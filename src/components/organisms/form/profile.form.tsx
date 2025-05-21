@@ -24,7 +24,7 @@ const ProfileForm = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:mb-5">
           <InputField
             control={form.control}
-            name="businessName"
+            name="name"
             label="Business Name"
             placeholder="John Doe"
           />

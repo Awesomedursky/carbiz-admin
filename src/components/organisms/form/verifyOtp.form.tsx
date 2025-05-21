@@ -10,7 +10,7 @@ import VerifyOtpSchema, {
   VerifyOtpSchemaType,
 } from "@/schema/verifyotp.schema";
 import { toast } from "sonner";
-import { useVerifyOtpMerchant } from "@/queries/verifyOtp";
+import { useVerifyOtpAdmin } from "@/queries/verifyOtp";
 import { useToast } from "@/hooks/Toast";
 
 function VerifyOtpForm() {
@@ -28,26 +28,26 @@ function VerifyOtpForm() {
   const { state } = useLocation();
 
   const {
-    verifyOtpMerchant,
-    resendOtpMerchant,
+    verifyOtpAdmin,
+    resendOtpAdmin,
     loading,
-    verifyResetPasswordOtpMerchant,
+    verifyResetPasswordOtpAdmin,
     verifyResetOtpLoading,
-  } = useVerifyOtpMerchant();
+  } = useVerifyOtpAdmin();
 
   const onSubmit = async (data: VerifyOtpSchemaType) => {
     if (pathname === "/reset-otp") {
-      if (state === null || state === undefined) {
-        handleError(new Error("No email provided"), "Resend OTP failed");
-        navigate("/forgot-password");
-        return;
-      }
-      await verifyResetPasswordOtpMerchant({
+      // if (state === null || state === undefined) {
+      //   handleError(new Error("No email provided"), "Resend OTP failed");
+      //   navigate("/forgot-password");
+      //   return;
+      // }
+      await verifyResetPasswordOtpAdmin({
         variables: { input: { otp: data?.otp } },
       });
       return;
     }
-    await verifyOtpMerchant({ variables: { input: { otp: data?.otp } } });
+    await verifyOtpAdmin({ variables: { input: { otp: data?.otp } } });
   };
 
   const handleOtpResend = async () => {
@@ -58,11 +58,11 @@ function VerifyOtpForm() {
     }
     form.setValue("otp", "");
     toast.promise(
-      resendOtpMerchant({ variables: { input: { email: state.email } } }),
+      resendOtpAdmin({ variables: { input: { email: state.email } } }),
       {
         loading: "Sending OTP...",
         success: (data) => {
-          const result = data?.data?.resendOtpMerchant;
+          const result = data?.data?.resendOtpAdmin;
           return result?.message || "OTP sent!";
         },
         error: (err) => {

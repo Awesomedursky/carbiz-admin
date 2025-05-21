@@ -43,8 +43,8 @@ const data = {
       icon: UsersRound,
     },
     {
-      title: "Products",
-      url: "/products",
+      title: "Merchants",
+      url: "/merchants",
       icon: IconCoins,
     },
     {

@@ -54,7 +54,7 @@ export function DataTable<TData, TValue>({
   });
 
   const { pathname } = useLocation();
-  const productsPath = pathname === "/products";
+  const productsPath = pathname === "/merchants";
   const router = useNavigate();
 
   return (

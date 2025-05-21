@@ -5,7 +5,7 @@ import { useMutation } from "@apollo/client";
 import { useNavigate } from "react-router";
 
 interface otpResponse {
-  verifyOtpMerchant: {
+  verifyOtpAdmin: {
     businessName: string;
     email: string;
     isVerified: boolean;
@@ -14,32 +14,32 @@ interface otpResponse {
   };
 }
 
-interface verifyResetOtpResponse {
-  verifyResetOtpResponse: {
+interface verifyResetPasswordOtpAdmin {
+  verifyResetPasswordOtpAdmin: {
     success?: boolean;
     message?: string;
     payload?: string;
   };
 }
 
-interface resendOtpResponse {
-  resendOtpMerchant: {
+interface resendOtpAdmin {
+  resendOtpAdmin: {
     success?: boolean;
     message?: string;
   };
 }
 
-export const useVerifyOtpMerchant = () => {
+export const useVerifyOtpAdmin = () => {
   const navigate = useNavigate();
   const { handleError, handleInfo, handleSuccess } = useToast();
 
   /* ------------------------VERIFY OTP HOOK----------------------------*/
-  const [verifyOtpMerchant, { loading }] = useMutation<
+  const [verifyOtpAdmin, { loading }] = useMutation<
     otpResponse,
     { input: VerifyOtpSchemaType }
   >(VERIFY_OTP, {
     onCompleted: (data) => {
-      const result = data?.verifyOtpMerchant;
+      const result = data?.verifyOtpAdmin;
       if (!result) {
         handleError(
           new Error("No response received"),
@@ -66,12 +66,12 @@ export const useVerifyOtpMerchant = () => {
   });
 
   /* ------------------------VERIFY RESET OTP HOOK----------------------------*/
-  const [verifyResetPasswordOtpMerchant, { loading: verifyResetOtpLoading }] =
-    useMutation<verifyResetOtpResponse, { input: VerifyOtpSchemaType }>(
+  const [verifyResetPasswordOtpAdmin, { loading: verifyResetOtpLoading }] =
+    useMutation<verifyResetPasswordOtpAdmin, { input: VerifyOtpSchemaType }>(
       VERIFY_RESET_OTP,
       {
         onCompleted: (data) => {
-          const result = data?.verifyResetOtpResponse;
+          const result = data?.verifyResetPasswordOtpAdmin;
           if (!result) {
             handleError(
               new Error("No response received"),
@@ -99,12 +99,12 @@ export const useVerifyOtpMerchant = () => {
     );
 
   /* ------------------------RESEND OTP HOOK----------------------------*/
-  const [resendOtpMerchant] = useMutation<
-    resendOtpResponse,
+  const [resendOtpAdmin] = useMutation<
+    resendOtpAdmin,
     { input: { email: string } }
   >(RESEND_OTP, {
     onCompleted: (data) => {
-      const result = data?.resendOtpMerchant;
+      const result = data?.resendOtpAdmin;
       if (!result) {
         handleError(new Error("No response received"), "Error sending OTP");
         return;
@@ -124,10 +124,10 @@ export const useVerifyOtpMerchant = () => {
   });
 
   return {
-    verifyOtpMerchant,
-    resendOtpMerchant,
+    verifyOtpAdmin,
+    resendOtpAdmin,
     loading,
-    verifyResetPasswordOtpMerchant,
+    verifyResetPasswordOtpAdmin,
     verifyResetOtpLoading,
   };
 };

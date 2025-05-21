@@ -1,34 +1,10 @@
-// // stores/useAuthStore.ts
-// import { create } from "zustand";
-
-// interface User {
-//   businessName: string;
-//   email: string;
-// }
-
-// interface AuthStore {
-//   user: User | null;
-//   setUser: (user: User) => void;
-//   logout: () => void;
-// }
-
-// export const useAuthStore = create<AuthStore>((set) => ({
-//   user: null,
-//   setUser: (user) => {
-//     set({ user });
-//   },
-//   logout: () => {
-//     localStorage.removeItem("authToken");
-//     set({ user: null });
-//   },
-// }));
-
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface UserType {
-  businessName: string;
+  name: string;
   email: string;
+  role: string;
 }
 
 interface AuthStoreType {

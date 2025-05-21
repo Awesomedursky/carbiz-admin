@@ -1,20 +1,21 @@
-import { REGISTER_MERCHANT } from "@/api/auth";
+import { REGISTER_ADMIN } from "@/api/auth";
 import { useToast } from "@/hooks/Toast";
 import { useMutation } from "@apollo/client";
 import { useNavigate } from "react-router";
 
-interface signUpMerchantInput {
-  businessName: string;
+interface signUpAdminInput {
+  name: string;
   email: string;
   password: string;
   phoneNumber: string;
 }
 
-interface signUpMerchant {
-  signUpMerchant: {
+interface signUpAdmin {
+  signUpAdmin: {
     payload: {
-      businessName: string;
+      name: string;
       email: string;
+      role: string;
     };
     phoneNumber: string;
     password: string;
@@ -27,12 +28,12 @@ export const useRegisterMerchant = () => {
   const { handleError, handleInfo, handleSuccess } = useToast();
   const navigate = useNavigate();
 
-  const [signUpMerchant, { loading }] = useMutation<
-    signUpMerchant,
-    { input: signUpMerchantInput }
-  >(REGISTER_MERCHANT, {
+  const [signupAdmin, { loading }] = useMutation<
+    signUpAdmin,
+    { input: signUpAdminInput }
+  >(REGISTER_ADMIN, {
     onCompleted: (data) => {
-      const result = data?.signUpMerchant;
+      const result = data?.signUpAdmin;
 
       if (!result) {
         handleError(new Error("No response received"), "Signup failed");
@@ -56,5 +57,5 @@ export const useRegisterMerchant = () => {
     },
   });
 
-  return { signUpMerchant, loading };
+  return { signupAdmin, loading };
 };

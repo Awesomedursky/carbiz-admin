@@ -4,15 +4,16 @@ import { useAuthStore } from "@/store/auth.store";
 import { useMutation } from "@apollo/client";
 import { useNavigate } from "react-router";
 
-interface LoginResponseTypeMerchant {
-  loginMerchant: {
+interface LoginResponseTypeAdmin {
+  loginAdmin: {
     success: boolean;
     message: string;
     payload: {
       token: string;
       user: {
-        businessName: string;
+        name: string;
         email: string;
+        role: string;
       };
     };
   };
@@ -23,17 +24,17 @@ interface loginType {
   password: string;
 }
 
-export const useLoginMerchant = () => {
+export const useLoginAdmin = () => {
   const navigate = useNavigate();
   const { handleError, handleInfo, handleSuccess } = useToast();
   const { setUser } = useAuthStore();
 
-  const [loginMerchant, { loading }] = useMutation<
-    LoginResponseTypeMerchant,
+  const [loginAdmin, { loading }] = useMutation<
+    LoginResponseTypeAdmin,
     { input: loginType }
   >(LOGIN, {
     onCompleted: (data) => {
-      const result = data?.loginMerchant;
+      const result = data?.loginAdmin;
       if (!result) {
         handleError(new Error("Invalid"), "Error logging in");
         return;
@@ -53,5 +54,5 @@ export const useLoginMerchant = () => {
     },
   });
 
-  return { loginMerchant, loading };
+  return { loginAdmin, loading };
 };

@@ -7,15 +7,15 @@ import { Button } from "@/components/ui/button";
 import InputField from "@/components/atoms/form/input";
 
 import LoginSchema, { LoginSchemaType } from "@/schema/login.schema";
-import { useLoginMerchant } from "@/queries/login";
+import { useLoginAdmin } from "@/queries/login";
 
 const LoginForm = () => {
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
   });
-  const { loginMerchant, loading } = useLoginMerchant();
+  const { loginAdmin, loading } = useLoginAdmin();
   const onSubmit = async (data: LoginSchemaType) => {
-    await loginMerchant({ variables: { input: data } });
+    await loginAdmin({ variables: { input: data } });
   };
 
   return (

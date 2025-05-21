@@ -19,7 +19,7 @@ import {
   Documents,
   Payouts,
   PreviewOrder,
-  Products,
+  Merchants,
   AddProduct,
 } from "@/pages";
 import MainLayout from "@/components/_layout/main.layout";
@@ -94,11 +94,11 @@ const router = createBrowserRouter([
         Component: Payouts,
       },
       {
-        path: "products",
+        path: "merchants",
         children: [
           {
             path: "",
-            Component: Products,
+            Component: Merchants,
           },
           {
             path: "new",

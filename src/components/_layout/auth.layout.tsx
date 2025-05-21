@@ -1,20 +1,20 @@
 import { Outlet, useLocation } from "react-router";
-import Autoplay from "embla-carousel-autoplay";
+// import Autoplay from "embla-carousel-autoplay";
 
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import { type CarouselApi } from "@/components/ui/carousel";
+// import {
+//   Carousel,
+//   CarouselContent,
+//   CarouselItem,
+// } from "@/components/ui/carousel";
+// import { type CarouselApi } from "@/components/ui/carousel";
 
 import { Link } from "react-router";
 
 import logo from "@/assets/images/logo.svg";
-import onboardingImage from "@/assets/images/onboarding.jpeg";
+import onboardingImage from "@/assets/images/onboarding.jpg";
 
 import stackIcon from "@/assets/images/icons/stack.svg";
-import { useEffect, useRef, useState } from "react";
+// import { useEffect, useRef, useState } from "react";
 
 const pageTitles = {
   login: {
@@ -51,23 +51,23 @@ const pageTitles = {
 
 const AuthLayout = () => {
   const { pathname } = useLocation();
-  const [currentCarousel, setCurrentCarousel] = useState(0);
-  const [api, setApi] = useState<CarouselApi>();
-  const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
+  // const [currentCarousel, setCurrentCarousel] = useState(0);
+  // const [api, setApi] = useState<CarouselApi>();
+  // const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
 
   let page = pathname.split("/").pop() as keyof typeof pageTitles;
   const pageKey = Object.keys(pageTitles).includes(page) ? page : "login";
   const pageTitle = pageTitles[pageKey];
 
-  useEffect(() => {
-    if (!api) return;
+  // useEffect(() => {
+  //   if (!api) return;
 
-    setCurrentCarousel(api.selectedScrollSnap() + 1);
+  //   setCurrentCarousel(api.selectedScrollSnap() + 1);
 
-    api.on("select", () => {
-      setCurrentCarousel(api.selectedScrollSnap() + 1);
-    });
-  }, [api]);
+  //   api.on("select", () => {
+  //     setCurrentCarousel(api.selectedScrollSnap() + 1);
+  //   });
+  // }, [api]);
 
   return (
     <div className="bg-white w-full">
@@ -113,7 +113,7 @@ const AuthLayout = () => {
 
         {/* Right Side Carousel */}
         <div className="fixed right-0 top-0 hidden sm:block w-1/2 h-screen z-0">
-          <Carousel
+          {/* <Carousel
             plugins={[plugin.current]}
             setApi={setApi}
             opts={{
@@ -122,20 +122,20 @@ const AuthLayout = () => {
           >
             <CarouselContent>
               {Array.from({ length: 3 }).map((_, index) => (
-                <CarouselItem key={index}>
-                  <div
-                    className="relative flex flex-col overflow-hidden h-screen"
-                    style={{
-                      background: `url(${onboardingImage}) no-repeat center center/cover`,
-                    }}
-                  ></div>
-                </CarouselItem>
+                <CarouselItem key={index}> */}
+          <div
+            className="relative flex flex-col overflow-hidden h-screen"
+            style={{
+              background: `url(${onboardingImage}) no-repeat center center/cover`,
+            }}
+          ></div>
+          {/* </CarouselItem>
               ))}
             </CarouselContent>
-          </Carousel>
+          </Carousel> */}
 
           {/* Carousel Overlay Content */}
-          <div className="absolute bottom-30 py-10 px-20 text-white z-10">
+          {/* <div className="absolute bottom-30 py-10 px-20 text-white z-10">
             <h1 className="text-[2.5rem] font-bold font-family-bricolage">
               Your one-stop app
             </h1>
@@ -154,7 +154,7 @@ const AuthLayout = () => {
                 ></span>
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

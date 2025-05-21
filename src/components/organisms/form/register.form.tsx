@@ -9,8 +9,8 @@ import InputField from "@/components/atoms/form/input";
 import RegistrationSchema, {
   RegistrationSchemaType,
 } from "@/schema/registration.schema";
-import FormCheckbox from "@/components/atoms/form/checkbox";
-import { Link } from "react-router";
+// import FormCheckbox from "@/components/atoms/form/checkbox";
+// import { Link } from "react-router";
 import { useRegisterMerchant } from "@/queries/register";
 // import ProfileImageUpload from "@/components/atoms/form/profileImageUpload";
 
@@ -19,13 +19,13 @@ const RegisterForm = () => {
     resolver: zodResolver(RegistrationSchema),
   });
 
-  const { signUpMerchant, loading } = useRegisterMerchant();
+  const { signupAdmin, loading } = useRegisterMerchant();
 
   const onSubmit = async (data: RegistrationSchemaType) => {
-    await signUpMerchant({
+    await signupAdmin({
       variables: {
         input: {
-          businessName: data.businessName,
+          name: data.name,
           email: data.email,
           password: data.password,
           phoneNumber: data.phoneNumber,
@@ -42,7 +42,7 @@ const RegisterForm = () => {
       >
         <InputField
           control={form.control}
-          name="businessName"
+          name="name"
           label="Business Name"
           placeholder="John Doe"
         />
@@ -69,7 +69,7 @@ const RegisterForm = () => {
         />
         {/* <ProfileImageUpload name="profileImage" control={form.control} /> */}
 
-        <div className="2xl:py-4">
+        {/* <div className="2xl:py-4">
           <FormCheckbox
             control={form.control}
             name="agreement"
@@ -91,7 +91,7 @@ const RegisterForm = () => {
               </div>
             }
           />
-        </div>
+        </div> */}
         <Button
           disabled={loading}
           type="submit"

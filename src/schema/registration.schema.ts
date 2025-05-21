@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const RegistrationSchema = z.object({
-  businessName: z.string({ message: "Business name is required" }),
+  name: z.string({ message: "Business name is required" }),
   email: z
     .string({ message: "Email is required" })
     .email("Invalid email address"),
@@ -20,10 +20,10 @@ const RegistrationSchema = z.object({
         "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character. e.g. example2@2",
     }),
   //profileImage: z.string({ message: "kindly upload a profile image" }),
-  agreement: z.boolean().refine((val) => val === true, {
-    message: "You must accept the terms and conditions",
-    path: ["agreement"],
-  }),
+  // agreement: z.boolean().refine((val) => val === true, {
+  //   message: "You must accept the terms and conditions",
+  //   path: ["agreement"],
+  // }),
 });
 
 export default RegistrationSchema;

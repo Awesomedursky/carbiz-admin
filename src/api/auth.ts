@@ -1,34 +1,36 @@
 import { gql } from "@apollo/client";
 
-export const REGISTER_MERCHANT = gql`
-  mutation signUpMerchant($input: SignupMerchantDto!) {
-    signUpMerchant(input: $input) {
+export const REGISTER_ADMIN = gql`
+  mutation signUpAdmin($input: SignupAdminDto!) {
+    signUpAdmin(input: $input) {
       success
       message
       payload {
-        businessName
+        name
         email
+        role
       }
     }
   }
 `;
 
 export const VERIFY_OTP = gql`
-  mutation verifyOtpMerchant($input: VerifyOtp!) {
-    verifyOtpMerchant(input: $input) {
+  mutation verifyOtpAdmin($input: VerifyOtp!) {
+    verifyOtpAdmin(input: $input) {
       success
       message
       payload {
-        businessName
+        name
         email
         isVerified
+        role
       }
     }
   }
 `;
 export const VERIFY_RESET_OTP = gql`
-  mutation verifyResetPasswordOtpMerchant($input: VerifyOtp!) {
-    verifyResetPasswordOtpMerchant(input: $input) {
+  mutation verifyResetPasswordOtpAdmin($input: VerifyOtp!) {
+    verifyResetPasswordOtpAdmin(input: $input) {
       success
       message
       payload
@@ -37,8 +39,8 @@ export const VERIFY_RESET_OTP = gql`
 `;
 
 export const RESEND_OTP = gql`
-  mutation resendOtpMerchant($input: ResendExpiredOtp!) {
-    resendOtpMerchant(input: $input) {
+  mutation resendOtpAdmin($input: ResendExpiredOtp!) {
+    resendOtpAdmin(input: $input) {
       success
       message
       payload
@@ -46,15 +48,16 @@ export const RESEND_OTP = gql`
   }
 `;
 export const LOGIN = gql`
-  mutation loginMerchant($input: LoginDto!) {
-    loginMerchant(input: $input) {
+  mutation loginAdmin($input: LoginDto!) {
+    loginAdmin(input: $input) {
       success
       message
       payload {
         token
         user {
-          businessName
+          name
           email
+          role
         }
       }
     }
@@ -62,8 +65,8 @@ export const LOGIN = gql`
 `;
 
 export const RESET_PASSWORD = gql`
-  mutation resetPasswordMerchant($input: ResetPasswordDto!) {
-    resetPasswordMerchant(input: $input) {
+  mutation resetPasswordAdmin($input: ResetPasswordDto!) {
+    resetPasswordAdmin(input: $input) {
       success
       message
       payload

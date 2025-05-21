@@ -17,7 +17,7 @@ const ResetPasswordForm = () => {
     resolver: zodResolver(ResetPasswordSchema),
   });
 
-  const { resetPasswordMerchant, loading } = useResetPassword();
+  const { resetPasswordAdmin, loading } = useResetPassword();
   interface StateType extends ResetPasswordType {
     email: string;
   }
@@ -34,7 +34,7 @@ const ResetPasswordForm = () => {
       email: state.email,
       ...data,
     };
-    await resetPasswordMerchant({
+    await resetPasswordAdmin({
       variables: { input: payload },
     });
   };

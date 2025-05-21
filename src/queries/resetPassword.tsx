@@ -1,7 +1,7 @@
 import { RESET_PASSWORD } from "@/api/auth";
 import { useToast } from "@/hooks/Toast";
 import { useMutation } from "@apollo/client";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 interface resetPasswordInput {
   email: string;
@@ -9,8 +9,8 @@ interface resetPasswordInput {
   confirmPassword: string;
 }
 
-interface resetPasswordMerchant {
-  resetPasswordMerchant: {
+interface resetPasswordAdmin {
+  resetPasswordAdmin: {
     payload: boolean;
     message: string;
     success: boolean;
@@ -20,12 +20,13 @@ interface resetPasswordMerchant {
 export const useResetPassword = () => {
   const { handleError, handleInfo, handleSuccess } = useToast();
   const navigate = useNavigate();
-  const [resetPasswordMerchant, { loading }] = useMutation<
-    resetPasswordMerchant,
+  const { state } = useLocation();
+  const [resetPasswordAdmin, { loading }] = useMutation<
+    resetPasswordAdmin,
     { input: resetPasswordInput }
   >(RESET_PASSWORD, {
     onCompleted: (data) => {
-      const result = data?.resetPasswordMerchant;
+      const result = data?.resetPasswordAdmin;
 
       if (!result) {
         handleError(new Error("No response received"), "Reset password failed");
@@ -39,7 +40,7 @@ export const useResetPassword = () => {
 
       // If success
       handleSuccess("Reset Password successful", result.message);
-      navigate("/reset-otp");
+      navigate("/reset-otp", { state });
     },
 
     onError: (error) => {
@@ -49,5 +50,5 @@ export const useResetPassword = () => {
     },
   });
 
-  return { resetPasswordMerchant, loading };
+  return { resetPasswordAdmin, loading };
 };

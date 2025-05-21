@@ -12,7 +12,7 @@ const MainLayout = () => {
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (!token && user === null) {
-      nav("/");
+      nav("/", { replace: true });
     }
   }, [user, nav]);
 

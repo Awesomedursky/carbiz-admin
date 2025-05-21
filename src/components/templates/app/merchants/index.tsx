@@ -4,17 +4,17 @@ import { DataTable } from "@/components/atoms/table";
 const index = () => {
   const productsData: productsType[] = [
     {
-      product: "Engine oil",
-      price: "$20.00",
-      quantity: 3,
-      status: "Available",
+      name: "Elizabeth Ali",
+      email: "example@gmail.com",
+      phone: "1223456789",
+      addedOn: "15-3-2024",
     },
   ];
   return (
     <>
       <DataTable
-        tableName="Products"
-        isClickable={false}
+        tableName="Merchants"
+        isClickable={true}
         columns={productsColumn}
         data={productsData}
       />
