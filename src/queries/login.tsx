@@ -46,7 +46,7 @@ export const useLoginAdmin = () => {
 
       handleSuccess(result.message);
       navigate("/dashboard");
-      localStorage.setItem("authToken", result.payload.token);
+      sessionStorage.setItem("authToken", result.payload.token);
       setUser(result?.payload?.user);
     },
     onError: (error) => {

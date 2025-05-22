@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 interface UserType {
   name: string;
@@ -19,12 +19,13 @@ export const useAuthStore = create<AuthStoreType>()(
       user: null,
       setUser: (user) => set({ user }),
       logout: () => {
-        localStorage.removeItem("authToken");
+        sessionStorage.removeItem("authToken");
         set({ user: null });
       },
     }),
     {
       name: "auth-storage",
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );

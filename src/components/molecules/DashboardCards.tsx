@@ -11,8 +11,8 @@ const analyticIcon = {
 
 type analyticKey = keyof typeof analyticIcon;
 const DashboardCards = () => {
-  const { productCount, customerCount, revenue } = useMerchantProfile();
-  const { loading, data } = productCount;
+  const { merchantCount, customerCount, revenue } = useMerchantProfile();
+  const { loading, data } = merchantCount;
   console.log(customerCount.data);
 
   const dashboardAnalytics = [
@@ -23,14 +23,14 @@ const DashboardCards = () => {
       color: "#DC6803",
     },
     {
-      title: "Product Sold",
-      value: data?.MerchantsProductsoldCount?.payload,
+      title: "Merchant",
+      value: data?.AdminFetchMerchantCount?.payload,
       name: "product",
       color: "#027A48",
     },
     {
       title: "Customer",
-      value: customerCount?.data?.MerchantsTotalCustomerCount?.payload,
+      value: customerCount?.data?.AdminFetchCustomerCount?.payload,
       name: "customer",
       color: "#7046C6",
     },

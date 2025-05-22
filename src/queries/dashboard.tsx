@@ -1,40 +1,43 @@
 import {
-  PRODUCT_SOLD,
-  PROFILE_MERCHANT,
+  MERCHNAT_COUNT,
+  PROFILE_ADMIN,
   REVENUE,
   TOTAL_CUSTOMER,
 } from "@/api/dashboard";
 import { useToast } from "@/hooks/Toast";
 import { useQuery } from "@apollo/client";
 
-interface MerchantProfileResponseType {
-  profileMerchant: {
+interface profileAdmin {
+  profileAdmin: {
     success: boolean;
     message: string;
     payload: {
-      onboardingActions: string;
-      onboardingPercentage: number; // fixed
-      onboardingStatus: {
-        add_Products: boolean;
-        create_Account: boolean;
-        setup_Payment: boolean;
-      };
+      adminID: string;
+      createdAt: string;
+      deletedAt: string;
+      email: string;
+      id: string;
+      isVerified: string;
+      name: string;
+      phoneNumber: string;
+      profilePics: string;
       role: string;
       status: string;
+      updatedAt: string;
     };
   };
 }
 
-interface MerchantsProductsoldCount {
-  MerchantsProductsoldCount: {
+interface AdminFetchMerchantCount {
+  AdminFetchMerchantCount: {
     errors: boolean;
     message: string;
     payload: any;
   };
 }
 
-interface MerchantsTotalCustomerCount {
-  MerchantsTotalCustomerCount: {
+interface AdminFetchCustomerCount {
+  AdminFetchCustomerCount: {
     errors: boolean;
     message: string;
     payload: any;
@@ -52,20 +55,17 @@ interface MerchantsTotalRevenueWithDeliveryFee {
 export const useMerchantProfile = () => {
   const { handleError } = useToast();
 
-  const { loading, error, data } = useQuery<MerchantProfileResponseType>(
-    PROFILE_MERCHANT,
-    {
-      onCompleted: () => {
-        // console.log("Profile Data:", data);
-      },
-      onError: (error) => {
-        handleError(error, "Error fetching merchant profile");
-      },
-      fetchPolicy: "cache-and-network",
-    }
-  );
+  const { loading, error, data } = useQuery<profileAdmin>(PROFILE_ADMIN, {
+    onCompleted: () => {
+      // console.log("Profile Data:", data);
+    },
+    onError: (error) => {
+      handleError(error, "Error fetching Admin profile");
+    },
+    fetchPolicy: "cache-and-network",
+  });
 
-  const productCount = useQuery<MerchantsProductsoldCount>(PRODUCT_SOLD, {
+  const merchantCount = useQuery<AdminFetchMerchantCount>(MERCHNAT_COUNT, {
     onCompleted: () => {},
     onError: (error) => {
       handleError(error, "Error fetching  product count");
@@ -73,13 +73,14 @@ export const useMerchantProfile = () => {
     fetchPolicy: "cache-and-network",
   });
 
-  const customerCount = useQuery<MerchantsTotalCustomerCount>(TOTAL_CUSTOMER, {
+  const customerCount = useQuery<AdminFetchCustomerCount>(TOTAL_CUSTOMER, {
     onCompleted: () => {},
     onError: (error) => {
       handleError(error, "Error fetching  customer count");
     },
     fetchPolicy: "cache-and-network",
   });
+
   const revenue = useQuery<MerchantsTotalRevenueWithDeliveryFee>(REVENUE, {
     onCompleted: () => {},
     onError: (error) => {
@@ -91,8 +92,8 @@ export const useMerchantProfile = () => {
   return {
     loading,
     error,
-    data: data?.profileMerchant?.payload,
-    productCount,
+    data: data?.profileAdmin?.payload,
+    merchantCount,
     customerCount,
     revenue,
   };

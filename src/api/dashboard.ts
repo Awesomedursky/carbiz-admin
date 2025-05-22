@@ -1,28 +1,31 @@
 import { gql } from "@apollo/client";
 
-export const PROFILE_MERCHANT = gql`
+export const PROFILE_ADMIN = gql`
   query {
-    profileMerchant {
+    profileAdmin {
       errors
       message
       payload {
-        onboardingActions
-        onboardingPercentage
-        onboardingStatus {
-          add_Products
-          create_Account
-          setup_Payment
-        }
+        adminID
+        createdAt
+        deletedAt
+        email
+        id
+        isVerified
+        name
+        phoneNumber
+        profilePics
         role
         status
+        updatedAt
       }
     }
   }
 `;
 
-export const PRODUCT_SOLD = gql`
+export const MERCHNAT_COUNT = gql`
   query {
-    MerchantsProductsoldCount {
+    AdminFetchMerchantCount {
       errors
       message
       payload
@@ -32,7 +35,7 @@ export const PRODUCT_SOLD = gql`
 
 export const TOTAL_CUSTOMER = gql`
   query {
-    MerchantsTotalCustomerCount {
+    AdminFetchCustomerCount {
       errors
       message
       payload

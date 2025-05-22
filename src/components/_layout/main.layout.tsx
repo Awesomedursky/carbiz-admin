@@ -10,7 +10,7 @@ const MainLayout = () => {
   const nav = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
+    const token = sessionStorage.getItem("authToken");
     if (!token && user === null) {
       nav("/", { replace: true });
     }
