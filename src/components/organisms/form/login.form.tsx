@@ -14,6 +14,7 @@ const LoginForm = () => {
     resolver: zodResolver(LoginSchema),
   });
   const { loginAdmin, loading } = useLoginAdmin();
+  
   const onSubmit = async (data: LoginSchemaType) => {
     await loginAdmin({ variables: { input: data } });
   };

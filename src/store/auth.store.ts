@@ -5,6 +5,9 @@ interface UserType {
   name: string;
   email: string;
   role: string;
+  phoneNumber: string;
+  id?: string;
+  profilePics?: string;
 }
 
 interface AuthStoreType {
