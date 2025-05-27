@@ -109,9 +109,9 @@ export function DataTable<TData, TValue>({
       ) : data.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-[50vh] border border-dashed border-gray-300 m-4">
           <h3 className="text-lg font-medium text-gray-800">No records found</h3>
-          <p className="text-sm text-gray-500 mt-1">
+          {/* <p className="text-sm text-gray-500 mt-1">
             Your journey begins here. Add your first record to get started.
-          </p>
+          </p> */}
         </div>
       ) : (
         <>

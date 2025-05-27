@@ -12,7 +12,7 @@ export type productsType = {
   productStatus: string;
 };
 
-const statusColor = (status: string|null) => {
+const statusColor = (status: string | null) => {
   switch (status) {
     case "new_arrival":
       return "text-yellow-500 bg-yellow-50";
@@ -23,7 +23,7 @@ const statusColor = (status: string|null) => {
     default:
       return "text-gray-500";
   }
-}
+};
 
 export const productsColumn: ColumnDef<productsType>[] = [
   {
@@ -71,14 +71,19 @@ export const productsColumn: ColumnDef<productsType>[] = [
   {
     accessorKey: "price",
     header: () => (
-      <div className=" text-base font-[500] text-black bg-[#FAFAFB] px-7 py-3.5 border-none">
+      <div className=" text-base font-medium text-black bg-[#FAFAFB] px-7 py-3.5 border-none">
         Price
       </div>
     ),
     cell: ({ row }) => {
-      return (
-        <div className=" font-normal px-7 py-3.">{`${row.getValue("priceCurrencyType")} ${row.getValue("price")}`}</div>
-      );
+      const price = row.getValue("price") as number;
+      const currency = row.original.priceCurrencyType;
+
+      const formattedPrice = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: currency || "NGN",
+      }).format(price);
+      return <div className=" font-normal px-7 py-3.5">{formattedPrice}</div>;
     },
   },
   {
@@ -90,7 +95,9 @@ export const productsColumn: ColumnDef<productsType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className=" font-normal px-7 py-3.">{row.getValue("productStock")}</div>
+        <div className=" font-normal px-7 py-3.">
+          {row.getValue("productStock")}
+        </div>
       );
     },
   },
@@ -103,10 +110,12 @@ export const productsColumn: ColumnDef<productsType>[] = [
     ),
     cell: ({ row }) => {
       const status = row.getValue("productStatus") as string | null;
-      const statusColorClass = statusColor(status?.toLowerCase() || '');
+      const statusColorClass = statusColor(status?.toLowerCase() || "");
       return (
         <div>
-          <span className={`font-normal px-4 py-3 text-sm ${statusColorClass} rounded-full`}>
+          <span
+            className={`font-normal px-4 py-3 text-sm ${statusColorClass} rounded-full`}
+          >
             {status?.replaceAll("_", " ")}
           </span>
         </div>

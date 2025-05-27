@@ -1,24 +1,17 @@
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
 import { ArrowLeft } from "iconsax-reactjs";
-import OrderColumn, { productType } from "@/columns/orders.column";
+import OrderColumn from "@/columns/orders.column";
 import { DataTable } from "@/components/atoms/table";
 
-import { products } from "@/assets/data/index.json";
 import { CardDetail } from "@/components/atoms/card/previewCard";
+import { fetchCustomerPreviewQuery } from "@/queries/customers.query";
+import moment from "moment";
 
-type details = {
-  title: string;
-  value: string;
-};
+const fieldsToDisplay = ["name", "email", "phoneNumber", "createdAt"] as const;
 
 const PreviewCustomer = () => {
-  const productList: productType[] = [...products];
-  const itemDetails: details[] = [
-    { title: "Name", value: "Elizabeth Ali" },
-    { title: "Email", value: "elizabeth@gmail.com" },
-    { title: "Phone", value: "+2347098675432" },
-    { title: "Added on", value: "13-5-2025" },
-  ];
+  const { id } = useParams<{ id: string }>();
+  const { data, loading } = fetchCustomerPreviewQuery(id || "");
 
   return (
     <div className="space-y-10">
@@ -30,19 +23,34 @@ const PreviewCustomer = () => {
       </Link>
 
       <div className="bg-white rounded-xl p-10 border border-[#F5F5F6] flex font-family-satoshi gap-6 flex-wrap sm:flex-nowrap">
-        {itemDetails.map(
-          ({ title, value }: { title: string; value: string }) => (
-            <CardDetail
-              key={title}
-              title={title}
-              value={value}
-              isLast={title === itemDetails[itemDetails.length - 1].title}
-            />
-          )
+        {loading ? (
+          <p className="py-10 inline-flex justify-center items-center w-full">
+            Fetching data...
+          </p>
+        ) : (
+          fieldsToDisplay.map((key) => {
+            const isDate = key === "createdAt";
+            const formattedValue = isDate
+              ? moment(data?.[key]).format("DD-MM-YYYY")
+              : data?.[key];
+
+            return (
+              <CardDetail
+                key={key}
+                title={isDate ? "added on" : key.replace(/([A-Z])/g, " $1")}
+                value={formattedValue?.toString() || "Unknown"}
+                // isLast={index === fieldsToDisplay.length - 1}
+              />
+            );
+          })
         )}
       </div>
 
-      <DataTable tableName="Orders" columns={OrderColumn} data={productList} />
+      <DataTable
+        tableName="Orders"
+        columns={OrderColumn}
+        data={data?.my_orders || []}
+      />
     </div>
   );
 };

@@ -1,22 +1,18 @@
 import { DataTable } from "@/components/atoms/table";
 import CustomerColumns from "@/columns/customers.column";
-import { customers } from "@/assets/data/index.json";
-
-type customerType = {
-  name: string;
-  email: string;
-  createdAt: string;
-  phone: string;
-};
+import fetchCustomersQuery from "@/queries/customers.query";
 
 const Customers = () => {
-  const newData: customerType[] = [...customers];
+  const { data, loading } = fetchCustomersQuery();
+
   return (
     <DataTable
       tableName="Customers"
       isClickable
       columns={CustomerColumns}
-      data={newData}
+      data={data || []}
+      loading={loading}
+      columnKey="customerID"
     />
   );
 };

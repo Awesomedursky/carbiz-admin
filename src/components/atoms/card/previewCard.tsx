@@ -1,6 +1,6 @@
 type CardDetailProps = {
   title: string;
-  value: string | boolean;
+  value?: string | Date| boolean;
   isLast?: boolean;
 };
 

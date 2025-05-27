@@ -1,5 +1,7 @@
 import { Checkbox } from "@/components/ui/checkbox";
+import OrderEntity from "@/types/order.type";
 import { ColumnDef } from "@tanstack/react-table";
+import moment from "moment";
 
 export type OrderType = {
   id: string;
@@ -15,16 +17,18 @@ export type OrderType = {
     | "awaiting_processing";
 };
 
-export type productType = {
-  id: number;
-  product: string;
-  created: string;
-  orderId: string;
-  paymentStatus: string;
-  deliveryStatus: string;
-};
+// export type productType = {
+//   id: number;
+//   product: string;
+//   created: string;
+//   orderId: string;
+//   paymentStatus: string;
+//   deliveryStatus: string;
+// };
 
-const OrderColumn: ColumnDef<OrderType | productType>[] = [
+// const status
+
+const OrderColumn: ColumnDef<OrderEntity>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -53,31 +57,30 @@ const OrderColumn: ColumnDef<OrderType | productType>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "product",
+    accessorKey: "orderID",
     header: () => (
       <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
-        Product
+        Order ID
       </div>
     ),
     cell: ({ row }) => {
       return (
         <div className=" font-normal py-3.5 uppercase">
-          {row.getValue("product")}
+          {row.getValue("orderID")}
         </div>
       );
     },
   },
   {
-    accessorKey: "created",
+    accessorKey: "createdAt",
     header: () => (
       <div className=" text-base font-[500] text-black bg-[#FAFAFB] px-7 py-3.5 border-none">
         Created
       </div>
     ),
     cell: ({ row }) => {
-      return (
-        <div className=" font-normal px-7 py-3.">{row.getValue("created")}</div>
-      );
+      const createdAt = moment(row.getValue("createdAt")).format("DD-MM-YYYY");
+      return <div className=" font-normal px-7 py-3.">{createdAt}</div>;
     },
   },
 
@@ -111,28 +114,30 @@ const OrderColumn: ColumnDef<OrderType | productType>[] = [
       );
     },
   },
+  // {
+  //   accessorKey: "orderId",
+  //   header: () => (
+  //     <div className=" text-base  font-[500] text-black bg-[#FAFAFB] px-7 py-3.5">
+  //       Order ID
+  //     </div>
+  //   ),
+  //   cell: ({ row }) => {
+  //     return (
+  //       <div className=" font-normal px-7 py-3.">{row.getValue("orderId")}</div>
+  //     );
+  //   },
+  // },
   {
-    accessorKey: "orderId",
-    header: () => (
-      <div className=" text-base  font-[500] text-black bg-[#FAFAFB] px-7 py-3.5">
-        Order ID
-      </div>
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className=" font-normal px-7 py-3.">{row.getValue("orderId")}</div>
-      );
-    },
-  },
-  {
-    accessorKey: "deliveryStatus",
+    accessorKey: "orderStatus",
     header: () => (
       <div className=" text-base  font-[500] text-black bg-[#FAFAFB] px-7 py-3.5">
         Status
       </div>
     ),
     cell: ({ row }) => {
-      const status: string | undefined = row?.getValue("deliveryStatus")?.toString();
+      const status: string | undefined = row
+        ?.getValue("deliveryStatus")
+        ?.toString();
       const statusColor = () => {
         switch (status?.toLocaleLowerCase()) {
           case "processing":
