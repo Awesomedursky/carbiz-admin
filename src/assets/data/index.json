@@ -82,6 +82,69 @@
       "phone": "+1-555-3344"
     }
   ],
+  
+  "admins": [
+    {
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "role": "admin",
+      "phoneNumber": "+1-555-1234"
+    },
+    {
+      "name": "Jane Smith",
+      "email": "jane.smith@example.com",
+      "role": "admin",
+      "phoneNumber": "+1-555-5678"
+    },
+    {
+      "name": "Michael Brown",
+      "email": "michael.brown@example.com",
+      "role": "admin",
+      "phoneNumber": "+1-555-8765"
+    },
+    {
+      "name": "Emily Clark",
+      "email": "emily.clark@example.com",
+      "role": "admin",
+      "phoneNumber": "+1-555-4321"
+    },
+    {
+      "name": "Daniel Johnson",
+      "email": "daniel.johnson@example.com",
+      "role": "admin",
+      "phoneNumber": "+1-555-3456"
+    },
+    {
+      "name": "Olivia Wilson",
+      "email": "olivia.wilson@example.com",
+      "role": "admin",
+      "phoneNumber": "+1-555-6543"
+    },
+    {
+      "name": "William Taylor",
+      "email": "william.taylor@example.com",
+      "role": "admin",
+      "phoneNumber": "+1-555-7890"
+    },
+    {
+      "name": "Sophia Anderson",
+      "email": "sophia.anderson@example.com",
+      "role": "admin",
+      "phoneNumber": "+1-555-0987"
+    },
+    {
+      "name": "James Thomas",
+      "email": "james.thomas@example.com",
+      "role": "admin",
+      "phoneNumber": "+1-555-1122"
+    },
+    {
+      "name": "Isabella Moore",
+      "email": "isabella.moore@example.com",
+      "role": "admin",
+      "phoneNumber": "+1-555-3344"
+    }
+  ],
   "products": [
     {
       "id": 1,

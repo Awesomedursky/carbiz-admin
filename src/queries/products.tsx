@@ -1,54 +1,27 @@
-import { ADD_PRODUCT } from "@/api/product";
-import { useToast } from "@/hooks/Toast";
-import { ProductSchemaType } from "@/schema/products.schema";
-import { useMutation } from "@apollo/client";
-import { useNavigate } from "react-router";
+import { useQuery } from "@apollo/client";
 
-interface createProduct {
-  createProduct: {
+import ProductEntity from "@/types/product.type";
+import { GET_ONE_MERCHANT_PRODUCTS } from "@/api/merchants";
+
+interface MerchantProductResponseType {
+  AdminFetchOneMerchant: {
     success: boolean;
     message: string;
     payload: {
-      productName: string;
-      productStatus: string;
+      my_products: ProductEntity[];
     };
   };
 }
 
-export const useAddProducts = () => {
-  const { handleError, handleInfo, handleSuccess } = useToast();
-  const navigate = useNavigate();
+export const useFetchMerchantProducts = (merchantID: string) => {
+  const { data, loading, error } = useQuery<MerchantProductResponseType>(
+    GET_ONE_MERCHANT_PRODUCTS,
+    { variables: { merchantID: merchantID } }
+  );
 
-  const [createProduct, { loading }] = useMutation<
-    createProduct,
-    { input: ProductSchemaType }
-  >(ADD_PRODUCT, {
-    onCompleted: (data) => {
-      const result = data?.createProduct;
-
-      if (!result) {
-        handleError(new Error("No response received"), "Add Product Failed");
-        return;
-      }
-
-      if (!result.success) {
-        handleInfo(
-          "Add Product",
-          result.message || "Adding Product unsuccessful"
-        );
-        return;
-      }
-
-      // If success
-      handleSuccess("Prodct Added Successfully", result.message);
-      navigate("..");
-    },
-
-    onError: (error) => {
-      handleError(error, "Adding Product Failed");
-      console.log("Mutation Error:", error);
-    },
-  });
-
-  return { createProduct, loading };
+  return {
+    data: data?.AdminFetchOneMerchant.payload.my_products || [],
+    loading,
+    error,
+  };
 };

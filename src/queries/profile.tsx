@@ -24,7 +24,7 @@ interface AdminProfileResponseType {
 type updateAdminInput = {
   name: string;
   phoneNumber: string;
-  profilePictureUrl: String;
+  profilePictureUrl:string;
 };
 
 const useAdminMutation = () => {

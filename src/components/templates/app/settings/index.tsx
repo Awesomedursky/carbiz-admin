@@ -15,7 +15,7 @@ const Settings = () => {
         <h3 className="text-xl font-bold font-family-satoshi">Settings</h3>
 
         <div className="inline-flex gap-2.5 mt-2 md:mt-5">
-          {["profile", "payment", "document"].map((nav) => (
+          {["profile", "admins"].map((nav) => (
             <NavLink
               to={`${nav !== "profile" ? `/settings/${nav}` : ""}`}
               end={nav === "profile"}

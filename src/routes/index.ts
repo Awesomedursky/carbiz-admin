@@ -15,12 +15,12 @@ import {
   PreviewCustomer,
   Settings,
   Profile,
-  Payment,
-  Documents,
+  Admins,
   Payouts,
   PreviewOrder,
   Merchants,
-  AddProduct,
+  MerchantPreview,
+  Products,
 } from "@/pages";
 import MainLayout from "@/components/_layout/main.layout";
 
@@ -101,9 +101,17 @@ const router = createBrowserRouter([
             Component: Merchants,
           },
           {
-            path: "new",
-            Component: AddProduct,
+            path: ":id",
+            Component: MerchantPreview,
           },
+          {
+            path: ":id/products",
+            Component: Products,
+          },
+          // {
+          //   path: "new",
+          //   Component: AddProduct,
+          // },
         ],
       },
       {
@@ -115,12 +123,8 @@ const router = createBrowserRouter([
             Component: Profile,
           },
           {
-            path: "payment",
-            Component: Payment,
-          },
-          {
-            path: "document",
-            Component: Documents,
+            path: "admins",
+            Component: Admins,
           },
         ],
       },

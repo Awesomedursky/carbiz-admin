@@ -1,33 +1,21 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
+import moment from "moment";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type productsType = {
-  productID: string;
-  productName: string;
-  price: number;
-  priceCurrencyType: string;
-  productStock: number;
-  productStatus: string;
+export type MerchantTableType = {
+  businessName: string;
+  email: string;
+  phoneNumber: string;
+  createdAt: Date;
+  merchandID?: string;
 };
 
-const statusColor = (status: string|null) => {
-  switch (status) {
-    case "new_arrival":
-      return "text-yellow-500 bg-yellow-50";
-    case "out_of_stock":
-      return "text-red-500 bg-red-50";
-    case "available":
-      return "text-green-500 bg-green-50";
-    default:
-      return "text-gray-500";
-  }
-}
-
-export const productsColumn: ColumnDef<productsType>[] = [
+const MerchantColumn: ColumnDef<MerchantTableType>[] = [
   {
-    id: "select",
+    id: 'id',
+    accessorKey: "merchandID",
     header: ({ table }) => (
       <div className=" pl-3 md:pl-7">
         <Checkbox
@@ -54,7 +42,7 @@ export const productsColumn: ColumnDef<productsType>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: "productName",
+    accessorKey: "businessName",
     header: () => (
       <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
         Name
@@ -62,55 +50,51 @@ export const productsColumn: ColumnDef<productsType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="font-normal py-3.5 capitalize">
-          {row.getValue("productName")}
+        <div className=" font-normal py-3.5 capitalize">
+          {row.getValue("businessName")}
         </div>
       );
     },
   },
   {
-    accessorKey: "price",
+    accessorKey: "email",
     header: () => (
       <div className=" text-base font-[500] text-black bg-[#FAFAFB] px-7 py-3.5 border-none">
-        Price
+        Email
       </div>
     ),
     cell: ({ row }) => {
       return (
-        <div className=" font-normal px-7 py-3.">{`${row.getValue("priceCurrencyType")} ${row.getValue("price")}`}</div>
+        <div className=" font-normal px-7 py-3.">{row.getValue("email")}</div>
       );
     },
   },
   {
-    accessorKey: "productStock",
+    accessorKey: "phoneNumber",
     header: () => (
       <div className=" text-base  font-[500] text-black bg-[#FAFAFB] px-7 py-3.5">
-        Quantity
+        Phone
       </div>
     ),
     cell: ({ row }) => {
       return (
-        <div className=" font-normal px-7 py-3.">{row.getValue("productStock")}</div>
-      );
-    },
-  },
-  {
-    accessorKey: "productStatus",
-    header: () => (
-      <div className=" text-base  font-[500] text-black bg-[#FAFAFB] px-7 py-3.5">
-        Status
-      </div>
-    ),
-    cell: ({ row }) => {
-      const status = row.getValue("productStatus") as string | null;
-      const statusColorClass = statusColor(status?.toLowerCase() || '');
-      return (
-        <div>
-          <span className={`font-normal px-4 py-3 text-sm ${statusColorClass} rounded-full`}>
-            {status?.replaceAll("_", " ")}
-          </span>
+        <div className=" font-normal px-7 py-3.">
+          {row.getValue("phoneNumber")}
         </div>
       );
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: () => (
+      <div className=" text-base  font-[500] text-black bg-[#FAFAFB] px-7 py-3.5">
+        Added On
+      </div>
+    ),
+    cell: ({ row }) => {
+      const addedOn = moment(row.getValue("createdAt")).format("DD-MM-YYYY");
+      return <div className=" font-normal px-7 py-3.">{addedOn}</div>;
     },
   },
 ];
+export default MerchantColumn;

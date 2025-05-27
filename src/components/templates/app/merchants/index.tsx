@@ -1,23 +1,32 @@
-import { productsColumn, productsType } from "@/columns/products.column";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
 import { DataTable } from "@/components/atoms/table";
+import useMerchantQuery from "@/queries/merchants";
+import MerchantColumn from "@/columns/merchants.column";
 
 const index = () => {
-  const productsData: productsType[] = [
-    {
-      name: "Elizabeth Ali",
-      email: "example@gmail.com",
-      phone: "1223456789",
-      addedOn: "15-3-2024",
-    },
-  ];
+  const { data, loading } = useMerchantQuery();
+
   return (
     <>
       <DataTable
+        isClickable
         tableName="Merchants"
-        isClickable={true}
-        columns={productsColumn}
-        data={productsData}
-      />
+        columns={MerchantColumn}
+        data={data || []}
+        actions
+        columnKey={"merchantID"}
+        loading={loading}
+      >
+        <Button
+          variant="default"
+          className="md:py-6  border-0 shadow text-sm font-bold"
+        >
+          <Plus className="size-4" />
+          New Merchant
+        </Button>
+      </DataTable>
     </>
   );
 };
