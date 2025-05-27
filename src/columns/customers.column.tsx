@@ -48,7 +48,7 @@ const CustomerColumns: ColumnDef<Customer>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className=" font-normal py-3.5 normal">{row.getValue("name")}</div>
+        <div className="capitalize font-normal py-3.5 normal">{row.getValue("name")}</div>
       );
     },
   },
@@ -75,8 +75,8 @@ const CustomerColumns: ColumnDef<Customer>[] = [
     cell: ({ row }) => {
       const phone = row.getValue("phoneNumber")?.toString();
       return (
-        <div className=" font-normal px-7 py-3.">
-          {phone?.replaceAll("-", "")}
+        <div className="font-normal px-7 py-3.">
+          {phone?.replaceAll("-", "") || "Unknown"}
         </div>
       );
     },

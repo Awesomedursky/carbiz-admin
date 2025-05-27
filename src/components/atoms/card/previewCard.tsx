@@ -30,8 +30,8 @@ export const CardDetail = ({ title, value, isLast }: CardDetailProps) => {
         isLast ? "" : "border-r"
       } border-[#E6E5E8]`}
     >
-      <p className="text-[#837E8E] text-sm capitalize">{title}</p>
-      <p className={`text-base font-bold ${valueClass}`}>
+      <p className={"text-[#837E8E] text-sm capitalize"}>{title}</p>
+      <p className={`text-base font-bold ${valueClass} ${title.includes("name") && "capitalize"}`}>
         {displayValue}
       </p>
     </div>

@@ -1,35 +1,27 @@
-import { PayoutsColumn, payoutType } from "@/columns/payouts.columns";
+import { PayoutsColumn } from "@/columns/payouts.columns";
 import { DataTable } from "@/components/atoms/table";
-
-const newData: payoutType[] = [
-  {
-    recepient: "John Doe",
-    date: "2023-10-01",
-    amount: "$100.00",
-    paymentStatus: "Completed",
-  },
-  {
-    recepient: "Jane Smith",
-    date: "2023-10-02",
-    amount: "$200.00",
-    paymentStatus: "Pending",
-  },
-  {
-    recepient: "Alice Johnson",
-    date: "2023-10-03",
-    amount: "$150.00",
-    paymentStatus: "Failed",
-  },
-];
+import fetchTransactions from "@/queries/transactions.query";
 
 const Payouts = () => {
+  const { data, loading } = fetchTransactions();
+
+  console.log("Payouts Data:", data);
+
   return (
-    <DataTable
-      tableName="Payouts"
-      isClickable
-      columns={PayoutsColumn}
-      data={newData}
-    />
+    <div className="space-y-10">
+      <div className="bg-white py-10 rounded-2xl">
+        {loading && <p className="capitalize">fetching data...</p>}
+
+        {data?.length > 0 && (
+          <DataTable
+            tableName="Payouts"
+            isClickable
+            columns={PayoutsColumn}
+            data={data}
+          />
+        )}
+      </div>
+    </div>
   );
 };
 

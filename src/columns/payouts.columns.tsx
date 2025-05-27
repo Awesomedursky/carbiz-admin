@@ -1,14 +1,9 @@
 import { Checkbox } from "@/components/ui/checkbox";
+import TransactionEntity from "@/types/transaction.types";
 import { ColumnDef } from "@tanstack/react-table";
+import moment from "moment";
 
-export type payoutType = {
-  recepient: string;
-  date: string;
-  amount: string;
-  paymentStatus: string;
-};
-
-export const PayoutsColumn: ColumnDef<payoutType>[] = [
+export const PayoutsColumn: ColumnDef<TransactionEntity>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -37,31 +32,34 @@ export const PayoutsColumn: ColumnDef<payoutType>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "recepient",
+    accessorKey: "merchant",
     header: () => (
       <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
-        Recepient
+        Merchant
       </div>
     ),
     cell: ({ row }) => {
+      const merchant = row.getValue(
+        "merchant"
+      ) as TransactionEntity["merchant"];
+      const merchantName = merchant?.businessName || "Unknown Merchant";
+
       return (
-        <div className=" font-normal py-3.5 uppercase">
-          {row.getValue("recepient")}
-        </div>
+        <div className=" font-normal py-3.5 uppercase">{merchantName}</div>
       );
     },
   },
   {
-    accessorKey: "date",
+    accessorKey: "createdAt",
     header: () => (
       <div className=" text-base font-[500] text-black bg-[#FAFAFB] px-7 py-3.5 border-none">
         Date
       </div>
     ),
     cell: ({ row }) => {
-      return (
-        <div className=" font-normal px-7 py-3.">{row.getValue("date")}</div>
-      );
+      const date = row.getValue("createdAt") as Date | string;
+      const formattedDate = moment(date).format("DD-MM-YYYY");
+      return <div className=" font-normal px-7 py-3.">{formattedDate}</div>;
     },
   },
   {

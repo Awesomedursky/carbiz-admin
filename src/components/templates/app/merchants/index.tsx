@@ -16,7 +16,7 @@ const index = () => {
         columns={MerchantColumn}
         data={data || []}
         actions
-        columnKey={"merchantID"}
+        columnKey="merchantID"
         loading={loading}
       >
         <Button

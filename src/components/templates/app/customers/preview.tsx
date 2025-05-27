@@ -46,11 +46,14 @@ const PreviewCustomer = () => {
         )}
       </div>
 
-      <DataTable
-        tableName="Orders"
-        columns={OrderColumn}
-        data={data?.my_orders || []}
-      />
+      {data?.my_orders && (
+        <DataTable
+          tableName="Orders"
+          columns={OrderColumn}
+          data={data?.my_orders || []}
+          loading={loading}
+        />
+      )}
     </div>
   );
 };
