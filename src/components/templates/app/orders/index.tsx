@@ -15,24 +15,7 @@ type Payment = {
     | "awaiting";
 };
 
-const payments: Payment[] = [
-  {
-    id: 1,
-    product: "728ed52f",
-    created: "2023-10-01",
-    orderId: "1234567890",
-    paymentStatus: "paid",
-    deliveryStatus: "processing",
-  },
-  {
-    id: 2,
-    product: "728ed52f",
-    created: "2023-10-02",
-    orderId: "13332",
-    paymentStatus: "cancelled",
-    deliveryStatus: "awaiting",
-  },
-];
+const payments: Payment[] = [];
 
 const Orders = () => {
   return (

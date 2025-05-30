@@ -1,6 +1,5 @@
 import { DataTable } from "@/components/atoms/table";
 import AdminColumns from "@/columns/adminusers.column";
-import { admins } from "@/assets/data/index.json";
 
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,7 @@ type adminType = {
 };
 
 const Admins = () => {
-  const newData: adminType[] = [...admins];
+  const newData: adminType[] = [];
   // const;
 
   return (

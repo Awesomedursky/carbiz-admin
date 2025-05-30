@@ -9,6 +9,7 @@ export const REGISTER_ADMIN = gql`
         name
         email
         role
+        profilePics
       }
     }
   }

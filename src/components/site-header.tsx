@@ -40,8 +40,12 @@ export function SiteHeader() {
           <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
             <>
               <Avatar className=" sm:size-10 lg:size-12 rounded-lg grayscale">
-                <AvatarImage src={user?.name} alt={user?.name} />
-                <AvatarFallback className="rounded-md">CN</AvatarFallback>
+                <AvatarImage src={user?.profilePics} alt={"profile picture"} />
+                <AvatarFallback className="rounded-md font-bold md:text-lg">
+                  {user?.name.split(" ")[0].split("")[0]}
+                  {""}
+                  {user?.name.split(" ")[1].split("")[0]}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium capitalize md:text-base">

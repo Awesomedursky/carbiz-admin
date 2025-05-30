@@ -15,6 +15,7 @@ interface LoginResponseTypeAdmin {
         email: string;
         role: string;
         phoneNumber: string;
+        profilePics: string;
       };
     };
   };

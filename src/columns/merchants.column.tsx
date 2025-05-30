@@ -9,13 +9,13 @@ export type MerchantTableType = {
   email: string;
   phoneNumber: string;
   createdAt: Date;
-  merchandID?: string;
+  merchantID?: string;
 };
 
 const MerchantColumn: ColumnDef<MerchantTableType>[] = [
   {
-    id: 'id',
-    accessorKey: "merchandID",
+    id: "id",
+    accessorKey: "merchantID",
     header: ({ table }) => (
       <div className=" pl-3 md:pl-7">
         <Checkbox

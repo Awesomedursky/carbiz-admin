@@ -20,7 +20,6 @@ interface TransactionsResponseType {
 
 const fetchTransactions = () => {
   const { pageSize, currentPage } = useTableStore();
-
   const { data, loading, error, fetchMore } = useQuery<
     TransactionsResponseType,
     { params: PaginationQuery }
@@ -29,7 +28,7 @@ const fetchTransactions = () => {
       params: {
         limit: pageSize,
         page: currentPage,
-        sortBy: "createdAt",
+        sortBy: "createdAT",
         sortOrder: "DESC",
       },
     },

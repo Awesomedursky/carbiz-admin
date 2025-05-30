@@ -1,9 +1,5 @@
-import { CheckCircle } from "@phosphor-icons/react";
-import { Progress } from "@/components/ui/progress";
 import { columns } from "@/columns/columns";
 import { DataTable } from "@/components/atoms/table";
-import { useAuthStore } from "@/store/auth.store";
-import { useMerchantProfile } from "@/queries/dashboard";
 import DashboardCards from "@/components/molecules/DashboardCards";
 
 export type Payment = {
@@ -20,24 +16,7 @@ export type Payment = {
     | "awaiting";
 };
 
-export const payments: Payment[] = [
-  {
-    id: 1,
-    product: "728ed52f",
-    created: "2023-10-01",
-    orderId: "1234567890",
-    paymentStatus: "paid",
-    deliveryStatus: "processing",
-  },
-  {
-    id: 2,
-    product: "728ed52f",
-    created: "2023-10-02",
-    orderId: "13332",
-    paymentStatus: "cancelled",
-    deliveryStatus: "awaiting",
-  },
-];
+export const payments: Payment[] = [];
 
 const Dashboard = () => {
   return (
