@@ -4,7 +4,7 @@ import { Link, NavLink, Outlet } from "react-router";
 const Settings = () => {
   return (
     <div className="space-y-10">
-      <Link to={".."} className="inline-flex items-center gap-2.5">
+      <Link to={"/dashboard"} className="inline-flex items-center gap-2.5">
         <ArrowLeft size={20} color="#696572" />
         <h4 className="font-family-satoshi text-text-secondary text-base font-medium">
           Settings
