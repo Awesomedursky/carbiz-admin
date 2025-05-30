@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { DataTable } from "@/components/atoms/table";
 import { productsColumn } from "@/columns/products.column";

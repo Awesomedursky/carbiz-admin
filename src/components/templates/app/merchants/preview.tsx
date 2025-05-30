@@ -1,4 +1,3 @@
-import React from "react";
 import { useFetchOneMerchant, useVerifyMerchant } from "@/queries/merchants";
 import { Link, useParams } from "react-router";
 import { CardDetail } from "@/components/atoms/card/previewCard";
@@ -7,26 +6,26 @@ import { ArrowRight } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import DocumentPreview from "@/components/atoms/documentpreview";
-import InputField from "@/components/atoms/form/input";
+// import InputField from "@/components/atoms/form/input";
 
-type MerchantData = {
-  businessName: string;
-  email: string;
-  phoneNumber: string;
-  createdAt: Date;
-  status: string;
-};
+// type MerchantData = {
+//   businessName: string;
+//   email: string;
+//   phoneNumber: string;
+//   createdAt: Date;
+//   status: string;
+// };
 
-const fields: (keyof MerchantData)[] = [
-  "businessName",
-  "email",
-  "phoneNumber",
-  "createdAt",
-  "status",
-];
+// const fields: (keyof MerchantData)[] = [
+//   "businessName",
+//   "email",
+//   "phoneNumber",
+//   "createdAt",
+//   "status",
+// ];
 
-const formatKey = (key: string) =>
-  key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());
+// const formatKey = (key: string) =>
+//   key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());
 
 const PreviewMerchant = () => {
   const { id } = useParams<{ id: string }>();
@@ -59,7 +58,7 @@ const PreviewMerchant = () => {
     //  disapprove Merchant
   };
 
-  const onDeactiveMerchant = () => {};
+  // const onDeactiveMerchant = () => {};
 
   return (
     <div className="space-y-10">
@@ -116,9 +115,7 @@ const PreviewMerchant = () => {
                 url={data.businessLicense}
               />
             )}
-            {data?.CAC && (
-              <DocumentPreview label="CAC" url={data.CAC} />
-            )}
+            {data?.CAC && <DocumentPreview label="CAC" url={data.CAC} />}
             {data?.validIDcard && (
               <DocumentPreview
                 label="Identification Card"
@@ -141,6 +138,7 @@ const PreviewMerchant = () => {
         <div className="inline-flex items-center space-x-5">
           <Button
             size="lg"
+            disabled={mutationLoading}
             className={`${
               data?.isVerified
                 ? "bg-red-50 text-red-700 hover:bg-red-100"

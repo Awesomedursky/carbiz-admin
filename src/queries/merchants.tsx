@@ -96,6 +96,7 @@ export const useVerifyMerchant = () => {
     VerifyMerchantInput
   >(VERIFY_MERCHANT, {
     onCompleted: (data) => {
+      handleSuccess("Merchant updated successfully", data.message);
       console.log(data);
     },
     onError: (error) => {
