@@ -67,8 +67,8 @@ export function DataTable<TData, TValue>({
   });
 
   const handleSearch = (value: string) => {
-    // Optional: Implement debounced or server-side search
-    Example: table.setGlobalFilter(value);
+    // Optional: Implement debounced or server-side searchExample:
+    table.setGlobalFilter(value);
   };
 
   const handlePageChange = (page: number) => {

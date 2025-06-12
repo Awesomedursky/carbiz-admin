@@ -34,7 +34,7 @@ const Analytics: React.FC<AnalyticsProp> = ({
           ? `N${typeof value === "number" ? value.toLocaleString() : value}`
           : typeof value === "number"
           ? value.toLocaleString("en-US")
-          : value}
+          : value || 0}
       </h3>
     </div>
   );

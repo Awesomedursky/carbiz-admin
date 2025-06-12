@@ -87,6 +87,7 @@ export const useMerchantProfile = () => {
       handleError(error, "Error fetching  revenue");
     },
     fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
   });
 
   return {

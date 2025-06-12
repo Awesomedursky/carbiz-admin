@@ -16,7 +16,14 @@ interface MerchantProductResponseType {
 export const useFetchMerchantProducts = (merchantID: string) => {
   const { data, loading, error } = useQuery<MerchantProductResponseType>(
     GET_ONE_MERCHANT_PRODUCTS,
-    { variables: { merchantID: merchantID } }
+    {
+      variables: { merchantID: merchantID },
+      fetchPolicy: "cache-and-network",
+      nextFetchPolicy: "cache-first",
+      onCompleted(data) {
+        console.log(data.AdminFetchOneMerchant.payload.my_products);
+      },
+    }
   );
 
   return {

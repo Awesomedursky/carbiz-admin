@@ -1,29 +1,29 @@
-import { PaginationQuery } from "@/types";
-import { GET_TRANSACTIONS } from "@/api/transactions";
+import { FETCH_ORDERS } from "@/api/orders";
 import useTableStore from "@/store/table.store";
-import TransactionEntity from "@/types/transaction.types";
+import { PaginationQuery } from "@/types";
+import OrderEntity from "@/types/order.type";
 import { useQuery } from "@apollo/client";
 import React from "react";
 
-interface TransactionsResponseType {
-  AdminFetchAllTransactions: {
+interface AdminFetchAllOrdersResponseType {
+  AdminFetchAllOrders: {
     message: string;
     success: boolean;
     payload: {
       currentPage: number;
-      data: TransactionEntity[];
+      data: OrderEntity[];
       pageSize: number;
       total: number;
     };
   };
 }
 
-const fetchTransactions = () => {
+const fetchOrdersQuery = () => {
   const { pageSize, currentPage } = useTableStore();
   const { data, loading, error, fetchMore } = useQuery<
-    TransactionsResponseType,
+    AdminFetchAllOrdersResponseType,
     { params: PaginationQuery }
-  >(GET_TRANSACTIONS, {
+  >(FETCH_ORDERS, {
     variables: {
       params: {
         limit: pageSize,
@@ -37,19 +37,17 @@ const fetchTransactions = () => {
   });
 
   React.useEffect(() => {
-    if (!data?.AdminFetchAllTransactions.payload) return;
-
     useTableStore.setState({
-      total: data?.AdminFetchAllTransactions.payload.total,
+      total: data?.AdminFetchAllOrders.payload?.total,
     });
-  }, [data?.AdminFetchAllTransactions.payload]);
+  }, [data?.AdminFetchAllOrders.payload?.total]);
 
   return {
-    data: data?.AdminFetchAllTransactions.payload.data || [],
+    data: data?.AdminFetchAllOrders.payload?.data,
     loading,
     error,
     fetchMore,
   };
 };
 
-export default fetchTransactions;
+export default fetchOrdersQuery;

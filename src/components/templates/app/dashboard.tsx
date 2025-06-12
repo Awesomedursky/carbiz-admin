@@ -1,24 +1,10 @@
 import { columns } from "@/columns/columns";
 import { DataTable } from "@/components/atoms/table";
 import DashboardCards from "@/components/molecules/DashboardCards";
-
-export type Payment = {
-  id: number;
-  product: string;
-  created: string;
-  orderId: string;
-  paymentStatus: "paid" | "cancelled" | "refunded";
-  deliveryStatus:
-    | "processing"
-    | "shipped"
-    | "delivered"
-    | "cancelled"
-    | "awaiting";
-};
-
-export const payments: Payment[] = [];
+import fetchOrdersQuery from "@/queries/orders.query";
 
 const Dashboard = () => {
+  const { data, loading } = fetchOrdersQuery();
   return (
     <div className="font-satoshi">
       {/* User breadcrumb */}
@@ -31,7 +17,13 @@ const Dashboard = () => {
       </div>
 
       {/* Recent order logs */}
-      <DataTable columns={columns} data={payments} />
+      <DataTable
+        loading={loading}
+        columnKey="orderID"
+        isClickable
+        columns={columns}
+        data={data || []}
+      />
     </div>
   );
 };

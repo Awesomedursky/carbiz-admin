@@ -21,6 +21,7 @@ import {
   Merchants,
   MerchantPreview,
   Products,
+  ProductPreview,
 } from "@/pages";
 import MainLayout from "@/components/_layout/main.layout";
 
@@ -108,11 +109,11 @@ const router = createBrowserRouter([
             path: ":id/products",
             Component: Products,
           },
-          // {
-          //   path: "new",
-          //   Component: AddProduct,
-          // },
         ],
+      },
+      {
+        path: "products/:id",
+        Component: ProductPreview,
       },
       {
         path: "settings",

@@ -12,7 +12,7 @@ export function SiteHeader() {
   const { user } = useAuthStore();
   return (
     <header className="bg-white flex p-2 md:py-5 md:pr-6  h-(--header-height) shrink-0 items-center gap-2 border-b border-border-gray transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
-      <div className="flex w-full items-center gap-1 px-2 sm:px-4 lg:gap-2 lg:px-6">
+      <div className="flex w-full items-center gap-1 px-2 sm:px-4 lg:gap-2 lg:px-12  xl:px-14  2xl:px-20">
         {
           <div className="flex gap-1 md:hidden items-center">
             <SidebarTrigger />

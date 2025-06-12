@@ -1,24 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import OrderEntity from "@/types/order.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Payment = {
-  product: string;
-  created: string;
-  orderId: string;
-  paymentStatus: "paid" | "cancelled" | "refunded";
-  deliveryStatus:
-    | "processing"
-    | "shipped"
-    | "delivered"
-    | "cancelled"
-    | "awaiting";
-};
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<OrderEntity>[] = [
   {
     id: "select",
     header: ({ table }) => (

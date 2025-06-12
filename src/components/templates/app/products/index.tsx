@@ -10,8 +10,6 @@ const Products = () => {
 
   const { data, loading } = useFetchMerchantProducts(id || "");
 
-  console.log("Products data:", data);
-
   return (
     <div className="space-y-10">
       <button

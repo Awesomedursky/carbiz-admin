@@ -40,6 +40,8 @@ const fetchCustomersQuery = () => {
         sortOrder: "DESC",
       },
     },
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
   });
 
   React.useEffect(() => {
@@ -64,6 +66,8 @@ export const fetchCustomerPreviewQuery = (customerID: string) => {
     { customerID: string }
   >(GET_ONE_CUSTOMER, {
     variables: { customerID },
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
   });
 
   return {
