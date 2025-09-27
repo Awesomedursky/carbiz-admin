@@ -3,7 +3,12 @@ import ProductEntity from "./product.type";
 interface OrderEntity {
   // RidersRide: RiderRidesEntity!
   createdAT: Date;
-  // customer: CustomerEntity!
+  customer: {
+    name: string;
+    email: string;
+    phoneNumber: string;
+    customerID: string;
+  };
   deliveryFee: number;
   deliveryType: string;
   distance_ms: number;

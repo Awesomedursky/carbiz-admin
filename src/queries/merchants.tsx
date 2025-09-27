@@ -1,4 +1,5 @@
 import {
+  FETCH_PRODUCT,
   GET_MERCHANTS,
   GET_ONE_MERCHANT,
   VERIFY_MERCHANT,
@@ -7,7 +8,7 @@ import { useToast } from "@/hooks/Toast";
 import useTableStore from "@/store/table.store";
 import { PaginationQuery } from "@/types";
 import MerchantData from "@/types/merchants.type";
-import { useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import React from "react";
 
 interface MerchantPaginatedResponseType {
@@ -32,13 +33,15 @@ interface MerchantPreviewResponseType {
 }
 
 interface VerifyMerchantResponseType {
-  message: string;
-  payload: {
-    merchantID: string;
-    isVerified: boolean;
+  AdminApproveOrDisApproveMerchant: {
+    message: string;
+    payload: {
+      merchantID: string;
+      isVerified: boolean;
+    };
+    status: number;
+    success: boolean;
   };
-  status: number;
-  success: boolean;
 }
 
 const useMerchantQuery = () => {
@@ -56,6 +59,8 @@ const useMerchantQuery = () => {
         sortOrder: "DESC",
       },
     },
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
   });
 
   React.useEffect(() => {
@@ -75,17 +80,19 @@ const useMerchantQuery = () => {
 export default useMerchantQuery;
 
 type VerifyMerchantInput = {
-  approve: boolean;
+  approve: { approve: boolean };
   merchantID: string;
 };
 
 export const useFetchOneMerchant = (id: string) => {
-  const { data, loading, error } = useQuery<MerchantPreviewResponseType>(
-    GET_ONE_MERCHANT,
-    { variables: { merchantID: id } }
-  );
+  const { data, loading, error, refetch } =
+    useQuery<MerchantPreviewResponseType>(GET_ONE_MERCHANT, {
+      variables: { merchantID: id },
+      fetchPolicy: "cache-and-network",
+      nextFetchPolicy: "cache-first",
+    });
 
-  return { data: data?.AdminFetchOneMerchant.payload, loading, error };
+  return { data: data?.AdminFetchOneMerchant.payload, loading, error, refetch };
 };
 
 export const useVerifyMerchant = () => {
@@ -96,7 +103,7 @@ export const useVerifyMerchant = () => {
     VerifyMerchantInput
   >(VERIFY_MERCHANT, {
     onCompleted: (data) => {
-      console.log(data);
+      handleSuccess(data?.AdminApproveOrDisApproveMerchant?.message);
     },
     onError: (error) => {
       handleError("Update profile error", error.message);
@@ -104,4 +111,32 @@ export const useVerifyMerchant = () => {
   });
 
   return { mutate: approveOrDisApprove, loading };
+};
+
+interface fetchOneProduct {
+  fetchOneProduct: {
+    success: boolean;
+    message: string;
+    payload: any;
+  };
+}
+export const useFetchProduct = () => {
+  const { handleError } = useToast();
+
+  const [fetchOneProduct, { data, loading, error }] =
+    useLazyQuery<fetchOneProduct>(FETCH_PRODUCT, {
+      onCompleted: () => {},
+      onError: (error) => {
+        handleError(error, "Error fetching product");
+      },
+      fetchPolicy: "cache-and-network",
+      nextFetchPolicy: "cache-first",
+    });
+
+  return {
+    fetchOneProduct,
+    data: data?.fetchOneProduct?.payload,
+    loading,
+    error,
+  };
 };

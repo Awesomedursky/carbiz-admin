@@ -69,7 +69,7 @@ export const GET_ONE_MERCHANT_PRODUCTS = gql`
       success
       message
       payload {
-        my_products{
+        my_products {
           discountPercentage
           discountedPrice
           id
@@ -90,6 +90,36 @@ export const GET_ONE_MERCHANT_PRODUCTS = gql`
           productWeightType
           productWidth_cm
         }
+      }
+    }
+  }
+`;
+
+export const FETCH_PRODUCT = gql`
+  query fetchOneProduct($productID: String!) {
+    fetchOneProduct(productID: $productID) {
+      success
+      message
+      status
+      errors
+      payload {
+        productImages
+        productName
+        productDescription
+        productCategory {
+          productCategoryName
+        }
+        productType
+        priceCurrencyType
+        productWeightType
+        productStock
+        productColor
+        price
+        discountPercentage
+        productWeight
+        productLength_cm
+        productBreadth_cm
+        productWidth_cm
       }
     }
   }

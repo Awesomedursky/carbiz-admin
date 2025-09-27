@@ -12,7 +12,7 @@ export function SiteHeader() {
   const { user } = useAuthStore();
   return (
     <header className="bg-white flex p-2 md:py-5 md:pr-6  h-(--header-height) shrink-0 items-center gap-2 border-b border-border-gray transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
-      <div className="flex w-full items-center gap-1 px-2 sm:px-4 lg:gap-2 lg:px-6">
+      <div className="flex w-full items-center gap-1 px-2 sm:px-4 lg:gap-2 lg:px-12  xl:px-14  2xl:px-20">
         {
           <div className="flex gap-1 md:hidden items-center">
             <SidebarTrigger />
@@ -40,8 +40,12 @@ export function SiteHeader() {
           <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
             <>
               <Avatar className=" sm:size-10 lg:size-12 rounded-lg grayscale">
-                <AvatarImage src={user?.name} alt={user?.name} />
-                <AvatarFallback className="rounded-md">CN</AvatarFallback>
+                <AvatarImage src={user?.profilePics} alt={"profile picture"} />
+                <AvatarFallback className="rounded-md font-bold md:text-lg">
+                  {user?.name.split(" ")[0].split("")[0]}
+                  {""}
+                  {user?.name.split(" ")[1].split("")[0]}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium capitalize md:text-base">

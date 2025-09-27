@@ -18,7 +18,7 @@ const DashboardCards = () => {
   const dashboardAnalytics = [
     {
       title: "Revenue",
-      value: revenue?.data?.MerchantsTotalRevenueWithDeliveryFee?.payload,
+      value: "0",
       name: "revenue",
       color: "#DC6803",
     },

@@ -24,7 +24,7 @@ interface AdminProfileResponseType {
 type updateAdminInput = {
   name: string;
   phoneNumber: string;
-  profilePictureUrl:string;
+  profilePictureUrl: string;
 };
 
 const useAdminMutation = () => {
@@ -36,6 +36,7 @@ const useAdminMutation = () => {
       { input: updateAdminInput }
     >(UPDATE_CURRENT_USER_PROFILE, {
       onCompleted: (data) => {
+        handleSuccess("Profile updated successfully", data.message);
         console.log(data);
       },
       onError: (error) => {

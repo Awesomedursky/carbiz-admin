@@ -19,6 +19,7 @@ import { Link, useNavigate } from "react-router";
 import logo from "@/assets/images/logo.svg";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/auth.store";
+import { useToast } from "@/hooks/Toast";
 
 const data = {
   user: {
@@ -63,16 +64,18 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { logout } = useAuthStore();
   const [isLoggingOut, setIsLoggingOut] = React.useState<boolean>(false);
+  const { handleSuccess } = useToast();
   const nav = useNavigate();
   const onLogout = () => {
     setIsLoggingOut(true);
     logout();
     setTimeout(() => {
       nav("/");
-    }, 2000);
+      handleSuccess("Merchant Logged out successfully");
+    }, 3000);
   };
   return (
-    <Sidebar backgroundColor="bg-white" {...props}>
+    <Sidebar backgroundColor="bg-white" {...props} className="">
       <SidebarHeader className="flex  gap-2 pt-5 md:pt-10 h-auto px-4">
         <SidebarMenu>
           <SidebarMenuItem className="flex justify-between items-center-safe ">

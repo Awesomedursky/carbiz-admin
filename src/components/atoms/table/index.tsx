@@ -67,8 +67,8 @@ export function DataTable<TData, TValue>({
   });
 
   const handleSearch = (value: string) => {
-    // Optional: Implement debounced or server-side search
-    // Example: table.setGlobalFilter(value)
+    // Optional: Implement debounced or server-side searchExample:
+    table.setGlobalFilter(value);
   };
 
   const handlePageChange = (page: number) => {
@@ -84,7 +84,10 @@ export function DataTable<TData, TValue>({
         {showSearch && (
           <div className="flex items-center gap-4">
             <div className="relative flex items-center">
-              <SearchNormal className="absolute left-2 text-gray-500" size={16} />
+              <SearchNormal
+                className="absolute left-2 text-gray-500"
+                size={16}
+              />
               <Input
                 placeholder="Search here..."
                 onChange={(e) => handleSearch(e.target.value)}
@@ -101,14 +104,20 @@ export function DataTable<TData, TValue>({
           </div>
         )}
 
-        {actions && <div className="flex items-center gap-4 lg:ml-auto">{children}</div>}
+        {actions && (
+          <div className="flex items-center gap-4 lg:ml-auto">{children}</div>
+        )}
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center py-10">Fetching data...</div>
+        <div className="flex justify-center items-center py-10">
+          Fetching data...
+        </div>
       ) : data.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-[50vh] border border-dashed border-gray-300 m-4">
-          <h3 className="text-lg font-medium text-gray-800">No records found</h3>
+          <h3 className="text-lg font-medium text-gray-800">
+            No records found
+          </h3>
           {/* <p className="text-sm text-gray-500 mt-1">
             Your journey begins here. Add your first record to get started.
           </p> */}
@@ -123,7 +132,10 @@ export function DataTable<TData, TValue>({
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
                   ))}
                 </TableRow>
@@ -139,13 +151,19 @@ export function DataTable<TData, TValue>({
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() =>
-                      isClickable && columnKey && rowId && navigate(`/${route}/${rowId}`)
+                      isClickable &&
+                      columnKey &&
+                      rowId &&
+                      navigate(`/${route}/${rowId}`)
                     }
                     className={isClickable ? "cursor-pointer" : ""}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
                       </TableCell>
                     ))}
                   </TableRow>

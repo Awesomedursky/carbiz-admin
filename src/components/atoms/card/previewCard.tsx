@@ -1,6 +1,6 @@
 type CardDetailProps = {
   title: string;
-  value?: string | Date| boolean;
+  value?: string | Date | boolean;
   isLast?: boolean;
 };
 
@@ -21,17 +21,21 @@ export const CardDetail = ({ title, value, isLast }: CardDetailProps) => {
       ? "text-primary"
       : isRejected
       ? "text-red-500"
-      : "text-black/70"
+      : "text-red-500"
     : "text-black/70";
 
   return (
     <div
-      className={`w-max md:min-w-42 flex flex-col gap-1 pr-14 ${
+      className={`w-max md:min-w-42 flex flex-col gap-1 pr-2 md:pr-14 ${
         isLast ? "" : "border-r"
       } border-[#E6E5E8]`}
     >
       <p className={"text-[#837E8E] text-sm capitalize"}>{title}</p>
-      <p className={`text-base font-bold ${valueClass} ${title.includes("name") && "capitalize"}`}>
+      <p
+        className={`text-base font-bold ${valueClass} ${
+          title.includes("name") && "capitalize"
+        }`}
+      >
         {displayValue}
       </p>
     </div>
