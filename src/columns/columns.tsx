@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
+import { Link } from "react-router";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -153,14 +154,14 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     id: "action",
-    cell: ({}) => {
-      // const id = row.original;
-      // console.log(id);
+    cell: ({row}) => {
+      const id = row.original?.id;
+      console.log(id);
       return (
         <div className=" font-normal px-7 py-3.">
-          <Button variant={"ghost"}>
+          <Link to={`/orders/${id}`}>
             <Eye className=" text-3xl size-5 text-[#4F4C55]" />
-          </Button>
+          </Link>
         </div>
       );
     },

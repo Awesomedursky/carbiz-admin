@@ -50,7 +50,7 @@ const DashboardCards = () => {
             <Analytics
               key={name}
               title={title}
-              value={value}
+              value={value ?? 0}
               iconColor={color}
               icon={analyticIcon[name as analyticKey]}
               isCurrency={name == "revenue"}

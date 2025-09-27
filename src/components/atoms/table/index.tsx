@@ -78,7 +78,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="rounded-md border bg-white">
-      <div className="p-4 md:p-8 flex flex-wrap items-center gap-4 sm:gap-4 md:gap-8 lg:gap-12">
+      <div className="p-4 md:p-8 flex flex-wrap items-center justify-between gap-4 sm:gap-4 md:gap-8 lg:gap-12">
         <h1 className="text-[#020202] font-bold text-xl">{tableName}</h1>
 
         {showSearch && (

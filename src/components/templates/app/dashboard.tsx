@@ -1,9 +1,9 @@
-import { CheckCircle } from "@phosphor-icons/react";
-import { Progress } from "@/components/ui/progress";
+// import { CheckCircle } from "@phosphor-icons/react";
+// import { Progress } from "@/components/ui/progress";
 import { columns } from "@/columns/columns";
 import { DataTable } from "@/components/atoms/table";
-import { useAuthStore } from "@/store/auth.store";
-import { useMerchantProfile } from "@/queries/dashboard";
+// import { useAuthStore } from "@/store/auth.store";
+// import { useMerchantProfile } from "@/queries/dashboard";
 import DashboardCards from "@/components/molecules/DashboardCards";
 
 export type Payment = {
@@ -52,7 +52,7 @@ const Dashboard = () => {
       </div>
 
       {/* Recent order logs */}
-      <DataTable columns={columns} data={payments} />
+      <DataTable tableName="Recent Orders" columns={columns} data={payments} />
     </div>
   );
 };

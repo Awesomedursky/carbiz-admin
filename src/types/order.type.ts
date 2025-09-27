@@ -35,3 +35,28 @@ export type OrderItemsEntity = {
   product: ProductEntity;
   quantity: number;
 };
+
+export interface OrderItem {
+  id: number;
+  title: string;
+  price: number;
+  originalPrice?: number;
+  color: string;
+  image: string;
+}
+
+export interface OrderSummaryItem {
+  label: string;
+  amount: number;
+  isDiscount?: boolean;
+  isSaved?: boolean;
+}
+
+export interface TimelineStep {
+  id: number;
+  title: string;
+  description: string;
+  time: string;
+  isCompleted: boolean;
+  isActive?: boolean;
+}

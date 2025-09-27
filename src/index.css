@@ -1,8 +1,9 @@
 @import url("https://fonts.cdnfonts.com/css/satoshi");
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap");
 
-@import "tw-animate-css";
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -44,8 +45,6 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --font-satoshi: "Satoshi", sans-serif;
-  --font-bricolage: "Bricolage Grotesque", sans-serif;
 }
 
 .dark {
@@ -124,14 +123,15 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-family-satoshi: var(--font-satoshi);
-  --font-family-bricolage: var(--font-bricolage);
+  --font-family-satoshi: "Satoshi", sans-serif;
+  --font-family-bricolage: "Bricolage Grotesque", sans-serif;
+  --font-source: "Source Sans Pro", sans-serif;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    font: normal 0.875rem /1.6 Satoshi, sans-serif;
+    font: normal 0.875rem /1.6 "Satoshi", sans-serif;
     padding: 0;
     text-align: left;
   }
