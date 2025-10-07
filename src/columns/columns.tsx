@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import OrderEntity from "@/types/order.type";
 import { ColumnDef } from "@tanstack/react-table";
@@ -143,7 +142,7 @@ export const columns: ColumnDef<OrderEntity>[] = [
   },
   {
     id: "action",
-    cell: ({row}) => {
+    cell: ({ row }) => {
       const id = row.original?.id;
       console.log(id);
       return (
