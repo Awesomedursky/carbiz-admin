@@ -113,40 +113,36 @@ const riderDetails: RiderDetails = {
   phoneNumber: "+234 805 506 9828",
 };
 
-const PreviewOrder = () => {
+const Preview = () => {
   const navigate = useNavigate();
 
-  const handleViewMerchant = () => {
-    console.log("View Merchant clicked");
-  };
-
-  const handleViewCustomer = () => {
-    console.log("View Customer clicked");
-  };
-
-  const handleViewRider = () => {
-    console.log("View Rider clicked");
-  };
-
   return (
-    <div>
-      <Button
-        onClick={() => navigate(-1)}
-        variant={"ghost"}
-        className="flex items-center gap-3 -ml-2"
-      >
-        <div className="inline-flex gap-4">
-          <ArrowLeft className="size-6 font-bold text-gray-800" />
-          <h3 className="font-medium text-gray-800 text-base"> Order Id</h3>
+    <div className="space-y-2.5 md:space-y-5">
+      <div className=" flex justify-between gap-y-1.5 items-center flex-wrap">
+        <div className="flex items-center space-x-2 flex-wrap">
+          <Button
+            onClick={() => navigate(-1)}
+            variant={"ghost"}
+            className="flex items-center gap-3  flex-wrap p-0"
+          >
+            <div className="inline-flex space-x-1.5">
+              <ArrowLeft className="size-6 font-bold text-gray-800" />
+              <h3 className="font-medium text-gray-800 text-base"> Order Id</h3>
+            </div>{" "}
+            -
+            <h5 className="font-medium text-gray-800 text-base">
+              ORD-2024-4569
+            </h5>
+          </Button>
+
+          <p
+            className={`inline rounded px-3 py-1 font-medium font-family-satoshi text-sm  ${Status["processing"]}`}
+          >
+            Processing
+          </p>
         </div>
-        - <h5 className="font-medium text-gray-800 text-base">ORD-2024-4569</h5>
-        <div
-          className={`rounded px-3 py-1 font-medium font-family-satoshi text-sm ${Status["processing"]}`}
-        >
-          Processing
-        </div>
-      </Button>
-      <div className="flex items-start gap-4 py-10">
+      </div>
+      <div className="flex items-start gap-4  flex-col md:flex-row">
         <div className="w-full max-w-7xl col-span-3 space-y-4">
           <div className="bg-white border border-gray-200 rounded-[0.75rem] space-y-5">
             <div className="p-4 border-b ">
@@ -207,7 +203,7 @@ const PreviewOrder = () => {
           <DetailsSection
             title="Merchant Details"
             viewText="View Merchant"
-            onViewClick={handleViewMerchant}
+            // onViewClick={handleViewMerchant}
           >
             <DetailRow label="Merchant Name" value={merchantDetails.name} />
             <DetailRow
@@ -220,7 +216,7 @@ const PreviewOrder = () => {
           <DetailsSection
             title="Customer Details"
             viewText="View Customer"
-            onViewClick={handleViewCustomer}
+            // onViewClick={handleViewCustomer}
           >
             <DetailRow label="Customer Name" value={customerDetails.name} />
             <DetailRow
@@ -242,7 +238,7 @@ const PreviewOrder = () => {
           <DetailsSection
             title="Rider Details"
             viewText="View Rider"
-            onViewClick={handleViewRider}
+            // onViewClick={handleViewRider}
           >
             <DetailRow label="Rider Name" value={riderDetails.name} />
             <DetailRow
@@ -256,4 +252,4 @@ const PreviewOrder = () => {
   );
 };
 
-export default PreviewOrder;
+export default Preview;
