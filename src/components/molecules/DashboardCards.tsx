@@ -1,4 +1,4 @@
-import { ArrowSwapHorizontal, MoneySend, People } from "iconsax-reactjs";
+import { ArrowSwapHorizontal, MoneySend, People, Car } from "iconsax-reactjs";
 import Analytics from "../atoms/analytics";
 import { useMerchantProfile } from "@/queries/dashboard";
 import { Skeleton } from "../ui/skeleton";
@@ -7,13 +7,14 @@ const analyticIcon = {
   product: ArrowSwapHorizontal,
   revenue: MoneySend,
   customer: People,
+  rider: Car,
 };
 
 type analyticKey = keyof typeof analyticIcon;
 const DashboardCards = () => {
-  const { merchantCount, customerCount, revenue } = useMerchantProfile();
+  const { merchantCount, customerCount, revenue, ridersCount } =
+    useMerchantProfile();
   const { loading, data } = merchantCount;
-  console.log(customerCount.data);
 
   const dashboardAnalytics = [
     {
@@ -34,11 +35,21 @@ const DashboardCards = () => {
       name: "customer",
       color: "#7046C6",
     },
+    {
+      title: "Rider",
+      value: ridersCount?.data?.AdminFetchRiderCount?.payload,
+      name: "rider",
+      color: "#0046C8",
+    },
   ];
+
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
-      {loading && revenue?.loading && customerCount?.loading
-        ? Array(3)
+    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+      {loading &&
+      revenue?.loading &&
+      customerCount?.loading &&
+      ridersCount?.loading
+        ? Array(4)
             .fill(0)
             .map((_, idx) => (
               <Skeleton

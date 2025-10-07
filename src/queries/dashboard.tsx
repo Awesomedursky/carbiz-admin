@@ -2,6 +2,7 @@ import {
   MERCHNAT_COUNT,
   PROFILE_ADMIN,
   REVENUE,
+  RIDERS_COUNT,
   TOTAL_CUSTOMER,
 } from "@/api/dashboard";
 import { useToast } from "@/hooks/Toast";
@@ -38,6 +39,14 @@ interface AdminFetchMerchantCount {
 
 interface AdminFetchCustomerCount {
   AdminFetchCustomerCount: {
+    errors: boolean;
+    message: string;
+    payload: any;
+  };
+}
+
+interface AdminFetchRiderCount {
+  AdminFetchRiderCount: {
     errors: boolean;
     message: string;
     payload: any;
@@ -81,6 +90,14 @@ export const useMerchantProfile = () => {
     fetchPolicy: "cache-and-network",
   });
 
+  const ridersCount = useQuery<AdminFetchRiderCount>(RIDERS_COUNT, {
+    onCompleted: () => {},
+    onError: (error) => {
+      handleError(error, "Error fetching  customer count");
+    },
+    fetchPolicy: "cache-and-network",
+  });
+
   const revenue = useQuery<MerchantsTotalRevenueWithDeliveryFee>(REVENUE, {
     onCompleted: () => {},
     onError: (error) => {
@@ -96,6 +113,7 @@ export const useMerchantProfile = () => {
     data: data?.profileAdmin?.payload,
     merchantCount,
     customerCount,
+    ridersCount,
     revenue,
   };
 };
