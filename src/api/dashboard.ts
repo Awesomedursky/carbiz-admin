@@ -42,6 +42,16 @@ export const TOTAL_CUSTOMER = gql`
     }
   }
 `;
+
+export const RIDERS_COUNT = gql`
+  query {
+    AdminFetchRiderCount {
+      errors
+      message
+      payload
+    }
+  }
+`;
 export const REVENUE = gql`
   query {
     MerchantsTotalRevenueWithDeliveryFee {

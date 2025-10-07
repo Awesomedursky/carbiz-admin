@@ -1,5 +1,10 @@
 import * as React from "react";
-import { HouseSimple, HandCoins, Gear, Notification } from "@phosphor-icons/react";
+import {
+  HouseSimple,
+  HandCoins,
+  Gear,
+  Notification,
+} from "@phosphor-icons/react";
 import { LogOut, ShoppingBag, UsersRound } from "lucide-react";
 
 import { IconCoins } from "@tabler/icons-react";
@@ -20,7 +25,6 @@ import logo from "@/assets/images/logo.svg";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/auth.store";
 import { useToast } from "@/hooks/Toast";
-import { url } from "inspector";
 
 const data = {
   user: {
@@ -63,7 +67,7 @@ const data = {
       title: "Notification Center",
       url: "/notifications",
       icon: Notification,
-    }
+    },
   ],
 };
 
