@@ -1,5 +1,5 @@
+import NotificationEntity from "@/types/notification";
 import { useEffect, useState } from "react";
-import NotificationEntity from "@/types/notification.types";
 
 // 🧠 Mock notification data (temporary placeholder)
 const mockNotification: NotificationEntity = {
@@ -16,7 +16,12 @@ const mockNotification: NotificationEntity = {
   status: "Scheduled",
   recipients: [
     { id: "r1", name: "John Doe", email: "john@example.com", status: "Sent" },
-    { id: "r2", name: "Jane Smith", email: "jane@example.com", status: "Pending" },
+    {
+      id: "r2",
+      name: "Jane Smith",
+      email: "jane@example.com",
+      status: "Pending",
+    },
   ],
 };
 

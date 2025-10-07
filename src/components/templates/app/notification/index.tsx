@@ -2,7 +2,7 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/atoms/table";
 import { NotificationColumns } from "@/columns/notifications.columns";
-import NotificationCards from "@/components/molecules/NotificationCards"
+import NotificationCards from "@/components/molecules/NotificationCards";
 import fetchNotifications from "@/queries/notifications.query";
 
 const NotificationCenter = () => {
@@ -23,11 +23,9 @@ const NotificationCenter = () => {
     })) || [];
 
   return (
-    <>
-      <div className="space-y-6">
+    <div className="space-y-6">
       <NotificationCards />
-      
-    </div>
+
       <DataTable
         isClickable
         tableName="Notification Center"
@@ -45,7 +43,7 @@ const NotificationCenter = () => {
           Create Notification
         </Button>
       </DataTable>
-    </>
+    </div>
   );
 };
 
