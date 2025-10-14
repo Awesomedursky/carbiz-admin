@@ -3,10 +3,29 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/atoms/table";
 import { NotificationColumns } from "@/columns/notifications.columns";
 import NotificationCards from "@/components/molecules/NotificationCards";
+import NotificationForm from "@/components/molecules/NotificationForm";
+import { useState } from "react";
+
 import fetchNotifications from "@/queries/notifications.query";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 
 const NotificationCenter = () => {
   const { data, loading } = fetchNotifications();
+
+  const [open, setOpen] = useState(false);
+  const [, setNotifications] = useState<any[]>(data || []);
+  const [] = useState(false);
+
+  
+  const handleClose = () => setOpen(false);
+
 
   const mappedData =
     data?.map((item: any) => ({
@@ -35,13 +54,38 @@ const NotificationCenter = () => {
         columnKey="id"
         loading={loading}
       >
-        <Button
-          variant="default"
-          className="md:py-6 border-0 shadow text-sm font-bold"
-        >
-          <Plus className="size-4" />
-          Create Notification
-        </Button>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <Button
+              variant="default"
+              className="md:py-6 border-0 shadow text-sm font-bold"
+            >
+              <Plus className="size-4" />
+              Create Notification
+            </Button>
+          </DialogTrigger>
+
+         <DialogContent className="max-w-lg">
+  <DialogHeader>
+    <DialogTitle>Create Notification</DialogTitle>
+  </DialogHeader>
+
+  <NotificationForm
+    onClose={handleClose}
+    onCreate={(newNotification) => {
+      console.log("Created notification:", newNotification);
+
+      // Add the new notification to the existing list
+      setNotifications((prev) => [...prev, newNotification]);
+
+      // Close the dialog
+      handleClose();
+    }}
+  />
+</DialogContent>
+
+        </Dialog>
+
       </DataTable>
     </div>
   );

@@ -2,10 +2,9 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {  MoreVertical } from "lucide-react";
+import NotificationActions from "@/components/molecules/NotificationActions";
 
-
+// ✅ Notification type
 export type NotificationEntity = {
   id: number;
   title: string;
@@ -16,9 +15,10 @@ export type NotificationEntity = {
   isScheduled: boolean;
   recurringType: "One Time" | "Daily" | "Weekly" | "Bi-Weekly";
   status: "Sent" | "Scheduled";
+  message?: string;
 };
 
-
+// ✅ Table columns
 export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
   {
     id: "select",
@@ -41,7 +41,6 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-
   {
     accessorKey: "title",
     header: "Title",
@@ -49,13 +48,13 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
       <div className="font-medium text-gray-900">{row.original.title}</div>
     ),
   },
-
   {
     accessorKey: "audience",
     header: "Audience",
-    cell: ({ row }) => <div className="text-gray-700">{row.original.audience}</div>,
+    cell: ({ row }) => (
+      <div className="text-gray-700">{row.original.audience}</div>
+    ),
   },
-
   {
     accessorKey: "method",
     header: "Method",
@@ -75,13 +74,13 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
       );
     },
   },
-
   {
     accessorKey: "sentBy",
     header: "Sent By",
-    cell: ({ row }) => <div className="text-gray-700">{row.original.sentBy}</div>,
+    cell: ({ row }) => (
+      <div className="text-gray-700">{row.original.sentBy}</div>
+    ),
   },
-
   {
     accessorKey: "dateTime",
     header: "Date/Time",
@@ -90,12 +89,10 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
       const formattedDate =
         typeof dateTime === "string"
           ? new Date(dateTime).toLocaleString()
-          : dateTime instanceof Date
-          ? dateTime.toLocaleString()
-          : "";
+          : dateTime.toLocaleString();
 
       return (
-        <div className=" text-sm text-gray-800">
+        <div className="text-sm text-gray-800">
           <span className="text-gray-500">
             {isScheduled ? "Scheduled:" : "Sent:"}
           </span>{" "}
@@ -104,7 +101,6 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
       );
     },
   },
-
   {
     accessorKey: "recurringType",
     header: "Recurring Type",
@@ -128,7 +124,6 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
       );
     },
   },
-
   {
     accessorKey: "status",
     header: "Status",
@@ -150,14 +145,9 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
       );
     },
   },
-
   {
     id: "actions",
     header: "Actions",
-    cell: () => (
-      <Button variant="ghost" size="icon" className="hover:bg-gray-100">
-        <MoreVertical className="h-4 w-4 text-gray-600" />
-      </Button>
-    ),
+    cell: ({ row }) => <NotificationActions notification={row.original} />,
   },
 ];
