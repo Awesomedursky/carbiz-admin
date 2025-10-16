@@ -3,6 +3,7 @@ import {
   HouseSimple,
   HandCoins,
   Gear,
+  Bus,
   Notification,
 } from "@phosphor-icons/react";
 import { LogOut, ShoppingBag, UsersRound } from "lucide-react";
@@ -52,6 +53,11 @@ const data = {
       title: "Merchants",
       url: "/merchants",
       icon: IconCoins,
+    },
+    {
+      title: "Riders",
+      url: "/riders",
+      icon: Bus,
     },
     {
       title: "Payouts",

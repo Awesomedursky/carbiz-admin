@@ -75,10 +75,10 @@ const NotificationCenter = () => {
     onCreate={(newNotification) => {
       console.log("Created notification:", newNotification);
 
-      // Add the new notification to the existing list
+      
       setNotifications((prev) => [...prev, newNotification]);
 
-      // Close the dialog
+     
       handleClose();
     }}
   />

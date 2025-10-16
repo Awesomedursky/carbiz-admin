@@ -22,6 +22,7 @@ import {
   MerchantPreview,
   Products,
   Notification,
+  Riders,
   ProductPreview,
 } from "@/pages";
 import MainLayout from "@/components/_layout/main.layout";
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
             Component: PreviewOrder,
           },
         ],
+      },
+      {
+        path: "riders",
+        Component: Riders,
       },
       {
         path: "payouts",
