@@ -12,16 +12,18 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { NotificationEntity } from "@/columns/notifications.columns";
+import { useDrawerStore } from "@/store/drawer.store";
 
 type NotificationFormProps = {
   onClose: () => void;
   onCreate: (newNotification: any) => void;
-   initialData?: NotificationEntity;
+  initialData?: NotificationEntity;
 };
 
-const NotificationForm = ({ onClose, onCreate }: NotificationFormProps) => {
+const NotificationForm = ({ onCreate }: NotificationFormProps) => {
   const [scheduleOption, setScheduleOption] = useState<"now" | "later">("now");
   const [scheduledDate, setScheduledDate] = useState("");
+  const { closeModal } = useDrawerStore();
 
   const [formData, setFormData] = useState({
     title: "",
@@ -52,7 +54,7 @@ const NotificationForm = ({ onClose, onCreate }: NotificationFormProps) => {
       status: scheduleOption === "later" ? "Scheduled" : "Sent",
     };
     onCreate(newNotification);
-    onClose();
+    closeModal();
   };
 
   return (
@@ -177,7 +179,7 @@ const NotificationForm = ({ onClose, onCreate }: NotificationFormProps) => {
       </div>
 
       <div className="flex justify-end gap-2 pt-2">
-        <Button type="button" variant="outline" onClick={onClose}>
+        <Button type="button" variant="outline" onClick={closeModal}>
           Cancel
         </Button>
         <Button type="submit" variant="default">

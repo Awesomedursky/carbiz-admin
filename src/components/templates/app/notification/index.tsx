@@ -7,25 +7,15 @@ import NotificationForm from "@/components/molecules/NotificationForm";
 import { useState } from "react";
 
 import fetchNotifications from "@/queries/notifications.query";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
+import { useDrawerStore } from "@/store/drawer.store";
 
 const NotificationCenter = () => {
   const { data, loading } = fetchNotifications();
+  const { openModal } = useDrawerStore();
 
-  const [open, setOpen] = useState(false);
   const [, setNotifications] = useState<any[]>(data || []);
   const [] = useState(false);
-
-  
-  const handleClose = () => setOpen(false);
-
 
   const mappedData =
     data?.map((item: any) => ({
@@ -46,7 +36,7 @@ const NotificationCenter = () => {
       <NotificationCards />
 
       <DataTable
-        isClickable
+        // isClickable
         tableName="Notification Center"
         columns={NotificationColumns}
         data={mappedData}
@@ -54,38 +44,30 @@ const NotificationCenter = () => {
         columnKey="id"
         loading={loading}
       >
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button
-              variant="default"
-              className="md:py-6 border-0 shadow text-sm font-bold"
-            >
-              <Plus className="size-4" />
-              Create Notification
-            </Button>
-          </DialogTrigger>
+        <Button
+          variant="default"
+          className="md:py-6 border-0 shadow text-sm font-bold"
+          onClick={() =>
+            openModal({
+              title: "Create New Notification",
+              content: NotificationForm,
+              width: 600,
+              placement: "center",
+              showCloseIcon: false,
+              description: "Fill the correct information in the field provided below.",
+              props: {
+                onCreate: (newNotification: any) => {
+                  console.log("Created notification:", newNotification);
 
-         <DialogContent className="max-w-lg">
-  <DialogHeader>
-    <DialogTitle>Create Notification</DialogTitle>
-  </DialogHeader>
-
-  <NotificationForm
-    onClose={handleClose}
-    onCreate={(newNotification) => {
-      console.log("Created notification:", newNotification);
-
-      
-      setNotifications((prev) => [...prev, newNotification]);
-
-     
-      handleClose();
-    }}
-  />
-</DialogContent>
-
-        </Dialog>
-
+                  setNotifications((prev) => [...prev, newNotification]);
+                },
+              },
+            })
+          }
+        >
+          <Plus className="size-4" />
+          Create Notification
+        </Button>
       </DataTable>
     </div>
   );
