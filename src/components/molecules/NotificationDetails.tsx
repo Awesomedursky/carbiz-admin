@@ -34,10 +34,7 @@ const NotificationDetails: React.FC<NotificationDetailsProps> = ({
     <Card className="shadow-none border-none">
       <CardHeader>
         <h2 className="text-xl font-semibold">{notification.title}</h2>
-        <p className="text-sm text-gray-500">
-          Sent by <span className="font-medium">{notification.sentBy}</span> on{" "}
-          {new Date(notification.dateTime).toLocaleString()}
-        </p>
+        
       </CardHeader>
 
       <Separator className="my-3" />
@@ -69,7 +66,15 @@ const NotificationDetails: React.FC<NotificationDetailsProps> = ({
           <span className="font-medium">{notification.audience}</span>
 
           <span className="text-gray-500">Frequency</span>
+          
           <span className="font-medium">{notification.recurringType}</span>
+
+          <span className="text-sm text-gray-500"> Sent by</span>
+           <span className="font-medium">{notification.sentBy}</span>
+           
+           <span className="text-gray-500">Time Sent</span> 
+           <span className="font-medium"> {new Date(notification.dateTime).toLocaleString()}</span>
+        
 
           <span className="text-gray-500">Created At</span>
           <span className="font-medium">

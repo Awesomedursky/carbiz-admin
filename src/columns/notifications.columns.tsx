@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import NotificationActions from "@/components/molecules/NotificationActions";
 
-// ✅ Notification type
+
 export type NotificationEntity = {
   id: number;
   title: string;
@@ -16,9 +16,9 @@ export type NotificationEntity = {
   recurringType: "One Time" | "Daily" | "Weekly" | "Bi-Weekly";
   status: "Sent" | "Scheduled";
   message?: string;
+  scheduledDate?: string;
 };
 
-// ✅ Table columns
 export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
   {
     id: "select",

@@ -1,6 +1,11 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import InputField from "@/components/atoms/form/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -11,182 +16,194 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { NotificationEntity } from "@/columns/notifications.columns";
+import { FormLabel } from "@/components/ui/form";
 import { useDrawerStore } from "@/store/drawer.store";
+
+import {
+  NotificationSchema,
+  NotificationSchemaType,
+} from "@/schema/notification.schema";
+
+import { NotificationEntity } from "@/columns/notifications.columns";
 
 type NotificationFormProps = {
   onClose: () => void;
-  onCreate: (newNotification: any) => void;
+  onCreate: (newNotification: NotificationEntity) => void;
   initialData?: NotificationEntity;
 };
 
-const NotificationForm = ({ onCreate }: NotificationFormProps) => {
-  const [scheduleOption, setScheduleOption] = useState<"now" | "later">("now");
-  const [scheduledDate, setScheduledDate] = useState("");
+const NotificationForm = ({ onCreate, initialData }: NotificationFormProps) => {
   const { closeModal } = useDrawerStore();
 
-  const [formData, setFormData] = useState({
-    title: "",
-    message: "",
-    audience: "",
-    method: "Email",
-    isScheduled: false,
-    scheduleOption,
-    scheduledDate: "",
-    dateTime: "",
-    recurringType: "One Time",
+  const [scheduleOption, setScheduleOption] = useState<"now" | "later">(
+    initialData?.isScheduled ? "later" : "now"
+  );
+  const [scheduledDate, setScheduledDate] = useState<string>("");
+
+  const form = useForm<NotificationSchemaType>({
+    resolver: zodResolver(NotificationSchema),
+    defaultValues: {
+      title: initialData?.title || "",
+      message: initialData?.message || "",
+      audience: initialData?.audience || "",
+      method: (initialData?.method as any) || "Email",
+      recurringType: (initialData?.recurringType as any) || "One Time",
+      isScheduled: initialData?.isScheduled || false,
+      scheduledDate: initialData?.scheduledDate || "",
+      dateTime:
+        initialData?.dateTime instanceof Date
+          ? initialData.dateTime.toISOString()
+          : initialData?.dateTime || "",
+    },
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newNotification = {
-      ...formData,
+  const onSubmit = (data: NotificationSchemaType) => {
+    const newNotification: NotificationEntity = {
+      ...data,
+      id: initialData?.id ?? Date.now(),
       isScheduled: scheduleOption === "later",
-      dateTime:
-        scheduleOption === "later" ? scheduledDate : new Date().toISOString(),
+      dateTime: scheduleOption === "later"
+        ? scheduledDate
+        : new Date().toISOString(),
       status: scheduleOption === "later" ? "Scheduled" : "Sent",
+      sentBy: ""
     };
+
     onCreate(newNotification);
     closeModal();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-      <div>
-        <Label>Notification Title</Label>
-        <Input
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          placeholder="Enter notification title"
-          required
-        />
-      </div>
-
-      <div>
-        <Label>Message</Label>
-        <Textarea
-          name="message"
-          value={formData.message}
-          onChange={handleChange}
-          placeholder="Write the message here..."
-          required
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-2 mt-0 mb-0"
+      >
+        {/* Title */}
         <div>
-          <Label>Delivery Method</Label>
-          <Select
-            value={formData.method}
-            onValueChange={(value) =>
-              setFormData({ ...formData, method: value as any })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Method" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Email">Email</SelectItem>
-              <SelectItem value="Push">Push</SelectItem>
-              <SelectItem value="SMS">SMS</SelectItem>
-              <SelectItem value="In-App">In-App</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div>
-          <Label>Audience</Label>
-          <Input
-            name="audience"
-            value={formData.audience}
-            onChange={handleChange}
-            placeholder="e.g., Customers, Merchants"
+          <FormLabel>Notification Title</FormLabel>
+          <InputField
+            control={form.control}
+            name="title"
+            placeholder="Enter notification title"
           />
         </div>
-      </div>
 
-      <div>
-        <Label>Schedule Option</Label>
-        <div className="flex items-center gap-6 mt-2">
-          <div className="flex items-center gap-2">
-            <Checkbox
-              checked={scheduleOption === "now"}
-              onCheckedChange={() => setScheduleOption("now")}
-            />
-            <span>Send Now</span>
+        {/* Message */}
+        <div>
+          <FormLabel>Message</FormLabel>
+          <Textarea
+            {...form.register("message")}
+            placeholder="Write the message here..."
+          />
+        </div>
+
+        {/* Delivery & Audience */}
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <FormLabel>Delivery Method</FormLabel>
+            <Select
+              onValueChange={(value) =>
+                form.setValue("method", value as any)
+              }
+              value={form.watch("method")}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Method" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Email">Email</SelectItem>
+                <SelectItem value="Push">Push</SelectItem>
+                <SelectItem value="SMS">SMS</SelectItem>
+                <SelectItem value="In-App">In-App</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Checkbox
-              checked={scheduleOption === "later"}
-              onCheckedChange={() => setScheduleOption("later")}
+          <div>
+            <FormLabel>Audience</FormLabel>
+            <InputField
+              control={form.control}
+              name="audience"
+              placeholder="e.g., Customers, Merchants"
             />
-            <span>Send Later</span>
           </div>
         </div>
-      </div>
 
-      {scheduleOption === "later" && (
+        {/* Schedule */}
         <div>
-          <Label>Pick Date and Time</Label>
-          <Input
-            type="datetime-local"
-            value={scheduledDate}
-            onChange={(e) => setScheduledDate(e.target.value)}
-            required
-          />
-        </div>
-      )}
-
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <Label>Repeat Every</Label>
-          <Select
-            value={formData.recurringType}
-            onValueChange={(value) =>
-              setFormData({ ...formData, recurringType: value as any })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="One Time">One Time</SelectItem>
-              <SelectItem value="Daily">Daily</SelectItem>
-              <SelectItem value="Weekly">Weekly</SelectItem>
-              <SelectItem value="Bi-Weekly">Bi-Weekly</SelectItem>
-            </SelectContent>
-          </Select>
+          <Label>Schedule Option</Label>
+          <div className="flex items-center gap-6 mt-2">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                checked={scheduleOption === "now"}
+                onCheckedChange={() => setScheduleOption("now")}
+              />
+              <span>Send Now</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                checked={scheduleOption === "later"}
+                onCheckedChange={() => setScheduleOption("later")}
+              />
+              <span>Send Later</span>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <Label>End Date</Label>
-          <Input
-            type="datetime-local"
-            name="dateTime"
-            value={formData.dateTime}
-            onChange={handleChange}
-          />
-        </div>
-      </div>
+        {scheduleOption === "later" && (
+          <div>
+            <Label>Pick Date and Time</Label>
+            <Input
+              type="datetime-local"
+              value={scheduledDate}
+              onChange={(e) => setScheduledDate(e.target.value)}
+            />
+          </div>
+        )}
 
-      <div className="flex justify-end gap-2 pt-2">
-        <Button type="button" variant="outline" onClick={closeModal}>
-          Cancel
-        </Button>
-        <Button type="submit" variant="default">
-          Save Notification
-        </Button>
-      </div>
-    </form>
+        {/* Recurrence */}
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <Label>Repeat Every</Label>
+            <Select
+              onValueChange={(value) =>
+                form.setValue("recurringType", value as any)
+              }
+              value={form.watch("recurringType")}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="One Time">One Time</SelectItem>
+                <SelectItem value="Daily">Daily</SelectItem>
+                <SelectItem value="Weekly">Weekly</SelectItem>
+                <SelectItem value="Bi-Weekly">Bi-Weekly</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <Label>End Date</Label>
+            <Input
+              type="datetime-local"
+              {...form.register("dateTime")}
+            />
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="flex justify-end gap-2 pt-2">
+          <Button type="button" variant="outline" onClick={closeModal}>
+            Cancel
+          </Button>
+          <Button type="submit" variant="default">
+            Save Notification
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 };
 

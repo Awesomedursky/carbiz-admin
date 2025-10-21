@@ -13,12 +13,24 @@ import {
 import NotificationDetails from "@/components/molecules/NotificationDetails";
 import { NotificationEntity } from "@/columns/notifications.columns";
 import { useDrawerStore } from "@/store/drawer.store";
+import NotificationForm from "@/components/molecules/NotificationForm";
+import DeleteNotification from "./DeleteNotifications";
 
 const NotificationActions: React.FC<{ notification: NotificationEntity }> = ({
   notification,
 }) => {
  
   const { openModal } = useDrawerStore();
+
+  
+  const handleUpdateNotification = (updatedNotification: NotificationEntity) => {
+    console.log("Updated notification:", updatedNotification);
+  };
+
+    function onDelete(id: number) {
+  
+        console.log(`Deleting notification with id: ${id}`);
+    }
 
   return (
     <div>
@@ -48,17 +60,30 @@ const NotificationActions: React.FC<{ notification: NotificationEntity }> = ({
             View
           </DropdownMenuItem>
           <DropdownMenuItem
-            onSelect={(e) => {
-              e.preventDefault();
-              alert(`Editing: ${notification.title}`);
-            }}
+            onSelect={() => {
+             openModal({
+                title: "Edit Notification",
+                content: NotificationForm,
+                props: {   initialData: notification,
+                onCreate: handleUpdateNotification, },
+                placement: 'right'
+              })
+             }
+            }
           >
             Edit
           </DropdownMenuItem>
           <DropdownMenuItem
-            onSelect={(e) => {
-              e.preventDefault();
-              alert(`Deleting: ${notification.title}`);
+            onSelect={() => {
+              openModal({
+                title: "Delete Notification",
+                content: DeleteNotification,
+                props: {
+                onDelete: () => onDelete(notification.id),
+                },
+                placement: "center",
+
+              })
             }}
             className="text-red-600"
           >
