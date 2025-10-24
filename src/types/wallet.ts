@@ -5,6 +5,7 @@ type WalletEntity = {
   isActive: Boolean;
   updatedAT: Date;
   walletAddrress: string;
+  riderId?: number;
 };
 
 export default WalletEntity

@@ -14,7 +14,7 @@ import NotificationDetails from "@/components/molecules/NotificationDetails";
 import { NotificationEntity } from "@/columns/notifications.columns";
 import { useDrawerStore } from "@/store/drawer.store";
 import NotificationForm from "@/components/molecules/NotificationForm";
-import DeleteNotification from "./DeleteNotifications";
+import DeleteModal from "./DeleteModal";
 
 const NotificationActions: React.FC<{ notification: NotificationEntity }> = ({
   notification,
@@ -74,18 +74,18 @@ const NotificationActions: React.FC<{ notification: NotificationEntity }> = ({
             Edit
           </DropdownMenuItem>
           <DropdownMenuItem
-            onSelect={() => {
-              openModal({
-                title: "Delete Notification",
-                content: DeleteNotification,
-                props: {
-                onDelete: () => onDelete(notification.id),
-                },
-                placement: "center",
-
-              })
-            }}
-            className="text-red-600"
+            onClick={() => {
+    openModal({
+      title: "Delete Notification",
+      content: DeleteModal,
+      props: {
+        itemName: "Notification",
+        onDelete: () => onDelete(notification.id),
+      },
+      placement: "center",
+    });
+  }}
+    className="text-red-600"
           >
             Delete
           </DropdownMenuItem>
