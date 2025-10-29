@@ -1,5 +1,5 @@
 @import url("https://fonts.cdnfonts.com/css/satoshi");
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap");
 
 @import "tailwindcss";
@@ -147,4 +147,17 @@
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+[data-radix-drawer-overlay],
+[data-radix-drawer-content] {
+  transition: none !important;
+}
+
+/* When drawer is closed, disable pointer events */
+[data-state="closed"][data-radix-drawer-overlay],
+[data-state="closed"][data-radix-drawer-content] {
+  pointer-events: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
 }

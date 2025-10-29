@@ -1,53 +1,64 @@
-// store/drawer-store.ts
 import { create } from "zustand";
 import { ReactNode, ComponentType } from "react";
 
-export type DrawerContentProps<T = any> = {
-  [key: string]: any; // allows flexible props
-};
+export type DrawerPlacement =
+  | "right"
+  | "left"
+  | "top"
+  | "bottom"
+  | "center"
+  | null;
+export type DrawerType = "dialog" | "drawer" | null;
 
-interface OpenDrawerProps<T = any> {
+export interface DrawerContentProps {
+  [key: string]: any;
+}
+
+export interface DrawerOptions<T = any> {
   title?: string;
-  // can accept React component or ReactNode
+  type?: DrawerType;
   content?: ReactNode | ComponentType<T>;
-  placement?: "right" | "left" | "top" | "bottom" | "center";
-  props?: DrawerContentProps<T>;
-  width?: number;
+  placement?: DrawerPlacement;
+  props?: DrawerContentProps | null;
+  width?: number | null;
   showCloseIcon?: boolean;
   description?: string;
 }
 
-interface DrawerState<T = any> {
+interface DrawerState<T = any> extends DrawerOptions<T> {
   isOpen: boolean;
-  showCloseIcon?: boolean;
-  description?: string;
-  title?: string;
-  width?: number;
-  content?: ReactNode | ComponentType<T>;
-  placement?: "right" | "left" | "top" | "bottom" | "center";
-  props?: DrawerContentProps<T>;
-  openModal: (props: OpenDrawerProps<T>) => void;
+  openModal: (options: DrawerOptions<T>) => void;
   closeModal: () => void;
 }
 
 export const useDrawerStore = create<DrawerState>((set) => ({
   isOpen: false,
+  type: null,
+
   openModal: ({
+    type = "drawer",
     title,
     content,
     placement = "right",
     props,
+    width,
     showCloseIcon = true,
     description,
   }) =>
     set({
       isOpen: true,
+      type,
       title,
       content,
       placement,
       props,
+      width,
       showCloseIcon,
       description,
     }),
-  closeModal: () => set({ isOpen: false }),
+
+  closeModal: () =>
+    set({
+      isOpen: false,
+    }),
 }));

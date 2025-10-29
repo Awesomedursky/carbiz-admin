@@ -14,6 +14,7 @@ import DeleteModal from "@/components/molecules/DeleteModal";
 import RiderDetails from "@/components/molecules/RiderDetails";
 import DisableRider from "./DisableRider";
 import RiderEntity from "@/types/rider.type";
+import { DrawerTrigger } from "../ui/drawer";
 
 interface RiderActionsProps {
   rider: RiderEntity;
@@ -22,13 +23,13 @@ interface RiderActionsProps {
 const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
   const { openModal } = useDrawerStore();
 
-   function onDelete(id: number) {
-  
-        console.log(`Deleting rider with id: ${id}`);
-    }
+  function onDelete(id: number) {
+    console.log(`Deleting rider with id: ${id}`);
+  }
 
   const handleApprove = () => {
-   openModal({
+    openModal({
+      type: "dialog",
       title: "Disable Rider",
       content: DisableRider,
       props: { rider },
@@ -38,6 +39,7 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
 
   const handleReject = () => {
     openModal({
+      type: "dialog",
       title: "Disable Rider",
       content: DisableRider,
       props: { rider },
@@ -47,6 +49,7 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
 
   const handleDelete = () => {
     openModal({
+      type: "dialog",
       title: "Disable Rider",
       content: DeleteModal,
       props: {
@@ -59,6 +62,7 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
 
   const handleDisable = () => {
     openModal({
+      type: "dialog",
       title: "Disable Rider",
       content: DisableRider,
       props: { rider },
@@ -68,6 +72,7 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
 
   const handleViewDetails = () => {
     openModal({
+      type: "drawer",
       title: "Rider Details",
       content: RiderDetails,
       props: { rider },
@@ -79,6 +84,7 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
     openModal({
       title: "Reject Rider Request",
       content: DeleteModal,
+      type: "dialog",
       props: {
         id: rider.id,
         title: "Reject Rider Request",
@@ -93,6 +99,8 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
   const handleDeleteModal = () => {
     openModal({
       title: "Delete Request",
+      type: "dialog",
+
       content: DeleteModal,
       props: {
         id: rider.id,
@@ -111,7 +119,9 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
         return (
           <>
             <DropdownMenuItem onSelect={handleViewDetails}>
+              {/* <DrawerTrigger> */}
               View Details
+              {/* </DrawerTrigger> */}
             </DropdownMenuItem>
 
             <DropdownMenuItem onSelect={handleApprove}>
@@ -130,9 +140,7 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
       case "APPROVED":
         return (
           <>
-            <DropdownMenuItem onSelect={handleViewDetails}
-            >
-              
+            <DropdownMenuItem onSelect={handleViewDetails}>
               View Details
             </DropdownMenuItem>
 

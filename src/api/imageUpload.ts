@@ -1,24 +1,5 @@
 import axios from "axios";
 
-// export const uploadImageRest = (
-//   file: File,
-//   onProgress: (percent: number) => void
-// ): Promise<string> => {
-//   return axios
-//     .post(
-//       "https://carbiz-backend-euek.onrender.com/api/carbiz/v1/files/upload/product-images",
-//       { productImages: file },
-//       {
-//         headers: { "Content-Type": "multipart/form-data" },
-//         onUploadProgress: (e: any) => {
-//           const percent = Math.round((e.loaded * 100) / e.total);
-//           onProgress(percent);
-//         },
-//       }
-//     )
-//     .then((res) => res.data.payload);
-// };
-
 export const uploadImageRest = (
   files: File[],
   onProgress?: (percent: number) => void

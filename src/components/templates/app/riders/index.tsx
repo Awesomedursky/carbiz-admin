@@ -15,7 +15,6 @@ const Riders = () => {
 
   return (
     <DataTable
-      isClickable
       tableName="Riders"
       columns={RiderColumns}
       data={data?.length ? data : mockRiders} // ✅ fallback to mock if empty

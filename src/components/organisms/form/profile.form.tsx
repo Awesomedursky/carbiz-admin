@@ -42,13 +42,10 @@ const ProfileForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="max-w-lg">
           <ImagePicker
-            control={form.control}
-            name="image"
-            label="Profile Picture"
+            name="businessPictureUrl"
             defaultValue={user?.profilePics}
-            onChange={(value: string) =>
-              form.setValue("profilePics", value)
-            }
+            control={form.control}
+            label="Profile Picture"
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:mb-5">
