@@ -20,33 +20,52 @@ const DrawerPortal = DrawerPrimitive.Portal;
 
 const DrawerClose = DrawerPrimitive.Close;
 
-const DrawerOverlay = React.forwardRef<
-  React.ElementRef<typeof DrawerPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay>
->(({ className, ...props }, ref) => (
-  <DrawerPrimitive.Overlay
-    ref={ref}
-    className={cn("fixed inset-0 z-50 bg-black/80", className)}
-    {...props}
-  />
-));
-DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
+// const DrawerOverlay = React.forwardRef<
+//   React.ElementRef<typeof DrawerPrimitive.Overlay>,
+//   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay>
+// >(({ className, ...props }, ref) => (
+//   <DrawerPrimitive.Overlay
+//     ref={ref}
+//     className={cn(
+//       "fixed inset-0 z-40 bg-black/50",
+//       // Handle animation states properly
+//       "data-[state=open]:animate-in data-[state=open]:fade-in-0",
+//       "data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
+//       // When closed — don't block clicks
+//       "pointer-events-none data-[state=open]:pointer-events-auto",
+//       className
+//     )}
+//     {...props}
+//   />
+// ));
+// DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
 
 const DrawerContent = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
   <DrawerPortal>
-    <DrawerOverlay />
+    {/* <DrawerOverlay /> */}
     <DrawerPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background",
+        // Float layout
+        "fixed right-6 top-8 bottom-8 z-50 w-[420px] rounded-2xl bg-background border border-border shadow-2xl flex flex-col",
+
+        // Animation
+        "data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right",
+
+        // Smooth motion
+        "transition-all duration-300 ease-in-out",
+
+        // No drag bar or unnecessary spacing
+        "overflow-hidden",
+
         className
       )}
       {...props}
     >
-      <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
+      {/* Removed that mx-auto h-2 bar here */}
       {children}
     </DrawerPrimitive.Content>
   </DrawerPortal>
@@ -105,7 +124,7 @@ DrawerDescription.displayName = DrawerPrimitive.Description.displayName;
 export {
   Drawer,
   DrawerPortal,
-  DrawerOverlay,
+  // DrawerOverlay,
   DrawerTrigger,
   DrawerClose,
   DrawerContent,

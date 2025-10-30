@@ -10,6 +10,7 @@ import {
 
 import { useDrawerStore } from "@/store/drawer.store";
 import { X } from "lucide-react";
+import { useState } from "react";
 
 export function CustomDialog() {
   const {
@@ -48,8 +49,13 @@ export function CustomDialog() {
     return content;
   };
 
+  const [open, setOpen] = useState(isOpen);
+
   return (
-    <Dialog open={type === "dialog" && isOpen} onOpenChange={closeModal}>
+    <Dialog
+      open={type === "dialog" && open}
+      onOpenChange={(e) => setOpen(!open)}
+    >
       <DialogOverlay />
       <DialogContent
         className={` bg-white shadow-lg z-50 transition-transform duration-300 

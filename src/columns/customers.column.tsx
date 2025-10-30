@@ -3,14 +3,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import Customer from "@/types/customer.type";
 
-// type CustomerType = {
-//   customerID: string;
-//   name: string;
-//   email: string;
-//   createdAt: Date;
-//   phoneNumber: string;
-// };
-
 const CustomerColumns: ColumnDef<Customer>[] = [
   {
     id: "select",
@@ -48,7 +40,9 @@ const CustomerColumns: ColumnDef<Customer>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="capitalize font-normal py-3.5 normal">{row.getValue("name")}</div>
+        <div className="capitalize font-normal py-3.5 normal">
+          {row.getValue("name")}
+        </div>
       );
     },
   },
@@ -95,6 +89,11 @@ const CustomerColumns: ColumnDef<Customer>[] = [
         </div>
       );
     },
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    // cell: ({ row }) => <RiderActions rider={row.original} />,
   },
 ];
 

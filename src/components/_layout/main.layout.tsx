@@ -29,7 +29,7 @@ const MainLayout = () => {
           <Outlet />
         </div>
         <CustomDialog />
-        <CustomDrawer />
+        {/* <CustomDrawer /> */}
       </SidebarInset>
     </SidebarProvider>
   );

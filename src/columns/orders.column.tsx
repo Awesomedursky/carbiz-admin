@@ -1,6 +1,8 @@
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import OrderEntity from "@/types/order.type";
 import { ColumnDef } from "@tanstack/react-table";
+import { EyeIcon } from "lucide-react";
 import moment from "moment";
 
 export type OrderType = {
@@ -161,6 +163,14 @@ const OrderColumn: ColumnDef<OrderEntity>[] = [
           </span>
         </div>
       );
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      <Button>
+        <EyeIcon size={20} />
+      </Button>;
     },
   },
 ];

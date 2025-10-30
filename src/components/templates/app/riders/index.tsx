@@ -5,6 +5,7 @@ import { RiderColumns } from "@/columns/riders.columns";
 import useRidersQuery from "@/queries/riders.query";
 import { mockRiders } from "@/api/mockrider";
 import RiderEntity from "@/types/rider.type"; // ✅ import your defined model
+import { CustomDrawer } from "@/components/molecules/drawer";
 
 const Riders = () => {
   // ✅ Correct typing using RiderEntity
@@ -29,6 +30,7 @@ const Riders = () => {
         <Download className="size-4" />
         Export Data
       </Button>
+      <CustomDrawer />
     </DataTable>
   );
 };

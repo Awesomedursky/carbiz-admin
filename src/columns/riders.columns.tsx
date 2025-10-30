@@ -77,7 +77,6 @@ export const RiderColumns: ColumnDef<RiderEntity>[] = [
   {
     id: "actions",
     header: "Actions",
-    
     cell: ({ row }) => <RiderActions rider={row.original} />,
   },
 ];

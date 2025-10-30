@@ -6,12 +6,13 @@ import {
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
+  // DrawerOverlay,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
 import { useDrawerStore } from "@/store/drawer.store";
+import { useState } from "react";
 
 export function CustomDrawer() {
   const { type, isOpen, closeModal } = useDrawerStore();
@@ -19,15 +20,22 @@ export function CustomDrawer() {
   if (!(type === "drawer" && isOpen)) return null;
 
   return (
-    <Drawer>
-      <DrawerTrigger asChild>Opem Modal</DrawerTrigger>
-      <DrawerContent
-      // className={cn(
-      //   "fixed right-0 top-0 h-full  bg-white border-l border-gray-200 shadow-lg",
-      //   "data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right"
-      // )}
-      >
-        Test
+    <Drawer open={isOpen} onOpenChange={closeModal}>
+      <DrawerContent className="bg-white">
+        <div className="p-4">
+          <DrawerHeader>
+            <DrawerTitle>Test Drawer</DrawerTitle>
+            <DrawerDescription>
+              Floated fixed to the right side
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="flex-1 p-4">Your content goes here...</div>
+          <DrawerFooter>
+            <DrawerClose asChild>
+              <Button variant="outline">Close</Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </div>
       </DrawerContent>
     </Drawer>
   );
