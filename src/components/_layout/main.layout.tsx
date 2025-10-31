@@ -4,8 +4,9 @@ import { SiteHeader } from "@/components/site-header";
 import { Outlet, useNavigate } from "react-router";
 import { useEffect } from "react";
 import { useAuthStore } from "@/store/auth.store";
-import { CustomDialog } from "../molecules/dialog";
-import { CustomDrawer } from "../molecules/drawer";
+import { CustomDrawer } from "../molecules/CustomDrawer";
+// import { CustomDialog } from "../molecules/dialog";
+// import { CustomDrawer } from "../molecules/drawer";
 
 const MainLayout = () => {
   const { user } = useAuthStore();
@@ -28,7 +29,7 @@ const MainLayout = () => {
         <div className="p-5 md:p-10 lg:p-12  xl:p-14 2xl:p-20">
           <Outlet />
         </div>
-        <CustomDialog />
+        {/* <CustomDialog /> */}
         {/* <CustomDrawer /> */}
       </SidebarInset>
     </SidebarProvider>
