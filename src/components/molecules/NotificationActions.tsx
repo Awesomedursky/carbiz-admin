@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MoreVertical } from "lucide-react";
 import {
@@ -19,23 +19,26 @@ import DeleteModal from "./DeleteModal";
 const NotificationActions: React.FC<{ notification: NotificationEntity }> = ({
   notification,
 }) => {
- 
   const { openModal } = useDrawerStore();
+  const [open, setOpen] = useState(false);
 
-  
+  /** --- HANDLERS --- **/
   const handleUpdateNotification = (updatedNotification: NotificationEntity) => {
     console.log("Updated notification:", updatedNotification);
   };
 
-    function onDelete(id: number) {
-  
-        console.log(`Deleting notification with id: ${id}`);
-    }
+  function onDelete(id: number) {
+    console.log(`Deleting notification with id: ${id}`);
+  }
 
+  /** --- RENDER --- **/
   return (
-    <div>
-      {/* --- Dropdown Menu --- */}
-      <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
+      <div
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        className="relative inline-block"
+      >
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
@@ -46,52 +49,61 @@ const NotificationActions: React.FC<{ notification: NotificationEntity }> = ({
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="end">
+        <DropdownMenuContent align="end" className="z-50">
           <DropdownMenuItem
-            onSelect={() =>
+            onSelect={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
               openModal({
                 title: "Notification Details",
                 content: NotificationDetails,
                 props: { notification },
-                placement: 'right'
-              })
-            }
+                placement: "right",
+              });
+            }}
           >
             View
           </DropdownMenuItem>
+
           <DropdownMenuItem
-            onSelect={() => {
-             openModal({
+            onSelect={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              openModal({
                 title: "Edit Notification",
                 content: NotificationForm,
-                props: {   initialData: notification,
-                onCreate: handleUpdateNotification, },
-                placement: 'right'
-              })
-             }
-            }
+                props: {
+                  initialData: notification,
+                  onCreate: handleUpdateNotification,
+                },
+                placement: "right",
+              });
+            }}
           >
             Edit
           </DropdownMenuItem>
+
           <DropdownMenuItem
-            onClick={() => {
-    openModal({
-      title: "Delete Notification",
-      content: DeleteModal,
-      props: {
-        itemName: "Notification",
-        onDelete: () => onDelete(notification.id),
-      },
-      placement: "center",
-    });
-  }}
-    className="text-red-600"
+            onSelect={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              openModal({
+                title: "Delete Notification",
+                content: DeleteModal,
+                props: {
+                  itemName: "Notification",
+                  onDelete: () => onDelete(notification.id),
+                },
+                placement: "center",
+              });
+            }}
+            className="text-red-600"
           >
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+      </div>
+    </DropdownMenu>
   );
 };
 

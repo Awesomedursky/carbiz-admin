@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MoreVertical } from "lucide-react";
 import {
@@ -14,7 +14,6 @@ import DeleteModal from "@/components/molecules/DeleteModal";
 import RiderDetails from "@/components/molecules/RiderDetails";
 import DisableRider from "./DisableRider";
 import RiderEntity from "@/types/rider.type";
-import { DrawerTrigger } from "../ui/drawer";
 
 interface RiderActionsProps {
   rider: RiderEntity;
@@ -22,14 +21,15 @@ interface RiderActionsProps {
 
 const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
   const { openModal } = useDrawerStore();
+  const [open, setOpen] = useState<boolean>(false);
 
-  function onDelete(id: number) {
-    console.log(`Deleting rider with id: ${id}`);
-  }
+   function onDelete(id: number) {
+  
+        console.log(`Deleting rider with id: ${id}`);
+    }
 
   const handleApprove = () => {
-    openModal({
-      type: "dialog",
+   openModal({
       title: "Disable Rider",
       content: DisableRider,
       props: { rider },
@@ -113,23 +113,21 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
     });
   };
 
+  // ---- Menu Items ---- //
   const getMenuItems = () => {
     switch (rider.status) {
       case "PENDING":
         return (
           <>
             <DropdownMenuItem onSelect={handleViewDetails}>
-              {/* <DrawerTrigger> */}
               View Details
               {/* </DrawerTrigger> */}
             </DropdownMenuItem>
-
-            <DropdownMenuItem onSelect={handleApprove}>
+            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleApprove(); }}>
               Approve Rider
             </DropdownMenuItem>
-
             <DropdownMenuItem
-              onSelect={handleRejectModal}
+              onClick={(e) => { e.stopPropagation(); handleRejectModal(); }}
               className="text-red-600"
             >
               Reject Rider
@@ -140,11 +138,12 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
       case "APPROVED":
         return (
           <>
-            <DropdownMenuItem onSelect={handleViewDetails}>
+            <DropdownMenuItem onSelect={handleViewDetails}
+            >
+              
               View Details
             </DropdownMenuItem>
-
-            <DropdownMenuItem onSelect={handleDisable}>
+            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleDisable(); }}>
               Disable Rider
             </DropdownMenuItem>
           </>
@@ -153,12 +152,11 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
       case "DISABLED":
         return (
           <>
-            <DropdownMenuItem onSelect={handleViewDetails}>
+            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleViewDetails(); }}>
               View Details
             </DropdownMenuItem>
-
             <DropdownMenuItem
-              onSelect={handleDeleteModal}
+              onClick={(e) => { e.stopPropagation(); handleDeleteModal(); }}
               className="text-red-600"
             >
               Delete Request
@@ -168,22 +166,40 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
 
       default:
         return (
-          <DropdownMenuItem onSelect={handleViewDetails}>
+          <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleViewDetails(); }}>
             View Details
           </DropdownMenuItem>
         );
     }
   };
 
+  // ---- Dropdown (hover trigger) ---- //
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
+    <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenuTrigger
+        asChild
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+      >
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onClick={(e) => e.stopPropagation()}
+          className="hover:bg-gray-100 focus:outline-none"
+        >
           <MoreVertical className="h-4 w-4 text-gray-600" />
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end">{getMenuItems()}</DropdownMenuContent>
+      <DropdownMenuContent
+        align="end"
+        className="z-50"
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+      >
+        {getMenuItems()}
+      </DropdownMenuContent>
     </DropdownMenu>
   );
 };
