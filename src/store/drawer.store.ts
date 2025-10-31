@@ -60,5 +60,9 @@ export const useDrawerStore = create<DrawerState>((set) => ({
   closeModal: () =>
     set({
       isOpen: false,
+      type: null,
+      content: null,
+      title: undefined,
+      props: null,
     }),
 }));
