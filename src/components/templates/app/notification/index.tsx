@@ -2,13 +2,13 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/atoms/table";
 import { NotificationColumns } from "@/columns/notifications.columns";
-import NotificationCards from "@/components/molecules/NotificationCards";
-import NotificationForm from "@/components/molecules/NotificationForm";
+import NotificationForm from "@/components/molecules/notification/NotificationForm";
 import { useState } from "react";
 
 import fetchNotifications from "@/queries/notifications.query";
 
 import { useDrawerStore } from "@/store/drawer.store";
+import NotificationCards from "@/components/molecules/notification/NotificationCards";
 
 const NotificationCenter = () => {
   const { data, loading } = fetchNotifications();
@@ -54,7 +54,8 @@ const NotificationCenter = () => {
               width: 600,
               placement: "center",
               showCloseIcon: false,
-              description: "Fill the correct information in the field provided below.",
+              description:
+                "Fill the correct information in the field provided below.",
               props: {
                 onCreate: (newNotification: any) => {
                   console.log("Created notification:", newNotification);

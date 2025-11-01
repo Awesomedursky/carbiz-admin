@@ -42,8 +42,8 @@ export const CustomDrawer = () => {
               placement === "right" ? "ml-auto" : ""
             }`}
           >
-            <DrawerHeader>
-              <DrawerTitle>{title}</DrawerTitle>
+            <DrawerHeader className=" border-[#F1ECF9] border-b-2">
+              <DrawerTitle className="pt-3">{title}</DrawerTitle>
             </DrawerHeader>
             {renderContent()}
           </DrawerContent>
@@ -52,10 +52,10 @@ export const CustomDrawer = () => {
 
       {type === "dialog" && (
         <Dialog open={isOpen} onOpenChange={(open) => !open && closeModal()}>
-          <DialogContent>
-            <DialogHeader>
+          <DialogContent showCloseButton={false}>
+            {/* <DialogHeader>
               <DialogTitle>{title}</DialogTitle>
-            </DialogHeader>
+            </DialogHeader> */}
             {renderContent()}
           </DialogContent>
         </Dialog>

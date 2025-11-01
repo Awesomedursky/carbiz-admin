@@ -2,8 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import NotificationActions from "@/components/molecules/NotificationActions";
-
+import NotificationActions from "@/components/molecules/notification/NotificationActions";
 
 export type NotificationEntity = {
   id: number;

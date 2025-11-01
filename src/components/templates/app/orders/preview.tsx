@@ -1,6 +1,5 @@
 import DetailsSection, {
   CustomerDetails,
-  DetailRow,
   MerchantDetails,
   RiderDetails,
 } from "@/components/molecules/order/DetailsSection";
@@ -203,49 +202,23 @@ const Preview = () => {
           <DetailsSection
             title="Merchant Details"
             viewText="View Merchant"
+            details={merchantDetails}
             // onViewClick={handleViewMerchant}
-          >
-            <DetailRow label="Merchant Name" value={merchantDetails.name} />
-            <DetailRow
-              label="Merchant Phone Number"
-              value={merchantDetails.phoneNumber}
-            />
-          </DetailsSection>
+          />
 
           {/* Customer Details */}
           <DetailsSection
             title="Customer Details"
             viewText="View Customer"
-            // onViewClick={handleViewCustomer}
-          >
-            <DetailRow label="Customer Name" value={customerDetails.name} />
-            <DetailRow
-              label="Customer Address"
-              value={customerDetails.address}
-              isMultiline={true}
-            />
-            <DetailRow
-              label="Customer Email Address"
-              value={customerDetails.email}
-            />
-            <DetailRow
-              label="Customer Phone Number"
-              value={customerDetails.phoneNumber}
-            />
-          </DetailsSection>
+            details={customerDetails}
+          />
 
           {/* Rider Details */}
           <DetailsSection
             title="Rider Details"
             viewText="View Rider"
-            // onViewClick={handleViewRider}
-          >
-            <DetailRow label="Rider Name" value={riderDetails.name} />
-            <DetailRow
-              label="Rider Phone Number"
-              value={riderDetails.phoneNumber}
-            />
-          </DetailsSection>
+            details={riderDetails}
+          />
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter } from "react-router-dom";
 import AuthLayout from "@/components/_layout/auth.layout";
 
 // import Homepage from "../pages/Homepage";

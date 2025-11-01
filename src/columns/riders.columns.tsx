@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import RiderActions from "@/components/molecules/RiderActions";
+import RiderActions from "@/components/molecules/riders/RiderActions";
 import RiderEntity from "@/types/rider.type";
 
 export const RiderColumns: ColumnDef<RiderEntity>[] = [

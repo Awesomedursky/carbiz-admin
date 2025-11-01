@@ -1,6 +1,6 @@
+import Analytics from "@/components/atoms/analytics";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Bell, PaperPlaneTilt, Envelope, Clock } from "@phosphor-icons/react";
-import Analytics from "../atoms/analytics";
-import { Skeleton } from "../ui/skeleton";
 
 const analyticIcon = {
   totalSent: Bell,

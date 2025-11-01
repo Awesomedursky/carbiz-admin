@@ -5,7 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useDrawerStore } from "@/store/drawer.store";
 import RiderEntity from "@/types/rider.type";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
 interface DisableRiderProps {
@@ -20,7 +26,9 @@ const DisableRider: React.FC<DisableRiderProps> = ({ rider }) => {
 
   const handleDisable = async () => {
     if (!disableOption || !reason.trim()) {
-      alert("Please select an option and provide a reason for disabling this rider.");
+      alert(
+        "Please select an option and provide a reason for disabling this rider."
+      );
       return;
     }
 
@@ -55,7 +63,9 @@ const DisableRider: React.FC<DisableRiderProps> = ({ rider }) => {
       <div className="border rounded-lg p-4 bg-gray-50 space-y-2">
         <div>
           <p className="font-semibold text-base">{rider.name}</p>
-          <p className="text-sm text-gray-500">Rider • ID: #{rider.riderID ?? rider.id}</p>
+          <p className="text-sm text-gray-500">
+            Rider • ID: #{rider.riderID ?? rider.id}
+          </p>
         </div>
 
         <div className="text-sm border-t pt-2 space-y-1">
@@ -90,17 +100,22 @@ const DisableRider: React.FC<DisableRiderProps> = ({ rider }) => {
             <SelectValue placeholder="Select one" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="temporary">Temporary Suspension - (Rider can be reactivated
-              <br/>
-              later. Availability but active Deliveries
-              continue).</SelectItem>
-            <SelectItem value="permanent">Permanent Disable - (Complete account closure. 
-              <br/>
-              All active deliveries cancelled, requires
-              manual reactivation).</SelectItem>
-            <SelectItem value="delivery access">Delivery Access Only - (Hide from new order 
-              <br/>
-              assignments but allow dashboard access and existing delivery management).</SelectItem>
+            <SelectItem value="temporary">
+              Temporary Suspension - (Rider can be reactivated
+              <br />
+              later. Availability but active Deliveries continue).
+            </SelectItem>
+            <SelectItem value="permanent">
+              Permanent Disable - (Complete account closure.
+              <br />
+              All active deliveries cancelled, requires manual reactivation).
+            </SelectItem>
+            <SelectItem value="delivery access">
+              Delivery Access Only - (Hide from new order
+              <br />
+              assignments but allow dashboard access and existing delivery
+              management).
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -119,7 +134,7 @@ const DisableRider: React.FC<DisableRiderProps> = ({ rider }) => {
       </div>
 
       {/* ---- Buttons ---- */}
-      <div className="flex justify-end gap-2 pt-4">
+      <div className="grid grid-cols-2 space-x-2.5">
         <Button variant="outline" onClick={closeModal}>
           Cancel
         </Button>

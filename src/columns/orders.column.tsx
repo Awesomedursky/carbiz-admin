@@ -4,6 +4,7 @@ import OrderEntity from "@/types/order.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { EyeIcon } from "lucide-react";
 import moment from "moment";
+import { Link } from "react-router";
 
 export type OrderType = {
   id: string;
@@ -168,9 +169,14 @@ const OrderColumn: ColumnDef<OrderEntity>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      <Button>
-        <EyeIcon size={20} />
-      </Button>;
+      console.log(row);
+      return (
+        <Button>
+          <Link to={""}>
+            <EyeIcon size={20} />
+          </Link>
+        </Button>
+      );
     },
   },
 ];

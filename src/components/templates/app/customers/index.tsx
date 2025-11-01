@@ -8,7 +8,6 @@ const Customers = () => {
   return (
     <DataTable
       tableName="Customers"
-      isClickable
       columns={CustomerColumns}
       data={data || []}
       loading={loading}

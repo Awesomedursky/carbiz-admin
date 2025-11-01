@@ -2,6 +2,7 @@ import moment from "moment";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import Customer from "@/types/customer.type";
+import CustomerActions from "@/components/molecules/customer/customerActions";
 
 const CustomerColumns: ColumnDef<Customer>[] = [
   {
@@ -93,7 +94,7 @@ const CustomerColumns: ColumnDef<Customer>[] = [
   {
     id: "actions",
     header: "Actions",
-    // cell: ({ row }) => <RiderActions rider={row.original} />,
+    cell: ({ row }) => <CustomerActions customer={row.original} />,
   },
 ];
 
