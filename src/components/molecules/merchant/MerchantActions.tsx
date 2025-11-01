@@ -9,26 +9,28 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDrawerStore } from "@/store/drawer.store";
-import DeleteModal from "@/components/molecules/DeleteModal";
 import MerchantDetails from "./merchantDetails";
 import Merchant from "@/types/merchants.type";
+import GenericDisable from "../genericDisable";
 
 const MerchantAction = ({ merchant }: { merchant: Merchant }) => {
   const { openModal } = useDrawerStore();
 
-  function onDelete(id: number) {
-    console.log(`Deleting rider with id: ${id}`);
-  }
+  
 
-  // const handleApprove = () => {
-  //   openModal({
-  //     type: "dialog",
-  //     title: "Disable Rider",
-  //     content: DisableRider,
-  //     props: { merchant },
-  //     placement: "center",
-  //   });
-  // };
+  const handleApprove = () => {
+    openModal({
+      type: "dialog",
+      title: "Merchant",
+      content: GenericDisable,
+      props: {
+        type: "approve",
+        id: merchant?.merchantID,
+        name: merchant?.businessName,
+      },
+      placement: "center",
+    });
+  };
 
   // const handleReject = () => {
   //   openModal({
@@ -73,21 +75,24 @@ const MerchantAction = ({ merchant }: { merchant: Merchant }) => {
     });
   };
 
-  // const handleRejectModal = () => {
-  //   openModal({
-  //     title: "Reject Rider Request",
-  //     content: DeleteModal,
-  //     type: "dialog",
-  //     props: {
-  //       id: merchant.id,
-  //       title: "Reject Rider Request",
-  //       message: "This action will permanently reject this rider.",
-  //       confirmLabel: "Reject Rider",
-  //       onConfirm: handleReject,
-  //     },
-  //     placement: "center",
-  //   });
-  // };
+  const handleRejectModal = () => {
+    openModal({
+      title: "Merchant",
+      content: GenericDisable,
+      type: "dialog",
+      props: {
+        type: "reject",
+        id: merchant?.merchantID,
+        name: merchant?.businessName,
+        created: merchant?.createdAt,
+        // title: "Reject Rider Request",
+        // message: "This action will permanently reject this rider.",
+        // confirmLabel: "Reject Rider",
+        // onConfirm: handleReject,
+      },
+      placement: "center",
+    });
+  };
 
   // const handleDeleteModal = () => {
   //   openModal({
@@ -123,16 +128,16 @@ const MerchantAction = ({ merchant }: { merchant: Merchant }) => {
               View Details
             </DropdownMenuItem>
 
-            {/* <DropdownMenuItem onSelect={handleApprove}>
+            <DropdownMenuItem onSelect={handleApprove}>
               Approve Merchant
-            </DropdownMenuItem> */}
+            </DropdownMenuItem>
 
-            {/* <DropdownMenuItem
+            <DropdownMenuItem
               onSelect={handleRejectModal}
               className="text-red-600"
             >
               Reject Merchant
-            </DropdownMenuItem> */}
+            </DropdownMenuItem>
           </>
         );
 
@@ -167,9 +172,7 @@ const MerchantAction = ({ merchant }: { merchant: Merchant }) => {
 
       default:
         return (
-          <DropdownMenuItem
-          // onSelect={handleViewDetails}
-          >
+          <DropdownMenuItem onSelect={handleViewDetails}>
             View Details
           </DropdownMenuItem>
         );

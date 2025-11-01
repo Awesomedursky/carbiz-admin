@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import NotificationActions from "@/components/molecules/notification/NotificationActions";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export type NotificationEntity = {
   id: number;
@@ -20,43 +21,63 @@ export type NotificationEntity = {
 
 export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
   {
-    id: "select",
+    id: "id",
     header: ({ table }) => (
-      <input
-        type="checkbox"
-        checked={table.getIsAllPageRowsSelected()}
-        onChange={(e) => table.toggleAllPageRowsSelected(e.target.checked)}
-        className="h-4 w-4 accent-primary cursor-pointer"
-      />
+      <div className=" pl-3 md:pl-7">
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+          className=""
+        />
+      </div>
     ),
     cell: ({ row }) => (
-      <input
-        type="checkbox"
-        checked={row.getIsSelected()}
-        onChange={(e) => row.toggleSelected(e.target.checked)}
-        className="h-4 w-4 accent-primary cursor-pointer"
-      />
+      <div className=" pl-3 md:pl-7">
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      </div>
     ),
     enableSorting: false,
-    enableHiding: false,
+    enableHiding: true,
   },
   {
     accessorKey: "title",
-    header: "Title",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Title
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="font-medium text-gray-900">{row.original.title}</div>
+      <div className=" font-normal py-3.5 capitalize">{row.original.title}</div>
     ),
   },
   {
     accessorKey: "audience",
-    header: "Audience",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Audience
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="text-gray-700">{row.original.audience}</div>
+      <div className=" font-normal py-3.5 capitalize">
+        {row.original.audience}
+      </div>
     ),
   },
   {
     accessorKey: "method",
-    header: "Method",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Method
+      </div>
+    ),
     cell: ({ row }) => {
       const { method } = row.original;
       const colorVariant =
@@ -75,14 +96,24 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
   },
   {
     accessorKey: "sentBy",
-    header: "Sent By",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Sent By
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="text-gray-700">{row.original.sentBy}</div>
+      <div className=" font-normal py-3.5 capitalize">
+        {row.original.sentBy}
+      </div>
     ),
   },
   {
     accessorKey: "dateTime",
-    header: "Date/Time",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Date/Time
+      </div>
+    ),
     cell: ({ row }) => {
       const { dateTime, isScheduled } = row.original;
       const formattedDate =
@@ -91,7 +122,7 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
           : dateTime.toLocaleString();
 
       return (
-        <div className="text-sm text-gray-800">
+        <div className=" font-normal py-3.5 capitalize">
           <span className="text-gray-500">
             {isScheduled ? "Scheduled:" : "Sent:"}
           </span>{" "}
@@ -102,7 +133,11 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
   },
   {
     accessorKey: "recurringType",
-    header: "Recurring Type",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Recurring Type
+      </div>
+    ),
     cell: ({ row }) => {
       const { recurringType } = row.original;
       const colorMap: Record<string, string> = {
@@ -125,7 +160,11 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Status
+      </div>
+    ),
     cell: ({ row }) => {
       const { status } = row.original;
       const colorMap: Record<string, string> = {
@@ -146,7 +185,11 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
   },
   {
     id: "actions",
-    header: "Actions",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Actions
+      </div>
+    ),
     cell: ({ row }) => <NotificationActions notification={row.original} />,
   },
 ];

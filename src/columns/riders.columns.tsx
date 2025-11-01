@@ -4,39 +4,91 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import RiderActions from "@/components/molecules/riders/RiderActions";
 import RiderEntity from "@/types/rider.type";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export const RiderColumns: ColumnDef<RiderEntity>[] = [
   {
-    accessorKey: "riderID",
-    header: "Rider ID",
+    id: "id",
+    header: ({ table }) => (
+      <div className=" pl-3 md:pl-7">
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+          className=""
+        />
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="font-medium text-gray-900">{row.original.riderID}</div>
+      <div className=" pl-3 md:pl-7">
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      </div>
+    ),
+    enableSorting: false,
+    enableHiding: true,
+  },
+  {
+    accessorKey: "riderID",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Rider ID
+      </div>
+    ),
+    cell: ({ row }) => (
+      <div className=" font-normal py-3.5 capitalize">
+        {row.original.riderID}
+      </div>
     ),
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Name
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="text-gray-800 font-medium">{row.original.name}</div>
+      <div className=" font-normal py-3.5 capitalize">{row.original.name}</div>
     ),
   },
   {
     accessorKey: "email",
-    header: "Email",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Email
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="text-gray-700">{row.original.email}</div>
+      <div className=" font-normal py-3.5 capitalize">{row.original.email}</div>
     ),
   },
   {
     accessorKey: "phoneNumber",
-    header: "Phone Number",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Phone Number
+      </div>
+    ),
     cell: ({ row }) => (
-      <div className="text-gray-700">{row.original.phoneNumber}</div>
+      <div className=" font-normal py-3.5 capitalize">
+        {row.original.phoneNumber}
+      </div>
     ),
   },
   {
     accessorKey: "isApproved",
-    header: "Status",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Status
+      </div>
+    ),
     cell: ({ row }) => {
       const { isApproved, status } = row.original;
       const displayStatus = isApproved
@@ -64,11 +116,15 @@ export const RiderColumns: ColumnDef<RiderEntity>[] = [
   },
   {
     accessorKey: "updatedAt",
-    header: "Last Updated",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Last Updated
+      </div>
+    ),
     cell: ({ row }) => {
       const { updatedAt } = row.original;
       return (
-        <div className="text-sm text-gray-800">
+        <div className=" font-normal py-3.5 capitalize">
           {new Date(updatedAt).toLocaleString()}
         </div>
       );
@@ -76,7 +132,11 @@ export const RiderColumns: ColumnDef<RiderEntity>[] = [
   },
   {
     id: "actions",
-    header: "Actions",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] ">
+        Actions
+      </div>
+    ),
     cell: ({ row }) => <RiderActions rider={row.original} />,
   },
 ];

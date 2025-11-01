@@ -40,7 +40,7 @@ export const CustomDrawer = () => {
             <DrawerHeader className=" border-[#F1ECF9] border-b-2 sticky top-0 z-20">
               <DrawerTitle className="pt-3">{title}</DrawerTitle>
             </DrawerHeader>
-            <div className="overflow-y-scroll scroll-smooth">
+            <div className="overflow-y-scroll scroll-smooth scrollbar">
               {renderContent()}
             </div>
           </DrawerContent>

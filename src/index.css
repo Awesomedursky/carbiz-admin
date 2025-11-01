@@ -149,15 +149,6 @@
   scrollbar-width: none; /* Firefox */
 }
 
-[data-radix-drawer-overlay],
-[data-radix-drawer-content] {
-  transition: none !important;
-}
-
-/* When drawer is closed, disable pointer events */
-[data-state="closed"][data-radix-drawer-overlay],
-[data-state="closed"][data-radix-drawer-content] {
-  pointer-events: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
+.scrollbar {
+  scrollbar-width: thin;
 }

@@ -17,7 +17,6 @@ export { default as Riders } from "@/components/templates/app/riders";
 export { default as Payouts } from "@/components/templates/app/payout";
 
 export { default as Merchants } from "@/components/templates/app/merchants";
-export { default as MerchantPreview } from "@/components/templates/app/merchants/preview";
 
 export { default as Products } from "@/components/templates/app/products";
 export { default as ProductPreview } from "@/components/templates/app/products/preview";
@@ -27,3 +26,5 @@ export { default as Profile } from "@/components/templates/app/settings/profile"
 export { default as Admins } from "@/components/templates/app/settings/admins";
 
 export { default as PreviewOrder } from "@/components/templates/app/orders/preview";
+
+export { default as Complaints } from "@/components/templates/app/complaints";

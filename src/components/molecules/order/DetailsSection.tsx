@@ -47,7 +47,7 @@ const DetailRow: React.FC<DetailRowProps> = ({
 
 // render status badge
 const renderStatusBadge = (status: string | boolean | undefined) => {
-  if (!status) return "-";
+  if (status === null || status === undefined || status === "") return "-";
   const normalized = String(status).toUpperCase();
 
   const statusColors: Record<string, string> = {
@@ -135,7 +135,11 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
 
             let displayValue: ReactNode = "-";
 
-            if (typeof value === "boolean" || key.toLowerCase() === "status") {
+            if (
+              typeof value === "boolean" ||
+              key.toLowerCase() === "status" ||
+              key.toLowerCase() === "isverified"
+            ) {
               displayValue = renderStatusBadge(value);
             } else if (isDateValue(value)) {
               displayValue = moment(value).format("YYYY-MM-DD HH:mm");
@@ -161,6 +165,8 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
                   </DialogContent>
                 </Dialog>
               );
+            } else if (displayValue === "") {
+              value = "-";
             } else {
               displayValue = value ?? "-";
             }

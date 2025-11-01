@@ -6,7 +6,7 @@ import {
   Bus,
   Notification,
 } from "@phosphor-icons/react";
-import { LogOut, ShoppingBag, UsersRound } from "lucide-react";
+import { LogOut, ShoppingBag, UserPenIcon, UsersRound } from "lucide-react";
 
 import { IconCoins } from "@tabler/icons-react";
 
@@ -63,6 +63,11 @@ const data = {
       title: "Payouts",
       url: "/payouts",
       icon: HandCoins,
+    },
+    {
+      title: "Complaints",
+      url: "/complaints",
+      icon: UserPenIcon,
     },
     {
       title: "Settings",

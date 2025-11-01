@@ -1,5 +1,5 @@
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+// import { Plus } from "lucide-react";
+// import { Button } from "@/components/ui/button";
 
 import { DataTable } from "@/components/atoms/table";
 import useMerchantQuery from "@/queries/merchants";
@@ -21,13 +21,13 @@ const index = () => {
         columnKey="merchantID"
         loading={loading}
       >
-        <Button
+        {/* <Button
           variant="default"
           className="md:py-6  border-0 shadow text-sm font-bold"
         >
           <Plus className="size-4" />
           New Merchant
-        </Button>
+        </Button> */}
       </DataTable>
     </>
   );

@@ -11,9 +11,100 @@ import {
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import DetailsSection from "./order/DetailsSection";
+import moment from "moment";
 
-const GenericDisable = () => {
+const GenericDisable = ({
+  id,
+  name,
+  created,
+  type,
+}: {
+  id: string;
+  name: string;
+  created: string;
+  type: "approve" | "reject";
+}) => {
   const { title, closeModal } = useDrawerStore();
+
+  if (type === "approve") {
+    return (
+      <div className="p-5 w-full  space-y-6">
+        {/* ---- Header ---- */}
+        <div className="flex items-center flex-col  w-full">
+          <h2 className="text-lg md:text-xl font-bold text-center">
+            Approve {title} Account
+          </h2>
+          <p className="text-base">Review and approve this {title} request.</p>
+        </div>
+
+        {/* ---- Info ---- */}
+        <div className="space-y-3">
+          <div className=" bg-[#FBFBFB] border-[#ECECEB] border rounded-xl p-3 ">
+            <p className="font-semibold text-base">{name}</p>
+            <p className="text-sm text-gray-500">
+              {title} • ID: {id}
+            </p>
+          </div>
+        </div>
+
+        {/* ---- Buttons ---- */}
+        <div className="grid grid-cols-2 space-x-2.5">
+          <Button variant="outline" onClick={closeModal}>
+            Cancel
+          </Button>
+          <Button
+          //   onClick={handleDisable}
+          //   disabled={loading}
+          >
+            {/* {loading ? "Disabling..." : "Disable Rider"} */}
+            Approve {title}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "reject") {
+    return (
+      <div className="p-5 w-full  space-y-6">
+        {/* ---- Header ---- */}
+        <div className="flex items-center flex-col  w-full">
+          <h2 className="text-lg md:text-xl font-bold text-center">
+            Account Reject {title} Request
+          </h2>
+          <p className="text-base">
+            This action will permanently reject this {title} request.
+          </p>
+        </div>
+
+        {/* ---- Info ---- */}
+        <div className="space-y-3">
+          <div className=" bg-[#FBFBFB] border-[#ECECEB] border rounded-xl p-3 ">
+            <p className="font-semibold text-base">{name}</p>
+            <p className="text-sm text-gray-500">
+              {title} • ID: {id}
+            </p>
+          </div>
+        </div>
+
+        {/* ---- Buttons ---- */}
+        <div className="grid grid-cols-2 space-x-2.5">
+          <Button variant="outline" onClick={closeModal}>
+            Cancel
+          </Button>
+          <Button
+            variant={"destructive"}
+            //   onClick={handleDisable}
+            //   disabled={loading}
+          >
+            {/* {loading ? "Disabling..." : "Disable Rider"} */}
+            Approve {title}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-5 w-full  space-y-6">
       {/* ---- Header ---- */}
@@ -29,15 +120,16 @@ const GenericDisable = () => {
       {/* ---- Rider Info ---- */}
       <div className="space-y-3">
         <div className=" bg-[#FBFBFB] border-[#ECECEB] border rounded-xl p-3 ">
-          <p className="font-semibold text-base">Name</p>
-          <p className="text-sm text-gray-500">{title} • ID: #12345</p>
+          <p className="font-semibold text-base">{name}</p>
+          <p className="text-sm text-gray-500">
+            {title} • ID: {id}
+          </p>
         </div>
 
         <DetailsSection
           //   title="Test"
           details={{
-            "Member Since": "January 12 2025",
-            "Last Active": "2 hours ago",
+            "Member Since": moment(created).format("MMMM, DD YYYY HH:mm"),
           }}
         />
 
