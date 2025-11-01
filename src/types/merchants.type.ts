@@ -1,7 +1,9 @@
 import BankEntity from "./bank.type";
+import OrderEntity from "./order.type";
+import ProductEntity from "./product.type";
 import TransactionEntity from "./transaction.types";
 
-type LocationType = {}
+type LocationType = {};
 
 interface Merchant {
   CAC: string;
@@ -22,9 +24,9 @@ interface Merchant {
   my_transaction: TransactionEntity[];
   onboardingActions: string;
   onboardingPercentage: number;
-//   onboardingStatus: MerchantOnboardingStatusType;
-//   orderStatuses: [MerchantOrderStatusEntity];
-//   orders: [OrderEntity];
+  //   onboardingStatus: MerchantOnboardingStatusType;
+  //   orderStatuses: [MerchantOrderStatusEntity];
+  my_products: ProductEntity;
   phoneNumber: string;
   postalCode: string;
   resetPasswordOtp: string;
@@ -36,4 +38,4 @@ interface Merchant {
   validIDcard: string;
 }
 
-export default Merchant
+export default Merchant;

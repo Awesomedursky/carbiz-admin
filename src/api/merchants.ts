@@ -10,6 +10,8 @@ export const GET_MERCHANTS = gql`
         pageSize
         total
         data {
+          isVerified
+          status
           email
           businessName
           phoneNumber
@@ -39,6 +41,10 @@ export const GET_ONE_MERCHANT = gql`
         businessLicense
         validIDcard
         CAC
+        my_products {
+          productID
+          productName
+        }
       }
     }
   }

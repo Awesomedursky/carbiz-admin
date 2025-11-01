@@ -1,21 +1,13 @@
+import MerchantAction from "@/components/molecules/merchant/MerchantActions";
+import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import Merchant from "@/types/merchants.type";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type MerchantTableType = {
-  businessName: string;
-  email: string;
-  phoneNumber: string;
-  createdAt: Date;
-  merchantID?: string;
-};
-
-const MerchantColumn: ColumnDef<MerchantTableType>[] = [
+const MerchantColumn: ColumnDef<Merchant>[] = [
   {
     id: "id",
-    accessorKey: "merchantID",
     header: ({ table }) => (
       <div className=" pl-3 md:pl-7">
         <Checkbox
@@ -42,10 +34,26 @@ const MerchantColumn: ColumnDef<MerchantTableType>[] = [
     enableHiding: true,
   },
   {
+    id: "merchantID",
+    accessorKey: "merchantID",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Merchant Id
+      </div>
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className=" font-normal py-3.5 capitalize">
+          {row.original.merchantID}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "businessName",
     header: () => (
       <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
-        Name
+        Merchant Name
       </div>
     ),
     cell: ({ row }) => {
@@ -65,7 +73,7 @@ const MerchantColumn: ColumnDef<MerchantTableType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className=" font-normal px-7 py-3.">{row.getValue("email")}</div>
+        <div className=" font-normal px-7 py-3.5">{row.getValue("email")}</div>
       );
     },
   },
@@ -78,9 +86,41 @@ const MerchantColumn: ColumnDef<MerchantTableType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className=" font-normal px-7 py-3.">
+        <div className=" font-normal px-7 py-3.5">
           {row.getValue("phoneNumber")}
         </div>
+      );
+    },
+  },
+  {
+    accessorKey: "status",
+    header: () => (
+      <div className=" text-base  font-[500] text-black bg-[#FAFAFB]">
+        Status
+      </div>
+    ),
+    cell: ({ row }) => {
+      const { isVerified, status } = row.original;
+      const displayStatus = isVerified
+        ? "APPROVED"
+        : status === "disabled"
+        ? "DISABLED"
+        : "PENDING";
+
+      const colorMap: Record<string, string> = {
+        APPROVED: "bg-green-100 text-green-700",
+        PENDING: "bg-yellow-100 text-yellow-700",
+        DISABLED: "bg-red-100 text-red-700",
+      };
+
+      return (
+        <Badge
+          className={`capitalize px-2 py-1 text-xs font-medium rounded-md ${
+            colorMap[displayStatus] || "bg-gray-100 text-gray-700"
+          }`}
+        >
+          {displayStatus}
+        </Badge>
       );
     },
   },
@@ -93,8 +133,17 @@ const MerchantColumn: ColumnDef<MerchantTableType>[] = [
     ),
     cell: ({ row }) => {
       const addedOn = moment(row.getValue("createdAt")).format("DD-MM-YYYY");
-      return <div className=" font-normal px-7 py-3.">{addedOn}</div>;
+      return <div className=" font-normal px-7 py-3.5">{addedOn}</div>;
     },
+  },
+  {
+    id: "actions",
+    header: () => (
+      <div className=" text-base  font-[500] text-black bg-[#FAFAFB] px-7 py-3.5">
+        Actions
+      </div>
+    ),
+    cell: ({ row }) => <MerchantAction merchant={row.original} />,
   },
 ];
 export default MerchantColumn;

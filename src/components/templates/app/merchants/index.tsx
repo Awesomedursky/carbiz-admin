@@ -11,10 +11,12 @@ const index = () => {
   return (
     <>
       <DataTable
-        isClickable
         tableName="Merchants"
         columns={MerchantColumn}
-        data={data || []}
+        data={(data || []).map((merchant) => ({
+          ...merchant,
+          status: merchant.status as "string",
+        }))}
         actions
         columnKey="merchantID"
         loading={loading}

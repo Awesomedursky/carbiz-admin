@@ -1,4 +1,8 @@
 import React, { useState, ReactNode } from "react";
+import moment from "moment";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { EyeIcon } from "lucide-react";
 
 export interface MerchantDetails {
   name: string;
@@ -15,7 +19,7 @@ export interface RiderDetails {
   phoneNumber: string;
 }
 
-/** --- Detail Row --- **/
+// detail row
 interface DetailRowProps {
   label: string;
   value: ReactNode;
@@ -41,19 +45,20 @@ const DetailRow: React.FC<DetailRowProps> = ({
   </div>
 );
 
-/** --- Helper: Render Status Badge --- **/
-const renderStatusBadge = (status: string | undefined) => {
+// render status badge
+const renderStatusBadge = (status: string | boolean | undefined) => {
   if (!status) return "-";
-
-  const normalized = status.toUpperCase();
+  const normalized = String(status).toUpperCase();
 
   const statusColors: Record<string, string> = {
     APPROVED: "bg-green-100 text-green-700",
+    TRUE: "bg-green-100 text-green-700",
     PENDING: "bg-yellow-100 text-yellow-700",
     DISABLED: "bg-red-100 text-red-700",
     ACTIVE: "bg-green-100 text-green-700",
     INACTIVE: "bg-gray-100 text-gray-700",
     REJECTED: "bg-red-100 text-red-700",
+    FALSE: "bg-red-100 text-red-700",
   };
 
   const colorClass =
@@ -63,15 +68,36 @@ const renderStatusBadge = (status: string | undefined) => {
     <span
       className={`px-2 py-1 rounded-full text-xs font-semibold tracking-wide ${colorClass}`}
     >
-      {status}
+      {String(status)}
     </span>
   );
 };
 
-/** --- Generic Details Section --- **/
+// convert camel case to regex
+const formatLabel = (label: string): string => {
+  return label
+    .replace(/([a-z])([A-Z][a-z])/g, "$1 $2")
+    .replace(/([a-z])([A-Z]{2,})/g, "$1 $2")
+    .replace(/^./, (str) => str.toUpperCase())
+    .trim();
+};
+
+// detetct if value is date
+const isDateValue = (value: any): boolean => {
+  const date = moment(value, moment.ISO_8601, true);
+  return date.isValid();
+};
+
+// detect if value is a link
+const isLinkValue = (value: any): boolean => {
+  if (typeof value !== "string") return false;
+  return /^https?:\/\/[^\s]+$/.test(value);
+};
+
+// detail section
 interface DetailsSectionProps {
   title?: string;
-  details: Record<string, any>; // flexible
+  details: Record<string, any>;
   viewText?: string;
 }
 
@@ -85,7 +111,6 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
   return (
     <div className="bg-white rounded-lg border border-[#F1ECF9] mb-4 shadow-sm">
       {/* Header */}
-
       {title && (
         <div className="flex justify-between items-center  p-2.5">
           <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
@@ -98,7 +123,7 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
         </div>
       )}
 
-      {/* Animated body */}
+      {/* Body */}
       <div
         className={`overflow-hidden transition-all duration-300 ease-in-out ${
           showContent ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
@@ -106,18 +131,44 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
       >
         <div className="space-y-0">
           {Object.entries(details)?.map(([key, value]) => {
-            const isStatus =
-              key.toLowerCase() === "status" ||
-              String(value).toLowerCase() === "status";
+            const label = formatLabel(key);
 
-            const displayValue = isStatus
-              ? renderStatusBadge(String(value))
-              : value ?? "-";
+            let displayValue: ReactNode = "-";
+
+            if (typeof value === "boolean" || key.toLowerCase() === "status") {
+              displayValue = renderStatusBadge(value);
+            } else if (isDateValue(value)) {
+              displayValue = moment(value).format("YYYY-MM-DD HH:mm");
+            } else if (isLinkValue(value)) {
+              displayValue = (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className=" border-primary text-primary"
+                    >
+                      <EyeIcon className="w-4 h-4 mr-1" />
+                      Preview
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[400px] h-[400px] flex items-center justify-center">
+                    <img
+                      src={value}
+                      alt={label}
+                      className="max-h-full max-w-full object-contain rounded-lg"
+                    />
+                  </DialogContent>
+                </Dialog>
+              );
+            } else {
+              displayValue = value ?? "-";
+            }
 
             return (
               <DetailRow
                 key={key}
-                label={key}
+                label={label}
                 value={displayValue}
                 isMultiline={typeof value === "string" && value.length > 50}
               />
