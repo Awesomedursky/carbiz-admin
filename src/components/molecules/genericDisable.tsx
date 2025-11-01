@@ -12,7 +12,7 @@ import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import DetailsSection from "./order/DetailsSection";
 
-const GenericDisable = ({ disable, disableType }) => {
+const GenericDisable = () => {
   const { title, closeModal } = useDrawerStore();
   return (
     <div className="p-5 w-full  space-y-6">

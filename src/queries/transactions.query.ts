@@ -44,8 +44,10 @@ const fetchTransactions = () => {
     });
   }, [data?.AdminFetchAllTransactions.payload]);
 
+  console.log(data);
+
   return {
-    data: data?.AdminFetchAllTransactions.payload.data || [],
+    data: data?.AdminFetchAllTransactions?.payload?.data || [],
     loading,
     error,
     fetchMore,

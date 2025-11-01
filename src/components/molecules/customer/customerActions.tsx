@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDrawerStore } from "@/store/drawer.store";
-import DeleteModal from "../DeleteModal";
 import Customer from "@/types/customer.type";
 import CustomerDetails from "./customerDetails";
 import GenericDisable from "../genericDisable";

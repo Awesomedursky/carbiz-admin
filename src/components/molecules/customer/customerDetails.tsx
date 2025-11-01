@@ -3,9 +3,8 @@ import { fetchCustomerPreviewQuery } from "@/queries/customers.query";
 import Customer from "@/types/customer.type";
 import DetailsSection from "../order/DetailsSection";
 import { BoxIcon } from "lucide-react";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useDrawerStore } from "@/store/drawer.store";
-import { Button } from "@/components/ui/button";
 
 interface CustomerType {
   customer: Customer;
