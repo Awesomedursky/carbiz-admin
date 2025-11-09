@@ -1,24 +1,24 @@
 import { DataTable } from "@/components/atoms/table";
 import { NotificationColumns } from "@/columns/notifications.columns";
-import fetchNotifications from "@/queries/notifications.query";
+// import fetchNotifications from "@/queries/notifications.query";
 import ComplaintsCards from "@/components/molecules/complaints/cards";
 
 const Complaints = () => {
-  const { data, loading } = fetchNotifications();
+  //   const { data, loading } = fetchNotifications();
 
-  const mappedData =
-    data?.map((item: any) => ({
-      id: item.id,
-      title: item.title,
-      message: item.message,
-      audience: item.audience,
-      method: item.method,
-      sentBy: item.sentBy,
-      dateTime: item.dateTime,
-      isScheduled: item.isScheduled ?? false,
-      recurringType: item.recurringType ?? "",
-      status: item.status ?? "",
-    })) || [];
+  //   const mappedData =
+  //     data?.map((item: any) => ({
+  //       id: item.id,
+  //       title: item.title,
+  //       message: item.message,
+  //       audience: item.audience,
+  //       method: item.method,
+  //       sentBy: item.sentBy,
+  //       dateTime: item.dateTime,
+  //       isScheduled: item.isScheduled ?? false,
+  //       recurringType: item.recurringType ?? "",
+  //       status: item.status ?? "",
+  //     })) || [];
 
   return (
     <div className="space-y-6">
@@ -31,7 +31,7 @@ const Complaints = () => {
         data={[]}
         actions
         columnKey="id"
-        loading={loading}
+        // loading={loading}
       ></DataTable>
     </div>
   );

@@ -49,27 +49,25 @@ const DrawerContent = React.forwardRef<
     <DrawerPrimitive.Content
       ref={ref}
       className={cn(
-        // Float layout
-        "fixed right-4 top-4 bottom-4 z-50 w-[420px] rounded-2xl bg-background border border-border shadow-2xl flex flex-col",
+        "fixed z-50 bg-background border border-border shadow-2xl flex flex-col overflow-hidden transition-all duration-300 ease-in-out",
 
-        // Animation
-        "data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right",
+        // ✅ Desktop (≥640px): right side drawer
+        "right-4 top-4 bottom-4 w-[420px] rounded-2xl data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right",
 
-        // Smooth motion
-        "transition-all duration-300 ease-in-out",
-
-        // No drag bar or unnecessary spacing
-        "overflow-hidden",
+        // ✅ Mobile (<640px): bottom sheet with margin
+        "max-sm:left-4 max-sm:right-4 max-sm:bottom-2 max-sm:top-auto max-sm:w-auto max-sm:rounded-2xl max-sm:data-[state=open]:slide-in-from-bottom max-sm:data-[state=closed]:slide-out-to-bottom",
 
         className
       )}
       {...props}
     >
-      {/* Removed that mx-auto h-2 bar here */}
+      {/** Mobile drag handle */}
+      <div className="hidden max-sm:block mx-auto mt-2 h-1.5 w-12 rounded-full bg-muted-foreground/30" />
       {children}
     </DrawerPrimitive.Content>
   </DrawerPortal>
 ));
+
 DrawerContent.displayName = "DrawerContent";
 
 const DrawerHeader = ({

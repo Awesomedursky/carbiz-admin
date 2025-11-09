@@ -32,11 +32,11 @@ const DetailRow: React.FC<DetailRowProps> = ({
   isMultiline = false,
 }) => (
   <div className="flex justify-between items-start py-3 border-b border-[#F1ECF9] last:border-b-0">
-    <span className="text-sm text-gray-600 flex-shrink-0 mr-4 min-w-[100px] capitalize">
+    <span className="text-sm text-gray-600 flex-shrink-0 mr-4 sm:min-w-[100px] capitalize">
       {label}
     </span>
     <span
-      className={`capitalize text-sm font-semibold text-right ${
+      className={`capitalize text-sm font-semibold text-right text-wrap ${
         isMultiline ? "max-w-xs" : ""
       }`}
     >
@@ -176,7 +176,7 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
                 key={key}
                 label={label}
                 value={displayValue}
-                isMultiline={typeof value === "string" && value.length > 50}
+                isMultiline={typeof value === "string" && value.length > 5}
               />
             );
           })}

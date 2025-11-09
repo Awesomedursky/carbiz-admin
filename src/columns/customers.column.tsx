@@ -33,7 +33,22 @@ const CustomerColumns: ColumnDef<Customer>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "customerID",
+    header: () => (
+      <div className="normal text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none ">
+        Customer ID
+      </div>
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="capitalize font-normal py-3.5 normal">
+          {row.getValue("customerID")}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "Customer Name",
     header: () => (
       <div className="normal text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none ">
         Name

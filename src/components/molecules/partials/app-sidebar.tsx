@@ -70,14 +70,14 @@ const data = {
       icon: UserPenIcon,
     },
     {
-      title: "Settings",
-      url: "/settings",
-      icon: Gear,
-    },
-    {
       title: "Notification Center",
       url: "/notifications",
       icon: Notification,
+    },
+    {
+      title: "Settings",
+      url: "/settings",
+      icon: Gear,
     },
   ],
 };

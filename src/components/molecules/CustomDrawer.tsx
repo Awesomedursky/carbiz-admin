@@ -33,11 +33,11 @@ export const CustomDrawer = () => {
       {type === "drawer" && (
         <Drawer open={isOpen} onOpenChange={(open) => !open && closeModal()}>
           <DrawerContent
-            className={`w-full sm:w-[480px] ${
+            className={` h-4/5 sm:h-full w-full sm:w-[480px] ${
               placement === "right" ? "ml-auto" : ""
             }`}
           >
-            <DrawerHeader className=" border-[#F1ECF9] border-b-2 sticky top-0 z-20">
+            <DrawerHeader className=" border-[#F1ECF9] border-b-2 sticky sm:top-0 z-20">
               <DrawerTitle className="pt-3">{title}</DrawerTitle>
             </DrawerHeader>
             <div className="overflow-y-scroll scroll-smooth scrollbar">

@@ -17,10 +17,10 @@ const Analytics: React.FC<AnalyticsProp> = ({
   iconColor,
 }) => {
   return (
-    <div className="bg-white border border-border-gray px-6 py-6 md:py-10 flex flex-col gap-2 md:gap-4 rounded-lg space-y-5">
-      <div className="inline-flex gap-2.5">
+    <div className="bg-white border border-border-gray p-4 sm:p-6    flex flex-col  rounded-lg gap-y-5">
+      <div className="inline-flex space-x-2.5 items-center">
         <span
-          className="rounded-full p-2"
+          className="rounded-full p-2 place-self-start"
           style={{
             backgroundColor: iconColor ? `${iconColor}20` : "#f4f4f4", // hex + transparency
           }}
