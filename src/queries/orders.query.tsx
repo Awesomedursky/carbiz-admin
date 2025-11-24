@@ -28,7 +28,7 @@ const fetchOrdersQuery = () => {
       params: {
         limit: pageSize,
         page: currentPage,
-        sortBy: "createdAT",
+        sortBy: "createdAt",
         sortOrder: "DESC",
       },
     },

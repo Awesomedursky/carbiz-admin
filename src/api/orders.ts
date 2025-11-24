@@ -3,34 +3,62 @@ import { gql } from "@apollo/client";
 export const FETCH_ORDERS = gql`
   query AdminFetchAllOrder($params: PaginationDto!) {
     AdminFetchAllOrders(paginationQuery: $params) {
-      errors
-      message
       success
+      message
+      status
+      errors
       payload {
         currentPage
         pageSize
         total
         data {
-          orderID
-          orderStatus
-          paymentStatus
+          id
           createdAT
+          paymentStatus
+          orderStatus
           customer {
             name
-            email
             phoneNumber
-            customerID
+            email
+          }
+          merchants {
+            businessName
+            address
+            phoneNumber
+          }
+          RidersRide {
+            rider {
+              lastName
+              phoneNumber
+            }
           }
           items {
-            orderItemID
-            price
+            order {
+              subTotal
+              total
+              optimizedRoute {
+                lat
+                lng
+              }
+            }
             product {
+              priceCurrencyType
+              discountedPrice
+              discountPercentage
+              productColor
+              isDiscountApplied
               productName
-              productID
-              price
+              productImages
             }
             quantity
+            price
           }
+          total
+          pooledSavings
+          subTotal
+          total
+          deliveryFee
+          updatedAT
         }
       }
     }

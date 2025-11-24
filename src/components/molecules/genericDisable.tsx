@@ -12,19 +12,40 @@ import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import DetailsSection from "./order/DetailsSection";
 import moment from "moment";
+import CustomButton from "../atoms/button/CustomButton";
+import { useRiderApproveDisapprove } from "@/queries/riders.query";
 
 const GenericDisable = ({
   id,
   name,
   created,
   type,
+  state,
 }: {
   id: string;
   name: string;
   created: string;
   type: "approve" | "reject";
+  state?: string;
 }) => {
   const { title, closeModal } = useDrawerStore();
+
+  const { approveDisapproveRider, loading } = useRiderApproveDisapprove(id);
+
+  const approveFunction = () => {
+    switch (state) {
+      case "rider":
+        approveDisapproveRider({
+          variables: {
+            approve: { approve: type === "approve" ? true : false },
+            riderID: id,
+          },
+        });
+        break;
+      default:
+        return null;
+    }
+  };
 
   if (type === "approve") {
     return (
@@ -52,13 +73,9 @@ const GenericDisable = ({
           <Button variant="outline" onClick={closeModal}>
             Cancel
           </Button>
-          <Button
-          //   onClick={handleDisable}
-          //   disabled={loading}
-          >
-            {/* {loading ? "Disabling..." : "Disable Rider"} */}
+          <CustomButton loading={loading} onClick={approveFunction}>
             Approve {title}
-          </Button>
+          </CustomButton>
         </div>
       </div>
     );
@@ -92,14 +109,13 @@ const GenericDisable = ({
           <Button variant="outline" onClick={closeModal}>
             Cancel
           </Button>
-          <Button
+          <CustomButton
             variant={"destructive"}
-            //   onClick={handleDisable}
-            //   disabled={loading}
+            onClick={approveFunction}
+            loading={loading}
           >
-            {/* {loading ? "Disabling..." : "Disable Rider"} */}
-            Approve {title}
-          </Button>
+            Reject {title}
+          </CustomButton>
         </div>
       </div>
     );

@@ -55,7 +55,9 @@ export const RiderColumns: ColumnDef<RiderEntity>[] = [
       </div>
     ),
     cell: ({ row }) => (
-      <div className=" font-normal py-3.5 capitalize">{row.original.name}</div>
+      <div className=" font-normal py-3.5 capitalize">
+        {`${row.original.firstName} ${row.original.lastName}` || "-"}
+      </div>
     ),
   },
   {

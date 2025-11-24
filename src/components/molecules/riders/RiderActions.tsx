@@ -14,6 +14,7 @@ import DeleteModal from "@/components/molecules/DeleteModal";
 import RiderDetails from "@/components/molecules/riders/RiderDetails";
 import DisableRider from "./DisableRider";
 import RiderEntity from "@/types/rider.type";
+import GenericDisable from "../genericDisable";
 
 interface RiderActionsProps {
   rider: RiderEntity;
@@ -26,12 +27,28 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
     console.log(`Deleting rider with id: ${id}`);
   }
 
+  const actualStatus = () => {
+    const { isApproved, status } = rider;
+    const displayStatus = isApproved
+      ? "APPROVED"
+      : status === "disabled"
+      ? "DISABLED"
+      : "PENDING";
+
+    return displayStatus;
+  };
+
   const handleApprove = () => {
     openModal({
       type: "dialog",
-      title: "Disable Rider",
-      content: DisableRider,
-      props: { rider },
+      title: "Rider",
+      content: GenericDisable,
+      props: {
+        type: "approve",
+        id: rider?.riderID,
+        name: `${rider?.firstName} -  ${rider?.lastName}`,
+        state: "rider",
+      },
       placement: "center",
     });
   };
@@ -39,9 +56,14 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
   const handleReject = () => {
     openModal({
       type: "dialog",
-      title: "Disable Rider",
-      content: DisableRider,
-      props: { rider },
+      title: "Rider",
+      content: GenericDisable,
+      props: {
+        type: "reject",
+        id: rider?.riderID,
+        name: `${rider?.firstName} -  ${rider?.lastName}`,
+        state: "rider",
+      },
       placement: "center",
     });
   };
@@ -79,21 +101,21 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
     });
   };
 
-  const handleRejectModal = () => {
-    openModal({
-      title: "Reject Rider Request",
-      content: DeleteModal,
-      type: "dialog",
-      props: {
-        id: rider.id,
-        title: "Reject Rider Request",
-        message: "This action will permanently reject this rider.",
-        confirmLabel: "Reject Rider",
-        onConfirm: handleReject,
-      },
-      placement: "center",
-    });
-  };
+  // const handleRejectModal = () => {
+  //   openModal({
+  //     title: "Reject Rider Request",
+  //     content: DeleteModal,
+  //     type: "dialog",
+  //     props: {
+  //       id: rider.id,
+  //       title: "Reject Rider Request",
+  //       message: "This action will permanently reject this rider.",
+  //       confirmLabel: "Reject Rider",
+  //       onConfirm: handleReject,
+  //     },
+  //     placement: "center",
+  //   });
+  // };
 
   const handleDeleteModal = () => {
     openModal({
@@ -113,7 +135,7 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
   };
 
   const getMenuItems = () => {
-    switch (rider.status) {
+    switch (actualStatus()) {
       case "PENDING":
         return (
           <>
@@ -127,10 +149,7 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
               Approve Rider
             </DropdownMenuItem>
 
-            <DropdownMenuItem
-              onSelect={handleRejectModal}
-              className="text-red-600"
-            >
+            <DropdownMenuItem onSelect={handleReject} className="text-red-600">
               Reject Rider
             </DropdownMenuItem>
           </>
@@ -154,6 +173,10 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
           <>
             <DropdownMenuItem onSelect={handleViewDetails}>
               View Details
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onSelect={handleApprove}>
+              Re-Approve Rider
             </DropdownMenuItem>
 
             <DropdownMenuItem
