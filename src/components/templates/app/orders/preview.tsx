@@ -29,6 +29,7 @@ const PreviewOrder = () => {
     if (path) {
       AdminFetchoneOrder({
         variables: { orderID: path },
+        pollInterval: 5000,
       });
     }
   }, [path]);
@@ -90,7 +91,9 @@ const PreviewOrder = () => {
       time: data?.updatedAT
         ? moment(data?.updatedAT).format("DD MMM, YYYY hh:mm A")
         : "-",
-      isCompleted: data?.orderStatus === "Packed_And_Ready_For_Pickup",
+      isCompleted:
+        data?.orderStatus === "Packed_And_Ready_For_Pickup" ||
+        Boolean(data?.updatedAT),
     },
     {
       id: 3,
