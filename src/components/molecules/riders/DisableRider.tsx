@@ -34,7 +34,7 @@ const DisableRider: React.FC<DisableRiderProps> = ({ rider }) => {
 
     setLoading(true);
     try {
-      console.log(`Disabling rider ${rider.name} (${rider.id})`);
+      console.log(`Disabling rider ${rider.firstName}-(${rider.id})`);
       console.log("Option:", disableOption);
       console.log("Reason:", reason);
 
@@ -62,7 +62,7 @@ const DisableRider: React.FC<DisableRiderProps> = ({ rider }) => {
       {/* ---- Rider Info ---- */}
       <div className="border rounded-lg p-4 bg-gray-50 space-y-2">
         <div>
-          <p className="font-semibold text-base">{rider.name}</p>
+          <p className="font-semibold text-base">{rider?.firstName}</p>
           <p className="text-sm text-gray-500">
             Rider • ID: #{rider.riderID ?? rider.id}
           </p>

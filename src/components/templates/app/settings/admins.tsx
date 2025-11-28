@@ -15,7 +15,7 @@ type adminType = {
 };
 
 const Admins = () => {
-  const fetchAllAdmins = useQuery<adminEntity>(FETCH_ALL_ADMINS, {});
+  // const fetchAllAdmins = useQuery<adminEntity>(FETCH_ALL_ADMINS, {});
   const newData: adminType[] = [];
 
   return (
