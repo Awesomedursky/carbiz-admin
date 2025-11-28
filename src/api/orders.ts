@@ -88,6 +88,11 @@ export const FETCH_ONE_ORDER = gql`
           phoneNumber
         }
         RidersRide {
+          at_dropoff_locationAT
+          dropped_off_parcelAT
+          enroute_to_dropoff_locationAT
+          picked_up_parcelAT
+          milestone
           rider {
             firstName
             lastName

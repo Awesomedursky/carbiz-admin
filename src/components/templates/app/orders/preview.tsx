@@ -96,29 +96,43 @@ const PreviewOrder = () => {
       id: 3,
       title: "Courier Pick-up",
       description: "Courier collected package from Merchant.",
-      time: "-",
-      isCompleted: false,
+      time: data?.RidersRide?.picked_up_parcelAT
+        ? moment(data?.RidersRide?.picked_up_parcelAT).format(
+            "DD MMM, YYYY hh:mm A"
+          )
+        : "-",
+      isCompleted: data?.RidersRide?.picked_up_parcelAT !== null,
     },
     {
       id: 4,
       title: "In-Transit",
       description: "Package is on the way to you.",
-      time: "-",
-      isCompleted: false,
+      time: data?.RidersRide?.enroute_to_dropoff_locationAT
+        ? moment(data?.RidersRide?.enroute_to_dropoff_locationAT).format(
+            "DD MMM, YYYY hh:mm A"
+          )
+        : "-",
+      isCompleted: data?.RidersRide?.enroute_to_dropoff_locationAT !== null,
     },
     {
       id: 5,
       title: "Order Arrived",
       description: "Courier arrived at delivery address.",
-      time: "-",
-      isCompleted: false,
+      time: data?.RidersRide?.at_dropoff_locationAT
+        ? moment(data?.RidersRide?.at_dropoff_locationAT).format(
+            "DD MMM, YYYY hh:mm A"
+          )
+        : "-",
+      isCompleted: data?.RidersRide?.at_dropoff_locationAT !== null,
     },
     {
       id: 6,
       title: "Order Delivered",
       description: "Package handed to customer.",
-      time: "-",
-      isCompleted: false,
+      time: data?.RidersRide?.dropped_off_parcelAT
+        ? moment().format("DD MMM, YYYY hh:mm A")
+        : "-",
+      isCompleted: data?.RidersRide?.dropped_off_parcelAT !== null,
     },
   ];
 

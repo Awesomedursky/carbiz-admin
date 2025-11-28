@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { Control } from "react-hook-form";
 import { DocumentUpload, Gallery } from "iconsax-reactjs";
 import fileUploadReq from "@/api/uploader";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
   FormControl,

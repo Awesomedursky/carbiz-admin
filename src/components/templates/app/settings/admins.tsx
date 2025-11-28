@@ -3,9 +3,6 @@ import AdminColumns from "@/columns/adminusers.column";
 
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@apollo/client";
-import { adminEntity } from "@/types";
-import { FETCH_ALL_ADMINS } from "@/api/admin.profile";
 
 type adminType = {
   name: string;
