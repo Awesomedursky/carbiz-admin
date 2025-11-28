@@ -272,7 +272,7 @@ const PreviewOrder = () => {
               </div>
             </div>
 
-            <div>
+            <div className="w-full bg-white p-2 border-gray-200 rounded-[0.75rem]">
               {/* Merchant Details */}
               <DetailsSection
                 title="Merchant Details"
