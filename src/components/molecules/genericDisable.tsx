@@ -14,6 +14,7 @@ import DetailsSection from "./order/DetailsSection";
 import moment from "moment";
 import CustomButton from "../atoms/button/CustomButton";
 import { useRiderApproveDisapprove } from "@/queries/riders.query";
+import { useVerifyMerchant } from "@/queries/merchants";
 
 const GenericDisable = ({
   id,
@@ -31,6 +32,7 @@ const GenericDisable = ({
   const { title, closeModal } = useDrawerStore();
 
   const { approveDisapproveRider, loading } = useRiderApproveDisapprove(id);
+  const { approveDisApproveMerchant, merchantLoading } = useVerifyMerchant(id);
 
   const approveFunction = () => {
     switch (state) {
@@ -39,6 +41,14 @@ const GenericDisable = ({
           variables: {
             approve: { approve: type === "approve" ? true : false },
             riderID: id,
+          },
+        });
+        break;
+      case "merchant":
+        approveDisApproveMerchant({
+          variables: {
+            approve: { approve: type === "approve" ? true : false },
+            merchantID: id,
           },
         });
         break;
@@ -73,7 +83,10 @@ const GenericDisable = ({
           <Button variant="outline" onClick={closeModal}>
             Cancel
           </Button>
-          <CustomButton loading={loading} onClick={approveFunction}>
+          <CustomButton
+            loading={loading || merchantLoading}
+            onClick={approveFunction}
+          >
             Approve {title}
           </CustomButton>
         </div>
@@ -112,7 +125,7 @@ const GenericDisable = ({
           <CustomButton
             variant={"destructive"}
             onClick={approveFunction}
-            loading={loading}
+            loading={loading || merchantLoading}
           >
             Reject {title}
           </CustomButton>

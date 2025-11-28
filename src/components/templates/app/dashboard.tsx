@@ -1,4 +1,4 @@
-import { columns } from "@/columns/columns";
+import { ordersColumns } from "@/columns/orders.column";
 import { DataTable } from "@/components/atoms/table";
 import DashboardCards from "@/components/molecules/DashboardCards";
 import fetchOrdersQuery from "@/queries/orders.query";
@@ -20,8 +20,7 @@ const Dashboard = () => {
       <DataTable
         loading={loading}
         columnKey="orderID"
-        isClickable
-        columns={columns}
+        columns={ordersColumns}
         data={data || []}
       />
     </div>

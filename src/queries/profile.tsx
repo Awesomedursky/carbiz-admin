@@ -1,24 +1,14 @@
 import { UPDATE_CURRENT_USER_PROFILE } from "@/api/admin.profile";
+import { PROFILE_ADMIN } from "@/api/dashboard";
 import { useToast } from "@/hooks/Toast";
+import { AdminOutput } from "@/types/admin.type";
 import { useMutation } from "@apollo/client";
 
 interface AdminProfileResponseType {
   success: boolean;
   message: string;
   error: string;
-  payload: {
-    adminID: string;
-    createdAt: Date;
-    email: string;
-    id: number;
-    isVerified: Boolean;
-    name: string;
-    phoneNumber: string;
-    profilePics: string;
-    role: string;
-    status: string;
-    updatedAt: Date;
-  };
+  payload: AdminOutput;
 }
 
 type updateAdminInput = {
@@ -35,8 +25,10 @@ const useAdminMutation = () => {
       AdminProfileResponseType,
       { input: updateAdminInput }
     >(UPDATE_CURRENT_USER_PROFILE, {
+      refetchQueries: [PROFILE_ADMIN],
       onCompleted: (data) => {
         handleSuccess("Profile updated successfully", data.message);
+
         console.log(data);
       },
       onError: (error) => {

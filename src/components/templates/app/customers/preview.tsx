@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router";
 import { ArrowLeft } from "iconsax-reactjs";
-import OrderColumn from "@/columns/orders.column";
+import { ordersColumns } from "@/columns/orders.column";
 import { DataTable } from "@/components/atoms/table";
 
 import { CardDetail } from "@/components/atoms/card/previewCard";
@@ -49,7 +49,7 @@ const PreviewCustomer = () => {
       {data?.my_orders && (
         <DataTable
           tableName="Orders"
-          columns={OrderColumn}
+          columns={ordersColumns}
           data={data?.my_orders || []}
           loading={loading}
         />

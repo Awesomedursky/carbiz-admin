@@ -15,7 +15,7 @@ interface Customer {
   my_transaction: TransactionEntity[];
   //   my_wallet: WalletEntity!;
   name: string;
-  phoneNumber: String;
+  phoneNumber: string;
   profilePics: String;
   resetPasswordOtp: String;
   resetPasswordOtpExpiration: Date;

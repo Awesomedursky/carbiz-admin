@@ -13,6 +13,7 @@ export const FETCH_ORDERS = gql`
         total
         data {
           id
+          orderID
           createdAT
           paymentStatus
           orderStatus
@@ -23,7 +24,6 @@ export const FETCH_ORDERS = gql`
           }
           merchants {
             businessName
-            address
             phoneNumber
           }
           RidersRide {
@@ -43,7 +43,6 @@ export const FETCH_ORDERS = gql`
             }
             product {
               priceCurrencyType
-              discountedPrice
               discountPercentage
               productColor
               isDiscountApplied
@@ -60,6 +59,69 @@ export const FETCH_ORDERS = gql`
           deliveryFee
           updatedAT
         }
+      }
+    }
+  }
+`;
+
+export const FETCH_ONE_ORDER = gql`
+  query AdminfetchaOneOrder($orderID: String!) {
+    AdminfetchaOneOrder(orderID: $orderID) {
+      success
+      message
+      status
+      errors
+      payload {
+        orderID
+        deliveryType
+        createdAT
+        paymentStatus
+        orderStatus
+        customer {
+          name
+          phoneNumber
+          email
+        }
+        merchants {
+          businessName
+          address
+          phoneNumber
+        }
+        RidersRide {
+          rider {
+            firstName
+            lastName
+            phoneNumber
+          }
+        }
+        items {
+          order {
+            subTotal
+            total
+            optimizedRoute {
+              lat
+              lng
+            }
+          }
+          product {
+            priceCurrencyType
+            discountedPrice
+            discountPercentage
+            productColor
+            isDiscountApplied
+            productName
+            productImages
+            price
+          }
+          quantity
+          price
+        }
+        total
+        pooledSavings
+        subTotal
+        total
+        deliveryFee
+        updatedAT
       }
     }
   }

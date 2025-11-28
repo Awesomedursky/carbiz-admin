@@ -19,10 +19,10 @@ import {
   Payouts,
   PreviewOrder,
   Merchants,
-  Products,
+  // Products,
   Notification,
   Riders,
-  ProductPreview,
+  // ProductPreview,
   Complaints,
 } from "@/pages";
 import MainLayout from "@/components/_layout/main.layout";
@@ -113,13 +113,13 @@ const router = createBrowserRouter([
           },
           {
             path: ":id/products",
-            Component: Products,
+            // Component: Products,
           },
         ],
       },
       {
         path: "products/:id",
-        Component: ProductPreview,
+        // Component: ProductPreview,
       },
       {
         path: "settings",

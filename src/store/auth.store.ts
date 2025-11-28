@@ -1,18 +1,10 @@
+import { AdminOutput } from "@/types/admin.type";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-interface UserType {
-  name: string;
-  email: string;
-  role: string;
-  phoneNumber: string;
-  id?: string;
-  profilePics?: string;
-}
-
 interface AuthStoreType {
-  user: UserType | null;
-  setUser: (user: UserType) => void;
+  user: AdminOutput | null;
+  setUser: (user: AdminOutput) => void;
   logout: () => void;
 }
 

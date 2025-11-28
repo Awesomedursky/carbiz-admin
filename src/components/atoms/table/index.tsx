@@ -20,6 +20,7 @@ import { FunnelSimple } from "@phosphor-icons/react";
 import { Pagination } from "./pagination";
 import { useLocation, useNavigate } from "react-router";
 import useTableStore from "@/store/table.store";
+import { Spinner } from "@/components/ui/spinner";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -111,7 +112,7 @@ export function DataTable<TData, TValue>({
 
       {loading ? (
         <div className="flex justify-center items-center py-10">
-          Fetching data...
+          <Spinner className=" text-primary size-12" />
         </div>
       ) : data.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-[50vh] border border-dashed border-gray-300 m-4">
@@ -156,7 +157,9 @@ export function DataTable<TData, TValue>({
                       rowId &&
                       navigate(`/${route}/${rowId}`)
                     }
-                    className={isClickable ? "cursor-pointer" : ""}
+                    className={`hover:bg-primary/10  ${
+                      isClickable ? "cursor-pointer" : ""
+                    }`}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>

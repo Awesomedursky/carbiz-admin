@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 
 import InputField from "@/components/atoms/form/input";
 
@@ -12,6 +11,7 @@ import RegistrationSchema, {
 // import FormCheckbox from "@/components/atoms/form/checkbox";
 // import { Link } from "react-router";
 import { useRegisterMerchant } from "@/queries/register";
+import CustomButton from "@/components/atoms/button/CustomButton";
 // import ProfileImageUpload from "@/components/atoms/form/profileImageUpload";
 
 const RegisterForm = () => {
@@ -43,7 +43,7 @@ const RegisterForm = () => {
         <InputField
           control={form.control}
           name="name"
-          label="Business Name"
+          label="Admin Name"
           placeholder="John Doe"
         />
         <InputField
@@ -92,14 +92,12 @@ const RegisterForm = () => {
             }
           />
         </div> */}
-        <Button
-          disabled={loading}
-          type="submit"
-          // onClick={handleClick}
+        <CustomButton
+          loading={loading}
           className="bg-primary text-white w-full py-6 rounded-[0.625rem] text-base flex items-center justify-center "
         >
-          {loading ? "Loading..." : " Sign up"}
-        </Button>
+          Sign Up
+        </CustomButton>
       </form>
     </Form>
   );

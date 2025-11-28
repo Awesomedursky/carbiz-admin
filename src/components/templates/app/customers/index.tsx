@@ -4,9 +4,6 @@ import fetchCustomersQuery from "@/queries/customers.query";
 
 const Customers = () => {
   const { data, loading } = fetchCustomersQuery();
-
-  console.log(data);
-
   return (
     <DataTable
       tableName="Customers"

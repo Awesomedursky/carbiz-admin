@@ -1,174 +1,103 @@
-"use client";
-
-import React from "react";
-import { Separator } from "@/components/ui/separator";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import DetailsSection from "../order/DetailsSection";
 import { Button } from "@/components/ui/button";
-import RiderEntity from "@/types/rider.type";
 import { useDrawerStore } from "@/store/drawer.store";
+import RiderEntity from "@/types/rider.type";
+import { useFetchRider } from "@/queries/riders.query";
+import { newHandleRiderApprove, newHandleRiderReject } from "./RiderActions";
 
-interface RiderDetailsProps {
-  rider: RiderEntity;
-}
+const RidersDetails = ({ rider }: { rider: RiderEntity }) => {
+  const { data, loading } = useFetchRider(rider?.riderID || "");
 
-const RiderDetails: React.FC<RiderDetailsProps> = ({ rider }) => {
-  const { closeModal } = useDrawerStore();
+  console.log(data);
+  const { openModal } = useDrawerStore();
+
+  const handleApprove = () => {
+    newHandleRiderApprove(openModal, rider);
+  };
+
+  const handleRejectModal = () => {
+    newHandleRiderReject(openModal, rider);
+  };
+
+  const status = data?.isApproved;
+
+  const filteredData = Object.fromEntries(
+    Object.entries(data ?? {}).filter(
+      ([key, value]) =>
+        !["vehicles", "my_payouts"].includes(key.toLowerCase()) &&
+        !Array.isArray(value) &&
+        key !== "__typename"
+    )
+  ) as Record<string, unknown>;
+
+  // const my_rides = data?.my_rides
+  // const vehicles = data?.vehicle
+
+  const document = Object.fromEntries(
+    Object.entries(data?.vehicle[0] || {}).filter(
+      ([key]) => key !== "__typename"
+    )
+  );
+
+  if (loading) {
+    return (
+      <div className="grid w-full p-2.5 md:p-3.5 grid-cols-1 space-y-1.5 h-full">
+        {Array.from({ length: 2 }).map((_, p) => (
+          <Skeleton key={p} className=" h-30" />
+        ))}
+      </div>
+    );
+  }
+
+  const buttonRender = () => {
+    if (status == false) {
+      return (
+        <div className="grid grid-cols-2 gap-2">
+          <Button variant={"outline"} onClick={handleRejectModal}>
+            Reject Rider
+          </Button>
+          <Button className="" onClick={handleApprove}>
+            Approve Rider
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex place-self-end">
+        <Button variant={"destructive"}>Disable Rider</Button>
+      </div>
+    );
+  };
 
   return (
-    <div className="max-h-[80vh] overflow-y-auto p-2 space-y-6">
-      <Card className="shadow-none border-none">
-        <CardHeader>
-          <h2 className="text-lg font-semibold">Personal Details</h2>
-        </CardHeader>
+    <div className=" p-2.5 md:p-3.5">
+      <DetailsSection title="Personal Details" details={filteredData} />
+      <DetailsSection title="Vehicle Details" details={document} />
 
-        <Separator className="my-3" />
+      <div className="bg-white rounded-lg border border-gray-200 mb-4 shadow-sm">
+        {/* <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 p-2.5">
+          My Products
+        </h3> */}
 
-        <CardContent className="space-y-3 text-sm">
-          <div className="flex justify-between">
-            <span className="text-gray-500">Rider ID</span>
-            <span className="font-medium">{rider.riderID || "N/A"}</span>
+        {/* {my_products?.map((i: ProductEntity, idx: number) => (
+          <div key={idx} className="grid grid-cols-1 space-y-1.5 p-3">
+            <div className="p-2 border rounded-lg justify-between flex items-center">
+              <p className="font-bold text-sm flex items-center space-x-1.5">
+                <BoxIcon className="p-2 border rounded-lg size-10" />
+                <span className="font-bold text-sm uppercase">
+                  {i?.productID} -{" "}
+                  <span className=" text-primary">{i?.productName}</span>
+                </span>
+              </p>
+            </div>
           </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-500">Rider Name</span>
-            <span className="font-medium">{rider.name}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-500">Rider Email</span>
-            <span className="font-medium">{rider.email}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-500">Rider Phone Number</span>
-            <span className="font-medium">{rider.phoneNumber}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-500">Rider Bank Name</span>
-            <span className="font-medium">{(rider as any).bankName || "N/A"}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-500">Rider Account Name</span>
-            <span className="font-medium">{(rider as any).accountName || "N/A"}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-500">Rider Account Number</span>
-            <span className="font-medium">{(rider as any).accountNumber || "N/A"}</span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-500">Status</span>
-          
-            <span
-              className="font-medium"
-            >
-              {rider.status}
-            </span>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* National Identity Section */}
-      <Card className="shadow-none border-none">
-        <CardHeader>
-          <h2 className="text-sm font-bold">
-            National Identity / BVN Number
-          </h2>
-        </CardHeader>
-      
-        <CardContent>
-          <div className="flex  bg-gray-100 rounded-sm p-2 justify-between">
-            <span className="text-gray-500">Identity Number</span>
-            <span className="font-medium">{(rider as any).identityNumber || "N/A"}</span>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Vehicle Type Section */}
-      <Card className="shadow-none border-none">
-        <CardHeader>
-          <h2 className="text-sm font-semibold">Vehicle Type</h2>
-        </CardHeader>
-       
-        <CardContent>
-          <div className="flex  bg-gray-100 rounded-sm p-2 justify-between">
-            <span className=" text-gray-500">Type</span>
-            <span className="font-medium">{(rider as any).vehicleType || "N/A"}</span>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Documents Section */}
-      <Card className="shadow-none border-none">
-        <CardHeader>
-          <h2 className="text-sm font-semibold">Documents</h2>
-        </CardHeader>
-        
-        <CardContent className="space-y-3">
-          <div className="flex justify-between items-center">
-            <span className="text-gray-700">Rider Image</span>
-            {(rider as any).riderImageUrl ? (
-              <a
-                href={(rider as any).riderImageUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 text-sm font-medium hover:underline"
-              >
-                Preview
-              </a>
-            ) : (
-              <span className="text-gray-400 text-sm">No file</span>
-            )}
-          </div>
-
-          <div className="flex justify-between items-center">
-            <span className="text-gray-700">Driver’s License</span>
-            {(rider as any).driverLicenseUrl ? (
-              <a
-                href={(rider as any).driverLicenseUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 text-sm font-medium hover:underline"
-              >
-                Preview
-              </a>
-            ) : (
-              <span className="text-gray-400 text-sm">No file</span>
-            )}
-          </div>
-
-          <div className="flex justify-between items-center">
-            <span className="text-gray-700">Vehicle Document</span>
-            {(rider as any).vehicleDocumentUrl ? (
-              <a
-                href={(rider as any).vehicleDocumentUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 text-sm font-medium hover:underline"
-              >
-                Preview
-              </a>
-            ) : (
-              <span className="text-gray-400 text-sm">No file</span>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Footer Buttons */}
-      <div className="flex justify-between gap-3 pt-4 sticky bottom-0 left-0 right-0 px-6 pb-4 ">
-        <Button variant="outline" onClick={closeModal}>
-          Reject Rider
-        </Button>
-        <Button variant="default" className="bg-purple-600 hover:bg-purple-700">
-          Approve Rider
-        </Button>
+        ))} */}
       </div>
+      <div className="mt-2">{buttonRender()}</div>
     </div>
   );
 };
 
-export default RiderDetails;
+export default RidersDetails;

@@ -1,8 +1,9 @@
-import { FETCH_ORDERS } from "@/api/orders";
+import { FETCH_ONE_ORDER, FETCH_ORDERS } from "@/api/orders";
+import { useToast } from "@/hooks/Toast";
 import useTableStore from "@/store/table.store";
 import { PaginationQuery } from "@/types";
 import OrderEntity from "@/types/order.type";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import React from "react";
 
 interface AdminFetchAllOrdersResponseType {
@@ -28,7 +29,7 @@ const fetchOrdersQuery = () => {
       params: {
         limit: pageSize,
         page: currentPage,
-        sortBy: "createdAt",
+        sortBy: "createdAT",
         sortOrder: "DESC",
       },
     },
@@ -51,3 +52,31 @@ const fetchOrdersQuery = () => {
 };
 
 export default fetchOrdersQuery;
+
+export const useFetchOrder = () => {
+  const { handleError } = useToast();
+  type FetchOrderResult = {
+    AdminfetchaOneOrder: {
+      success?: boolean;
+      message?: string;
+      payload?: OrderEntity;
+    };
+  };
+
+  const [AdminFetchoneOrder, { data, loading, error }] =
+    useLazyQuery<FetchOrderResult>(FETCH_ONE_ORDER, {
+      onCompleted: () => {},
+      onError: (error) => {
+        handleError(error, "Error fetching order");
+      },
+      fetchPolicy: "cache-and-network",
+      nextFetchPolicy: "cache-first",
+    });
+
+  return {
+    AdminFetchoneOrder,
+    data: data?.AdminfetchaOneOrder?.payload,
+    loading,
+    error,
+  };
+};

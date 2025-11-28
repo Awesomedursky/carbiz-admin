@@ -51,13 +51,13 @@ const CustomerColumns: ColumnDef<Customer>[] = [
     accessorKey: "Customer Name",
     header: () => (
       <div className="normal text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none ">
-        Name
+        Customer Name
       </div>
     ),
     cell: ({ row }) => {
       return (
         <div className="capitalize font-normal py-3.5 normal">
-          {row.getValue("name")}
+          {row?.original?.name ?? "-"}
         </div>
       );
     },
@@ -71,7 +71,9 @@ const CustomerColumns: ColumnDef<Customer>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className=" font-normal px-7 py-3.">{row.getValue("email")}</div>
+        <div className=" font-normal px-7 py-3.">
+          {row?.original?.email ?? "-"}
+        </div>
       );
     },
   },
@@ -83,10 +85,9 @@ const CustomerColumns: ColumnDef<Customer>[] = [
       </div>
     ),
     cell: ({ row }) => {
-      const phone = row.getValue("phoneNumber")?.toString();
       return (
         <div className="font-normal px-7 py-3.">
-          {phone?.replaceAll("-", "") || "Unknown"}
+          {row?.original?.phoneNumber ?? "Unknown"}
         </div>
       );
     },
@@ -101,7 +102,7 @@ const CustomerColumns: ColumnDef<Customer>[] = [
     cell: ({ row }) => {
       return (
         <div className=" font-normal px-7 py-3.">
-          {moment(row.getValue("createdAt")).format("DD-MM-YYYY")}
+          {moment(row.getValue("createdAt")).format("DD-MM-YYYY hh:mm A")}
         </div>
       );
     },

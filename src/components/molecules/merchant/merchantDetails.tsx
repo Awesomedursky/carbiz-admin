@@ -1,13 +1,24 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import DetailsSection from "../order/DetailsSection";
 import { BoxIcon } from "lucide-react";
-// import { useDrawerStore } from "@/store/drawer.store";
 import { useFetchOneMerchant } from "@/queries/merchants";
 import { Button } from "@/components/ui/button";
 import ProductEntity from "@/types/product.type";
+import { useDrawerStore } from "@/store/drawer.store";
+import { newHandleApprove, newHandleRejectModal } from "./MerchantActions";
+import Merchant from "@/types/merchants.type";
 
-const MerchantDetails = ({ merchant }: { merchant: string }) => {
-  const { data, loading } = useFetchOneMerchant(merchant || "");
+const MerchantDetails = ({ merchant }: { merchant: Merchant }) => {
+  const { data, loading } = useFetchOneMerchant(merchant?.merchantID || "");
+  const { openModal } = useDrawerStore();
+
+  const handleApprove = () => {
+    newHandleApprove(openModal, merchant);
+  };
+
+  const handleRejectModal = () => {
+    newHandleRejectModal(openModal, merchant);
+  };
 
   const filteredData = Object.fromEntries(
     Object.entries(data ?? {}).filter(
@@ -36,7 +47,7 @@ const MerchantDetails = ({ merchant }: { merchant: string }) => {
   ) as Record<string, unknown>;
 
   const my_products = (data as any)?.my_products;
-  const status = data?.isVerified;
+  const status = data?.isApproved;
 
   //   const navigate = (e: string) => {
   //     closeModal();
@@ -45,7 +56,7 @@ const MerchantDetails = ({ merchant }: { merchant: string }) => {
 
   if (loading) {
     return (
-      <div className="grid w-full p-2.5 md:p-3.5 grid-cols-1 space-y-1.5">
+      <div className="grid w-full p-2.5 md:p-3.5 grid-cols-1 space-y-1.5 h-full">
         {Array.from({ length: 2 }).map((_, p) => (
           <Skeleton key={p} className=" h-30" />
         ))}
@@ -57,18 +68,18 @@ const MerchantDetails = ({ merchant }: { merchant: string }) => {
     if (status == false) {
       return (
         <div className="grid grid-cols-2 gap-2">
-          <Button variant={"outline"} className="">
+          <Button variant={"outline"} onClick={() => handleRejectModal()}>
             Reject Merchant
           </Button>
-          <Button className="">Approve Merchant</Button>
+          <Button className="" onClick={() => handleApprove()}>
+            Approve Merchant
+          </Button>
         </div>
       );
     }
     return (
       <div className="flex place-self-end">
-        <Button variant={"destructive"} className="">
-          Disable Merchant
-        </Button>
+        <Button variant={"destructive"}>Disable Merchant</Button>
       </div>
     );
   };

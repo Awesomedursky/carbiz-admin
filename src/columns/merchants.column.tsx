@@ -100,8 +100,8 @@ const MerchantColumn: ColumnDef<Merchant>[] = [
       </div>
     ),
     cell: ({ row }) => {
-      const { isVerified, status } = row.original;
-      const displayStatus = isVerified
+      const { isApproved, status } = row.original;
+      const displayStatus = isApproved
         ? "APPROVED"
         : status === "disabled"
         ? "DISABLED"

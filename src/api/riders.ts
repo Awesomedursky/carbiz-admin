@@ -41,15 +41,34 @@ export const ADMIN_FETCH_ONE_RIDER = gql`
         status
         availabilityStatus
         createdAt
-        deletedAt
         email
         firstName
         isApproved
         isVerified
         lastName
         riderID
+        role
+        profilePics
         phoneNumber
         updatedAt
+        governmentVerificationNumber
+        governmentVerificationType
+        my_rides {
+          order {
+            orderID
+          }
+        }
+        my_payouts {
+          payoutID
+          payoutStatus
+        }
+        vehicle {
+          vehicleDocuments
+          driversLicense
+          plateNumber
+          vehicleType
+          vehicleID
+        }
       }
     }
   }
@@ -68,6 +87,40 @@ export const ADMIN_APPROVE_OR_DISAPPROVE_RIDER = gql`
       payload {
         availabilityStatus
       }
+    }
+  }
+`;
+
+export const ADMIN_FETCH_ALL_AVAILABLE_RIDERS = gql`
+  query AdminFetchAllAvailableRiders($params: PaginationDto!) {
+    AdminFetchAllAvailableRiders(paginationQuery: $params) {
+      success
+      message
+      status
+      errors
+      payload {
+        currentPage
+        pageSize
+        total
+        data {
+          riderID
+          firstName
+          lastName
+          status
+        }
+      }
+    }
+  }
+`;
+
+export const ADMIN_ASSIGN_RIDER_TO_ORDER = gql`
+  mutation AdminAssignAnOrderToArider($orderID: String!, $riderID: String!) {
+    AdminAssignAnOrderToArider(orderID: $orderID, riderID: $riderID) {
+      success
+      message
+      status
+      errors
+      payload
     }
   }
 `;

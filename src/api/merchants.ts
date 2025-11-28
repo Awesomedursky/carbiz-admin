@@ -10,6 +10,7 @@ export const GET_MERCHANTS = gql`
         pageSize
         total
         data {
+          isApproved
           isVerified
           status
           email
@@ -36,6 +37,7 @@ export const GET_ONE_MERCHANT = gql`
         merchantID
         businessPics
         isVerified
+        isApproved
         status
         taxID
         businessLicense
@@ -96,36 +98,6 @@ export const GET_ONE_MERCHANT_PRODUCTS = gql`
           productWeightType
           productWidth_cm
         }
-      }
-    }
-  }
-`;
-
-export const FETCH_PRODUCT = gql`
-  query fetchOneProduct($productID: String!) {
-    fetchOneProduct(productID: $productID) {
-      success
-      message
-      status
-      errors
-      payload {
-        productImages
-        productName
-        productDescription
-        productCategory {
-          productCategoryName
-        }
-        productType
-        priceCurrencyType
-        productWeightType
-        productStock
-        productColor
-        price
-        discountPercentage
-        productWeight
-        productLength_cm
-        productBreadth_cm
-        productWidth_cm
       }
     }
   }

@@ -6,26 +6,15 @@ import {
   TOTAL_CUSTOMER,
 } from "@/api/dashboard";
 import { useToast } from "@/hooks/Toast";
+import { useAuthStore } from "@/store/auth.store";
+import { AdminOutput } from "@/types/admin.type";
 import { useQuery } from "@apollo/client";
 
 interface profileAdmin {
   profileAdmin: {
     success: boolean;
     message: string;
-    payload: {
-      adminID: string;
-      createdAt: string;
-      deletedAt: string;
-      email: string;
-      id: string;
-      isVerified: string;
-      name: string;
-      phoneNumber: string;
-      profilePics: string;
-      role: string;
-      status: string;
-      updatedAt: string;
-    };
+    payload: AdminOutput;
   };
 }
 
@@ -63,10 +52,13 @@ interface MerchantsTotalRevenueWithDeliveryFee {
 
 export const useMerchantProfile = () => {
   const { handleError } = useToast();
+  const { setUser } = useAuthStore();
 
   const { loading, error, data } = useQuery<profileAdmin>(PROFILE_ADMIN, {
-    onCompleted: () => {
-      // console.log("Profile Data:", data);
+    onCompleted: (response) => {
+      if (response?.profileAdmin?.payload) {
+        setUser(response?.profileAdmin?.payload);
+      }
     },
     onError: (error) => {
       handleError(error, "Error fetching Admin profile");

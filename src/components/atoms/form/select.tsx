@@ -65,7 +65,11 @@ const SelectField: React.FC<SelectFieldProps> = ({
               <SelectGroup>
                 {items && items.length > 0 ? (
                   items?.map((item) => (
-                    <SelectItem key={item.value} value={item.value}>
+                    <SelectItem
+                      key={item.value}
+                      value={item.value}
+                      className={item?.className}
+                    >
                       {item.label}
                     </SelectItem>
                   ))

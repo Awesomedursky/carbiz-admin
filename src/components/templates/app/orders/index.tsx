@@ -1,4 +1,5 @@
-import { columns } from "@/columns/columns";
+// import { columns } from "@/columns/columns";
+import { ordersColumns } from "@/columns/orders.column";
 import { DataTable } from "@/components/atoms/table";
 import fetchOrdersQuery from "@/queries/orders.query";
 
@@ -11,7 +12,7 @@ const Orders = () => {
         columnKey="orderID"
         tableName="Orders"
         isClickable
-        columns={columns}
+        columns={ordersColumns}
         data={data || []}
       />
     </div>

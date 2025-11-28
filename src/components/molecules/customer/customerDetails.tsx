@@ -25,6 +25,8 @@ const CustomerDetails = ({ customer }: CustomerType) => {
 
   const my_orders = (data as any)?.my_orders;
 
+  console.log(my_orders);
+
   const navigate = (e: string) => {
     closeModal();
     nav(`/orders/${e}`);
@@ -49,21 +51,27 @@ const CustomerDetails = ({ customer }: CustomerType) => {
           Customer's Orders
         </h3>
 
-        <div className="grid grid-cols-1 space-y-1.5 p-3">
-          <div className="p-2 border rounded-lg justify-between flex items-center">
-            <p className="font-bold text-sm flex items-center space-x-1.5">
-              <BoxIcon className="p-2 border rounded-lg size-10" />
-              <span className="font-bold text-sm uppercase">ABC12345</span>
-            </p>
-            <button
-              //   to={"/customers"}
-              onClick={() => navigate(my_orders?.id)}
-              className=" font-semibold text-primary cursor-pointer"
-            >
-              See Details
-            </button>
+        {my_orders && my_orders.length !== 0 && (
+          <div className="grid grid-cols-1 space-y-1.5 p-3">
+            {my_orders?.map((order: any) => (
+              <div className="p-2 border rounded-lg justify-between flex items-center">
+                <p className="font-bold text-sm flex items-center space-x-1.5">
+                  <BoxIcon className="p-2 border rounded-lg size-10" />
+                  <span className="font-bold text-sm uppercase">
+                    {order?.orderID}
+                  </span>
+                </p>
+                <button
+                  //   to={"/customers"}
+                  onClick={() => navigate(`/${order?.orderID}`)}
+                  className=" font-semibold text-primary cursor-pointer"
+                >
+                  See Details
+                </button>
+              </div>
+            ))}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -140,15 +140,38 @@
   }
 }
 
+/* ---------------------------
+   Ultra-Thin Scrollbar
+---------------------------- */
+.scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #9e9e9e transparent; /* Firefox */
+}
+
+/* Chrome, Safari, Edge */
+.scrollbar::-webkit-scrollbar {
+  width: 2px; /* Ultra thin */
+  height: 2px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #9e9e9e;
+  border-radius: 9999px;
+  min-height: 2px; /* Ensures tiny but still visible */
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------------------------
+   Hidden Scrollbar (unchanged)
+---------------------------- */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
-}
-
-.scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.scrollbar {
-  scrollbar-width: thin;
 }

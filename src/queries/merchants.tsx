@@ -1,14 +1,14 @@
 import {
-  FETCH_PRODUCT,
   GET_MERCHANTS,
   GET_ONE_MERCHANT,
   VERIFY_MERCHANT,
 } from "@/api/merchants";
 import { useToast } from "@/hooks/Toast";
+import { useDrawerStore } from "@/store/drawer.store";
 import useTableStore from "@/store/table.store";
 import { PaginationQuery } from "@/types";
 import MerchantData from "@/types/merchants.type";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import React from "react";
 
 interface MerchantPaginatedResponseType {
@@ -95,48 +95,40 @@ export const useFetchOneMerchant = (id: string) => {
   return { data: data?.AdminFetchOneMerchant.payload, loading, error, refetch };
 };
 
-export const useVerifyMerchant = () => {
+export const useVerifyMerchant = (merchantID: string) => {
   const { handleError, handleSuccess } = useToast();
+  const { pageSize, currentPage } = useTableStore();
+  const { closeModal } = useDrawerStore();
 
-  const [approveOrDisApprove, { loading }] = useMutation<
+  const [approveDisApproveMerchant, { loading: merchantLoading }] = useMutation<
     VerifyMerchantResponseType,
     VerifyMerchantInput
   >(VERIFY_MERCHANT, {
+    refetchQueries: [
+      {
+        query: GET_MERCHANTS,
+        variables: {
+          params: {
+            limit: pageSize,
+            page: currentPage,
+            sortBy: "createdAt",
+            sortOrder: "DESC",
+          },
+        },
+      },
+      { query: GET_ONE_MERCHANT, variables: { merchantID } },
+    ],
     onCompleted: (data) => {
       handleSuccess(data?.AdminApproveOrDisApproveMerchant?.message);
+      closeModal();
     },
     onError: (error) => {
       handleError("Update profile error", error.message);
     },
   });
 
-  return { mutate: approveOrDisApprove, loading };
-};
-
-interface fetchOneProduct {
-  fetchOneProduct: {
-    success: boolean;
-    message: string;
-    payload: any;
-  };
-}
-export const useFetchProduct = () => {
-  const { handleError } = useToast();
-
-  const [fetchOneProduct, { data, loading, error }] =
-    useLazyQuery<fetchOneProduct>(FETCH_PRODUCT, {
-      onCompleted: () => {},
-      onError: (error) => {
-        handleError(error, "Error fetching product");
-      },
-      fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-first",
-    });
-
   return {
-    fetchOneProduct,
-    data: data?.fetchOneProduct?.payload,
-    loading,
-    error,
+    approveDisApproveMerchant,
+    merchantLoading,
   };
 };

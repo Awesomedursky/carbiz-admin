@@ -1,14 +1,12 @@
+import Customer from "./customer.type";
+import { MerchantEntity } from "./merchants.type";
 import ProductEntity from "./product.type";
+import RiderEntity from "./rider.type";
 
 interface OrderEntity {
-  // RidersRide: RiderRidesEntity!
+  RidersRide: RiderRidesEntity;
   createdAT: Date;
-  customer: {
-    name: string;
-    email: string;
-    phoneNumber: string;
-    customerID: string;
-  };
+  customer: Customer;
   deliveryFee: number;
   deliveryType: string;
   distance_ms: number;
@@ -18,7 +16,7 @@ interface OrderEntity {
   isPooled: boolean;
   items: OrderItemsEntity[];
   // merchantStatuses: [MerchantOrderStatusEntity!]!
-  // merchants: [MerchantEntity!]!
+  merchants: MerchantEntity;
   orderID: string;
   orderStatus: string;
   paymentStatus: string;
@@ -28,6 +26,7 @@ interface OrderEntity {
   trackingID: string;
   updatedAT: Date;
   vehicleType: string;
+  pooledSavings: number;
 }
 
 export default OrderEntity;
@@ -48,6 +47,7 @@ export interface OrderItem {
   originalPrice?: number;
   color: string;
   image: string;
+  isDiscountApplied: boolean;
 }
 
 export interface OrderSummaryItem {
@@ -65,3 +65,21 @@ export interface TimelineStep {
   isCompleted: boolean;
   isActive?: boolean;
 }
+
+export type RiderRidesEntity = {
+  at_dropoff_locationAT: Date;
+  // checkpointStatus: checkpointStatusType
+  createdAt: Date;
+  deletedAt: Date;
+  dropped_off_parcelAT: Date;
+  enroute_to_dropoff_locationAT: Date;
+  enroute_to_pickup_locationAT: Date;
+  id: number;
+  // merchantCheckpoints: [MerchantCheckpointStatus!]!
+  milestone: String;
+  order: OrderEntity;
+  picked_up_parcelAT: Date;
+  rider: RiderEntity;
+  ridersRideID: String;
+  updatedAt: Date;
+};

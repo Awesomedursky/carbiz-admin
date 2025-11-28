@@ -18,8 +18,8 @@ export { default as Payouts } from "@/components/templates/app/payout";
 
 export { default as Merchants } from "@/components/templates/app/merchants";
 
-export { default as Products } from "@/components/templates/app/products";
-export { default as ProductPreview } from "@/components/templates/app/products/preview";
+// export { default as Products } from "@/components/templates/app/products";
+// export { default as ProductPreview } from "@/components/templates/app/products/preview";
 
 export { default as Settings } from "@/components/templates/app/settings";
 export { default as Profile } from "@/components/templates/app/settings/profile";

@@ -13,24 +13,44 @@ import MerchantDetails from "./merchantDetails";
 import Merchant from "@/types/merchants.type";
 import GenericDisable from "../genericDisable";
 
+export const newHandleApprove = (
+  openModal: ({}: any) => void,
+  merchant: Merchant
+) => {
+  openModal({
+    type: "dialog",
+    title: "Merchant",
+    content: GenericDisable,
+    props: {
+      type: "approve",
+      id: merchant?.merchantID,
+      name: merchant?.businessName,
+      state: "merchant",
+    },
+    placement: "center",
+  });
+};
+
+export const newHandleRejectModal = (
+  openModal: ({}: any) => void,
+  merchant: Merchant
+) => {
+  openModal({
+    title: "Merchant",
+    content: GenericDisable,
+    type: "dialog",
+    props: {
+      type: "reject",
+      id: merchant?.merchantID,
+      name: merchant?.businessName,
+      created: merchant?.createdAt,
+      state: "merchant",
+    },
+    placement: "center",
+  });
+};
 const MerchantAction = ({ merchant }: { merchant: Merchant }) => {
   const { openModal } = useDrawerStore();
-
-  
-
-  const handleApprove = () => {
-    openModal({
-      type: "dialog",
-      title: "Merchant",
-      content: GenericDisable,
-      props: {
-        type: "approve",
-        id: merchant?.merchantID,
-        name: merchant?.businessName,
-      },
-      placement: "center",
-    });
-  };
 
   // const handleReject = () => {
   //   openModal({
@@ -41,6 +61,14 @@ const MerchantAction = ({ merchant }: { merchant: Merchant }) => {
   //     placement: "center",
   //   });
   // };
+
+  const handleApprove = () => {
+    newHandleApprove(openModal, merchant);
+  };
+
+  const handleRejectModal = () => {
+    newHandleRejectModal(openModal, merchant);
+  };
 
   // const handleDelete = () => {
   //   openModal({
@@ -70,27 +98,8 @@ const MerchantAction = ({ merchant }: { merchant: Merchant }) => {
       type: "drawer",
       title: "Merchant Details",
       content: MerchantDetails,
-      props: { merchant: merchant.merchantID },
+      props: { merchant },
       placement: "right",
-    });
-  };
-
-  const handleRejectModal = () => {
-    openModal({
-      title: "Merchant",
-      content: GenericDisable,
-      type: "dialog",
-      props: {
-        type: "reject",
-        id: merchant?.merchantID,
-        name: merchant?.businessName,
-        created: merchant?.createdAt,
-        // title: "Reject Rider Request",
-        // message: "This action will permanently reject this rider.",
-        // confirmLabel: "Reject Rider",
-        // onConfirm: handleReject,
-      },
-      placement: "center",
     });
   };
 
@@ -112,9 +121,9 @@ const MerchantAction = ({ merchant }: { merchant: Merchant }) => {
   // };
 
   const getMenuItems = () => {
-    const { status, isVerified } = merchant;
+    const { status, isApproved } = merchant;
 
-    const displayStatus = isVerified
+    const displayStatus = isApproved
       ? "APPROVED"
       : status === "disabled"
       ? "DISABLED"

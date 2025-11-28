@@ -49,6 +49,7 @@ const NotificationCenter = () => {
           className="md:py-6 border-0 shadow text-sm font-bold"
           onClick={() =>
             openModal({
+              type: "dialog",
               title: "Create New Notification",
               content: NotificationForm,
               width: 600,

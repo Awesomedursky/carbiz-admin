@@ -1,8 +1,12 @@
 import BankEntity from "./bank.type";
+import OrderEntity from "./order.type";
 import ProductEntity from "./product.type";
 import TransactionEntity from "./transaction.types";
 
-type LocationType = {};
+type LocationType = {
+  latitude: GLfloat;
+  longitude: GLfloat;
+};
 
 interface Merchant {
   CAC: string;
@@ -18,6 +22,7 @@ interface Merchant {
   email: string;
   id: number;
   isVerified: boolean;
+  isApproved: boolean;
   location: LocationType;
   merchantID: string;
   my_transaction: TransactionEntity[];
@@ -25,7 +30,7 @@ interface Merchant {
   onboardingPercentage: number;
   //   onboardingStatus: MerchantOnboardingStatusType;
   //   orderStatuses: [MerchantOrderStatusEntity];
-  my_products: ProductEntity;
+  //   orders: [OrderEntity];
   phoneNumber: string;
   postalCode: string;
   resetPasswordOtp: string;
@@ -38,3 +43,39 @@ interface Merchant {
 }
 
 export default Merchant;
+
+export interface MerchantEntity {
+  CAC: String;
+  address: String;
+  // bank_details: [BankEntity!]!;
+  businessLicense: String;
+  businessName: String;
+  businessPics: String;
+  city: String;
+  country: String;
+  createdAt: Date;
+  deletedAt: Date;
+  email: String;
+  id: Number;
+  isApproved: Boolean;
+  isVerified: Boolean;
+  location: LocationType;
+  merchantID: string;
+  my_products: ProductEntity;
+  my_transaction: TransactionEntity;
+  onboardingActions: string;
+  onboardingPercentage: number;
+  // onboardingStatus: MerchantOnboardingStatusType;
+  // orderStatuses: MerchantOrderStatusEntity;
+  orders: OrderEntity;
+  password: string;
+  phoneNumber: String;
+  postalCode: String;
+  resetPasswordOtp: String;
+  resetPasswordOtpExpirationTime: Date;
+  role: String;
+  status: String;
+  taxID: String;
+  updatedAt: Date;
+  validIDcard: String;
+}

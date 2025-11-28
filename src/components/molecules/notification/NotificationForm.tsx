@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import InputField from "@/components/atoms/form/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -16,7 +15,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { FormLabel } from "@/components/ui/form";
 import { useDrawerStore } from "@/store/drawer.store";
 
 import {
@@ -25,6 +23,8 @@ import {
 } from "@/schema/notification.schema";
 
 import { NotificationEntity } from "@/columns/notifications.columns";
+import TextArea from "@/components/atoms/form/textarea";
+import SelectField from "@/components/atoms/form/select";
 
 type NotificationFormProps = {
   onClose: () => void;
@@ -62,11 +62,10 @@ const NotificationForm = ({ onCreate, initialData }: NotificationFormProps) => {
       ...data,
       id: initialData?.id ?? Date.now(),
       isScheduled: scheduleOption === "later",
-      dateTime: scheduleOption === "later"
-        ? scheduledDate
-        : new Date().toISOString(),
+      dateTime:
+        scheduleOption === "later" ? scheduledDate : new Date().toISOString(),
       status: scheduleOption === "later" ? "Scheduled" : "Sent",
-      sentBy: ""
+      sentBy: "",
     };
 
     onCreate(newNotification);
@@ -81,8 +80,8 @@ const NotificationForm = ({ onCreate, initialData }: NotificationFormProps) => {
       >
         {/* Title */}
         <div>
-          <FormLabel>Notification Title</FormLabel>
           <InputField
+            label="Notification Title"
             control={form.control}
             name="title"
             placeholder="Enter notification title"
@@ -91,9 +90,10 @@ const NotificationForm = ({ onCreate, initialData }: NotificationFormProps) => {
 
         {/* Message */}
         <div>
-          <FormLabel>Message</FormLabel>
-          <Textarea
-            {...form.register("message")}
+          <TextArea
+            label="Message"
+            name="message"
+            control={form.control}
             placeholder="Write the message here..."
           />
         </div>
@@ -101,28 +101,24 @@ const NotificationForm = ({ onCreate, initialData }: NotificationFormProps) => {
         {/* Delivery & Audience */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <FormLabel>Delivery Method</FormLabel>
-            <Select
-              onValueChange={(value) =>
-                form.setValue("method", value as any)
-              }
-              value={form.watch("method")}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Method" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Email">Email</SelectItem>
-                <SelectItem value="Push">Push</SelectItem>
-                <SelectItem value="SMS">SMS</SelectItem>
-                <SelectItem value="In-App">In-App</SelectItem>
-              </SelectContent>
-            </Select>
+            <SelectField
+              placeholder="select method"
+              control={form.control}
+              name="method"
+              label="Delivery Method"
+              items={[
+                { label: "Email", value: "email" },
+                { label: "Push", value: "push" },
+                { label: "SMS", value: "sms" },
+                { label: "In-App", value: "in-app" },
+              ]}
+            />
           </div>
 
           <div>
-            <FormLabel>Audience</FormLabel>
+            {/* <FormLabel>Audience</FormLabel> */}
             <InputField
+              label="Audience"
               control={form.control}
               name="audience"
               placeholder="e.g., Customers, Merchants"
@@ -186,10 +182,7 @@ const NotificationForm = ({ onCreate, initialData }: NotificationFormProps) => {
 
           <div>
             <Label>End Date</Label>
-            <Input
-              type="datetime-local"
-              {...form.register("dateTime")}
-            />
+            <Input type="datetime-local" {...form.register("dateTime")} />
           </div>
         </div>
 

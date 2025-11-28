@@ -1,16 +1,9 @@
-export type PaginationQuery = {
-  limit: number;
-  page: number;
-  sortBy: string;
-  sortOrder: string;
-};
-
-export interface adminEntity {
+export interface AdminOutput {
   adminID: string;
   createdAt: Date;
   deletedAt: Date;
   email: string;
-  id: number;
+  id: Number;
   isVerified: boolean;
   name: string;
   phoneNumber: string;
@@ -19,5 +12,5 @@ export interface adminEntity {
   resetPasswordOtpExpirationTime: Date;
   role: string;
   status: string;
-  updatedAt: Date;
+  upDatedAt: Date;
 }

@@ -1,6 +1,8 @@
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import {
   ADMIN_APPROVE_OR_DISAPPROVE_RIDER,
+  ADMIN_ASSIGN_RIDER_TO_ORDER,
+  ADMIN_FETCH_ALL_AVAILABLE_RIDERS,
   ADMIN_FETCH_ALL_RIDERS,
   ADMIN_FETCH_ONE_RIDER,
 } from "@/api/riders";
@@ -10,26 +12,7 @@ import { PaginationQuery } from "@/types";
 import React from "react";
 import { useToast } from "@/hooks/Toast";
 import { useDrawerStore } from "@/store/drawer.store";
-
-// const useRidersQuery = () => {
-//   const { data, loading, error } = useQuery(ADMIN_FETCH_ALL_RIDERS);
-
-//   if (error) {
-//     console.error("Error fetching riders:", error.message);
-//   }
-
-//   const riders: RiderEntity[] =
-//     data?.RiderOutput?.map((r: any) => ({
-//       ...r,
-//       createdAt: new Date(r.createdAt),
-//       updatedAt: new Date(r.updatedAt),
-//       deletedAt: r.deletedAt ? new Date(r.deletedAt) : null,
-//     })) || [];
-
-//   return { data: riders, loading, error };
-// };
-
-// export default useRidersQuery;
+import { FETCH_ONE_ORDER } from "@/api/orders";
 
 interface AdminFetchAllRidersResponseType {
   AdminFetchAllRiders: {
@@ -85,8 +68,7 @@ const fetchOrdersQuery = () => {
 
 export default fetchOrdersQuery;
 
-export const useFetchRider = () => {
-  const { handleError } = useToast();
+export const useFetchRider = (id: string) => {
   type fetchRiderResult = {
     AdminFetchOneRider: {
       success?: boolean;
@@ -94,23 +76,16 @@ export const useFetchRider = () => {
       payload?: RiderEntity;
     };
   };
-
-  const [AdminFetchOneRider, { data, loading, error }] =
-    useLazyQuery<fetchRiderResult>(ADMIN_FETCH_ONE_RIDER, {
-      onCompleted: () => {},
-      onError: (error) => {
-        handleError(error, "Error fetching order");
-      },
+  const { data, loading, error, refetch } = useQuery<fetchRiderResult>(
+    ADMIN_FETCH_ONE_RIDER,
+    {
+      variables: { riderID: id },
       fetchPolicy: "cache-and-network",
       nextFetchPolicy: "cache-first",
-    });
+    }
+  );
 
-  return {
-    AdminFetchOneRider,
-    data: data?.AdminFetchOneRider?.payload,
-    loading,
-    error,
-  };
+  return { data: data?.AdminFetchOneRider.payload, loading, error, refetch };
 };
 
 export const useRiderApproveDisapprove = (riderID: string) => {
@@ -159,4 +134,93 @@ export const useRiderApproveDisapprove = (riderID: string) => {
   });
 
   return { approveDisapproveRider, loading };
+};
+
+export const useFetchAllAvailableRiders = () => {
+  interface allAvailableRiderResponse {
+    AdminFetchAllAvailableRiders: {
+      message: string;
+      success: boolean;
+      payload: {
+        currentPage: number;
+        data: RiderEntity[];
+        pageSize: number;
+        total: number;
+      };
+    };
+  }
+  const { pageSize, currentPage } = useTableStore();
+  const { data, loading, error, fetchMore } = useQuery<
+    allAvailableRiderResponse,
+    { params: PaginationQuery }
+  >(ADMIN_FETCH_ALL_AVAILABLE_RIDERS, {
+    variables: {
+      params: {
+        limit: pageSize,
+        page: currentPage,
+        sortBy: "createdAt",
+        sortOrder: "DESC",
+      },
+    },
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
+  });
+
+  React.useEffect(() => {
+    useTableStore.setState({
+      total: data?.AdminFetchAllAvailableRiders.payload?.total,
+    });
+  }, [data?.AdminFetchAllAvailableRiders.payload?.total]);
+
+  return {
+    data: data?.AdminFetchAllAvailableRiders.payload?.data,
+    loading,
+    error,
+    fetchMore,
+  };
+};
+
+export const useAssignOrdertoRider = (orderID: string) => {
+  type assignType = {
+    AdminAssignAnOrderToArider: {
+      success?: boolean;
+      message?: string;
+      payload?: any;
+    };
+  };
+  const { closeModal } = useDrawerStore();
+  const { handleError, handleInfo, handleSuccess } = useToast();
+  const [assignOrdertoRider, { loading }] = useMutation<
+    assignType,
+    { orderID: string; riderID: string }
+  >(ADMIN_ASSIGN_RIDER_TO_ORDER, {
+    refetchQueries: [
+      {
+        query: FETCH_ONE_ORDER,
+        variables: {
+          orderID,
+        },
+      },
+    ],
+    awaitRefetchQueries: true,
+    onCompleted: (data) => {
+      const result = data?.AdminAssignAnOrderToArider;
+      if (!result) {
+        handleError(new Error("Invalid"), "Error Updating Rider");
+        return;
+      }
+      if (!result.success) {
+        handleInfo(result.message || "Rider Update Successfully");
+        closeModal();
+        return;
+      }
+      handleSuccess(result?.message || "Order Assigned to Rider Successfully");
+      closeModal();
+    },
+    onError: (error) => {
+      handleError(error, "Error Updating Rider");
+    },
+  });
+
+  return { assignOrdertoRider, assignRiderLoading: loading };
 };

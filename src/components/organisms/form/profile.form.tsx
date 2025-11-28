@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 
 import InputField from "@/components/atoms/form/input";
 
@@ -10,6 +9,7 @@ import ProfileSchema, { ProfileSchemaType } from "@/schema/profile.schema";
 import { useAuthStore } from "@/store/auth.store";
 import useAdminMutation from "@/queries/profile";
 import ImagePicker from "@/components/atoms/form/imagepicker";
+import CustomButton from "@/components/atoms/button/CustomButton";
 
 const ProfileForm = () => {
   const { user } = useAuthStore();
@@ -26,15 +26,14 @@ const ProfileForm = () => {
   const { updateAdminProfile } = useAdminMutation();
   const { loading, mutate } = updateAdminProfile();
 
-  const onSubmit = (data: ProfileSchemaType) => {
+  const onSubmit = async (data: ProfileSchemaType) => {
     console.log(data);
-
     const payload = {
-      name: data.name,
-      phoneNumber: data.phoneNumber,
-      profilePictureUrl: data.profilePics,
+      name: data?.name,
+      phoneNumber: data?.phoneNumber,
+      profilePictureUrl: data?.profilePics,
     };
-    mutate({ variables: { input: payload } });
+    await mutate({ variables: { input: payload } });
   };
 
   return (
@@ -42,7 +41,7 @@ const ProfileForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="max-w-lg">
           <ImagePicker
-            name="businessPictureUrl"
+            name="profilePics"
             defaultValue={user?.profilePics}
             control={form.control}
             label="Profile Picture"
@@ -74,15 +73,13 @@ const ProfileForm = () => {
           />
         </div>
 
-        <Button
-          type="submit"
-          className={`${
-            loading ? "bg-primary/10" : "bg-primary"
-          } text-white px-7 md:py-7 rounded-[0.625rem] text-base w-[16%]`}
-          disabled={loading}
+        <CustomButton
+          // type="submit"
+          className={` text-white px-7 md:py-7 rounded-[0.625rem] text-base`}
+          loading={loading}
         >
-          {loading ? "Updating" : "Edit"}
-        </Button>
+          Update Profile
+        </CustomButton>
       </form>
     </Form>
   );

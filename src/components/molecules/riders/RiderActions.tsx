@@ -20,12 +20,56 @@ interface RiderActionsProps {
   rider: RiderEntity;
 }
 
+export const newHandleRiderApprove = (
+  openModal: ({}: any) => void,
+  rider: RiderEntity
+) => {
+  openModal({
+    type: "dialog",
+    title: "Rider",
+    content: GenericDisable,
+    props: {
+      type: "approve",
+      id: rider?.riderID,
+      name: `${rider?.firstName} -  ${rider?.lastName}`,
+      state: "rider",
+    },
+    placement: "center",
+  });
+};
+
+export const newHandleRiderReject = (
+  openModal: ({}: any) => void,
+  rider: RiderEntity
+) => {
+  openModal({
+    type: "dialog",
+    title: "Rider",
+    content: GenericDisable,
+    props: {
+      type: "reject",
+      id: rider?.riderID,
+      name: `${rider?.firstName} -  ${rider?.lastName}`,
+      state: "rider",
+    },
+    placement: "center",
+  });
+};
+
 const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
   const { openModal } = useDrawerStore();
 
   function onDelete(id: number) {
     console.log(`Deleting rider with id: ${id}`);
   }
+
+  const handleApprove = () => {
+    newHandleRiderApprove(openModal, rider);
+  };
+
+  const handleReject = () => {
+    newHandleRiderReject(openModal, rider);
+  };
 
   const actualStatus = () => {
     const { isApproved, status } = rider;
@@ -36,36 +80,6 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
       : "PENDING";
 
     return displayStatus;
-  };
-
-  const handleApprove = () => {
-    openModal({
-      type: "dialog",
-      title: "Rider",
-      content: GenericDisable,
-      props: {
-        type: "approve",
-        id: rider?.riderID,
-        name: `${rider?.firstName} -  ${rider?.lastName}`,
-        state: "rider",
-      },
-      placement: "center",
-    });
-  };
-
-  const handleReject = () => {
-    openModal({
-      type: "dialog",
-      title: "Rider",
-      content: GenericDisable,
-      props: {
-        type: "reject",
-        id: rider?.riderID,
-        name: `${rider?.firstName} -  ${rider?.lastName}`,
-        state: "rider",
-      },
-      placement: "center",
-    });
   };
 
   const handleDelete = () => {

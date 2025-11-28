@@ -152,6 +152,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import CustomButton from "../button/CustomButton";
+import { useToast } from "@/hooks/Toast";
 
 interface ImagePickerProp {
   name: string;
@@ -176,6 +178,7 @@ const ImagePicker: React.FC<ImagePickerProp> = ({
   const [uploading, setUploading] = useState<boolean>(false);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const { handleSuccess, handleError } = useToast();
 
   useEffect(() => {
     return () => {
@@ -205,6 +208,10 @@ const ImagePicker: React.FC<ImagePickerProp> = ({
         onProgress: (percent) => setProgress(percent),
       });
 
+      if (data) {
+        handleSuccess("Image uploaded successfully");
+      }
+
       const uploadedUrl = Array.isArray(data) ? data[0] : data;
 
       fieldOnChange(uploadedUrl);
@@ -213,6 +220,7 @@ const ImagePicker: React.FC<ImagePickerProp> = ({
       setSelectedFile(null);
       setProgress(0);
     } catch (error) {
+      handleError("Upload failed", "There was an error uploading the image.");
       console.error("Upload failed:", error);
     } finally {
       setUploading(false);
@@ -258,18 +266,17 @@ const ImagePicker: React.FC<ImagePickerProp> = ({
                 onChange={handleFileChange}
               />
 
-              <Button
+              <CustomButton
                 type="button"
                 variant="outline"
                 size="sm"
                 className="flex items-center space-x-2"
                 onClick={() => handleUpload(field.onChange)}
-                disabled={uploading}
+                loading={uploading}
               >
                 <DocumentUpload size="18" />
                 <span>{selectedFile ? "Upload" : "Select Image"}</span>
-              </Button>
-
+              </CustomButton>
               {progress > 0 && uploading && (
                 <Progress className="w-full" value={progress} />
               )}

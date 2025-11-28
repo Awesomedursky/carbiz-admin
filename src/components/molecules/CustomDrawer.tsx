@@ -6,12 +6,26 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useDrawerStore } from "@/store/drawer.store";
 
 export const CustomDrawer = () => {
-  const { isOpen, closeModal, type, title, content, props, placement } =
-    useDrawerStore();
+  const {
+    isOpen,
+    closeModal,
+    type,
+    title,
+    content,
+    props,
+    placement,
+    description,
+    width,
+  } = useDrawerStore();
 
   const renderContent = () => {
     if (!content) return null;
@@ -21,8 +35,6 @@ export const CustomDrawer = () => {
       const Component = content;
       return <Component {...props} />;
     }
-
-    // Otherwise, it’s a ReactNode (JSX, element, fragment, etc.)
     return content;
   };
 
@@ -33,14 +45,14 @@ export const CustomDrawer = () => {
       {type === "drawer" && (
         <Drawer open={isOpen} onOpenChange={(open) => !open && closeModal()}>
           <DrawerContent
-            className={` h-4/5 sm:h-full w-full sm:w-[480px] ${
+            className={`h-4/5 sm:h-[calc(100vh-2rem)] w-full sm:w-[480px] ${
               placement === "right" ? "ml-auto" : ""
             }`}
           >
             <DrawerHeader className=" border-[#F1ECF9] border-b-2 sticky sm:top-0 z-20">
               <DrawerTitle className="pt-3">{title}</DrawerTitle>
             </DrawerHeader>
-            <div className="overflow-y-scroll scroll-smooth scrollbar">
+            <div className=" overflow-y-auto scrollbar scroll-smooth ">
               {renderContent()}
             </div>
           </DrawerContent>
@@ -49,10 +61,14 @@ export const CustomDrawer = () => {
 
       {type === "dialog" && (
         <Dialog open={isOpen} onOpenChange={(open) => !open && closeModal()}>
-          <DialogContent showCloseButton={false}>
-            {/* <DialogHeader>
+          <DialogContent
+            style={{ width: width ? width : "" }}
+            showCloseButton={false}
+          >
+            <DialogHeader className=" flex items-center">
               <DialogTitle>{title}</DialogTitle>
-            </DialogHeader> */}
+            </DialogHeader>
+            {description && <p className="text-center ">{description}</p>}
             {renderContent()}
           </DialogContent>
         </Dialog>

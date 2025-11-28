@@ -5,6 +5,7 @@ const Status = {
   delivered: "text-[#027A48] bg-[#D1FADF]",
   cancelled: "bg-[#FEE4E2] text-[#B42318]",
   awaiting: "text-[#343239] bg-[#E6E5E8]",
+  packed_and_ready_for_pickup: "text-[#343239] bg-[#E6E5E8]",
   refunded: "text-[#DC6803] bg-[#FFF7E1]",
 };
 
