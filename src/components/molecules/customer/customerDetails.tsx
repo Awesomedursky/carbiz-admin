@@ -25,11 +25,9 @@ const CustomerDetails = ({ customer }: CustomerType) => {
 
   const my_orders = (data as any)?.my_orders;
 
-  console.log(my_orders);
-
   const navigate = (e: string) => {
     closeModal();
-    nav(`/orders/${e}`);
+    nav(`orders/${e}`);
   };
 
   if (loading) {
@@ -63,7 +61,7 @@ const CustomerDetails = ({ customer }: CustomerType) => {
                 </p>
                 <button
                   //   to={"/customers"}
-                  onClick={() => navigate(`/${order?.orderID}`)}
+                  onClick={() => navigate(`${order?.orderID}`)}
                   className=" font-semibold text-primary cursor-pointer"
                 >
                   See Details

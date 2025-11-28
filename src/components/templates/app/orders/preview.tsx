@@ -101,7 +101,7 @@ const PreviewOrder = () => {
             "DD MMM, YYYY hh:mm A"
           )
         : "-",
-      isCompleted: data?.RidersRide?.picked_up_parcelAT !== null,
+      isCompleted: Boolean(data?.RidersRide?.picked_up_parcelAT),
     },
     {
       id: 4,
@@ -112,7 +112,7 @@ const PreviewOrder = () => {
             "DD MMM, YYYY hh:mm A"
           )
         : "-",
-      isCompleted: data?.RidersRide?.enroute_to_dropoff_locationAT !== null,
+      isCompleted: Boolean(data?.RidersRide?.enroute_to_dropoff_locationAT),
     },
     {
       id: 5,
@@ -123,7 +123,7 @@ const PreviewOrder = () => {
             "DD MMM, YYYY hh:mm A"
           )
         : "-",
-      isCompleted: data?.RidersRide?.at_dropoff_locationAT !== null,
+      isCompleted: Boolean(data?.RidersRide?.at_dropoff_locationAT),
     },
     {
       id: 6,
@@ -132,7 +132,7 @@ const PreviewOrder = () => {
       time: data?.RidersRide?.dropped_off_parcelAT
         ? moment().format("DD MMM, YYYY hh:mm A")
         : "-",
-      isCompleted: data?.RidersRide?.dropped_off_parcelAT !== null,
+      isCompleted: Boolean(data?.RidersRide?.dropped_off_parcelAT),
     },
   ];
 
