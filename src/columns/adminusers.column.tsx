@@ -1,14 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
+import { adminEntity } from "@/types";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import AdminActions from "@/components/molecules/admin/adminAction";
 
-type AdminType = {
-  name: string;
-  email: string;
-  phoneNumber: string;
-  role: string
-};
-
-const AdminColumns: ColumnDef<AdminType>[] = [
+const AdminColumns: ColumnDef<adminEntity>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -45,7 +41,13 @@ const AdminColumns: ColumnDef<AdminType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className=" font-normal py-3.5 normal">{row.getValue("name")}</div>
+        <div className=" font-normal py-3.5 normal flex items-center gap-1.5">
+          <Avatar>
+            <AvatarImage src={row?.original?.profilePics} />
+            <AvatarFallback />
+          </Avatar>
+          <p>{row.getValue("name")}</p>
+        </div>
       );
     },
   },
@@ -73,7 +75,7 @@ const AdminColumns: ColumnDef<AdminType>[] = [
       const phone = row.getValue("phoneNumber")?.toString();
       return (
         <div className=" font-normal px-7 py-3.">
-          {phone?.replaceAll("-", "")}
+          {phone?.replaceAll("-", "") ?? "-"}
         </div>
       );
     },
@@ -82,7 +84,7 @@ const AdminColumns: ColumnDef<AdminType>[] = [
     accessorKey: "role",
     header: () => (
       <div className=" text-base font-[500] text-black bg-[#FAFAFB] px-7 py-3.5 border-none">
-       Access
+        Role
       </div>
     ),
     cell: ({ row }) => {
@@ -91,6 +93,27 @@ const AdminColumns: ColumnDef<AdminType>[] = [
           {row.getValue("role")}
         </div>
       );
+    },
+  },
+  {
+    accessorKey: "access",
+    header: () => (
+      <div className=" text-base font-[500] text-black bg-[#FAFAFB] px-7 py-3.5 border-none">
+        Access
+      </div>
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className=" font-normal px-7 py-3 capitalize">
+          {row?.original?.adminAccess?.replaceAll("_", " ") ?? "-"}
+        </div>
+      );
+    },
+  },
+  {
+    id: "Action",
+    cell: ({ row }) => {
+      return <AdminActions admin={row.original} />;
     },
   },
 ];

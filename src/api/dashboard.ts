@@ -1,28 +1,5 @@
 import { gql } from "@apollo/client";
 
-export const PROFILE_ADMIN = gql`
-  query {
-    profileAdmin {
-      errors
-      message
-      payload {
-        adminID
-        createdAt
-        deletedAt
-        email
-        id
-        isVerified
-        name
-        phoneNumber
-        profilePics
-        role
-        status
-        updatedAt
-      }
-    }
-  }
-`;
-
 export const MERCHNAT_COUNT = gql`
   query {
     AdminFetchMerchantCount {

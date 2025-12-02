@@ -46,7 +46,6 @@ export const useResetPassword = () => {
     onError: (error) => {
       // Handles GraphQL errors or network issues
       handleError(error, "Reset Password failed");
-      console.log("Mutation Error:", error);
     },
   });
 

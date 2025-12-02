@@ -13,7 +13,7 @@ import { Control } from "react-hook-form";
 import { Link, useLocation } from "react-router";
 
 interface InputFieldProps {
-  control: Control<any>;
+  control?: Control<any>;
   name: string;
   label?: string;
   placeholder?: string;
@@ -22,6 +22,7 @@ interface InputFieldProps {
   inputClassName?: string;
   itemClassName?: string;
   disabled?: boolean;
+  iconRight?: React.ReactNode;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -34,6 +35,7 @@ const InputField: React.FC<InputFieldProps> = ({
   inputClassName,
   itemClassName,
   disabled,
+  iconRight,
 }) => {
   const { pathname } = useLocation();
 
@@ -58,7 +60,7 @@ const InputField: React.FC<InputFieldProps> = ({
             }`}
           >
             {label && (
-              <FormLabel className="text-sm lg:text-base text-primary-dark font-medium lg:mb-1">
+              <FormLabel className="text-sm lg:text-base text-primary-dark font-medium lg:mb-0">
                 {label}
               </FormLabel>
             )}
@@ -70,25 +72,24 @@ const InputField: React.FC<InputFieldProps> = ({
             )}
           </div>
           <FormControl>
-            <div
-              className={`${
-                type == "password" && "flex flex-row items-center"
-              }`}
-            >
+            <div className="relative">
               <Input
                 placeholder={placeholder}
                 type={showPassword && type == "password" ? "text" : type}
-                className={`text-sm lg:text-base rounded-lg py-6 focus:outline-0 focus-visible:ring-0 focus-visible:border-primary placeholder:text-text-secondary ${
-                  fieldState.error ? "border-red-500" : "border-border"
-                }  ${inputClassName}`}
+                className={`text-sm lg:text-base rounded-lg py-6 pr-10 
+      focus:outline-0 focus-visible:ring-0 
+      focus-visible:border-primary placeholder:text-text-secondary 
+      ${fieldState.error ? "border-red-500" : "border-border"}  
+      ${inputClassName}`}
                 disabled={disabled}
                 {...field}
               />
 
-              {type == "password" && (
+              {/* Password toggle */}
+              {type === "password" && (
                 <button
                   type="button"
-                  className="-ml-10 text-text-secondary"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary"
                   onClick={toggleShowPassword}
                 >
                   {showPassword ? (
@@ -97,6 +98,13 @@ const InputField: React.FC<InputFieldProps> = ({
                     <EyeIcon size={18} />
                   )}
                 </button>
+              )}
+
+              {/* Any custom right icon */}
+              {iconRight && (
+                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  {iconRight}
+                </div>
               )}
             </div>
           </FormControl>

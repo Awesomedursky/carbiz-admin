@@ -1,7 +1,10 @@
+import { useAuthStore } from "@/store/auth.store";
 import { ArrowLeft } from "iconsax-reactjs";
 import { Link, NavLink, Outlet } from "react-router";
 
 const Settings = () => {
+  const { user } = useAuthStore();
+  const check = user?.adminAccess.toLowerCase() !== "sub_admin";
   return (
     <div className="space-y-10">
       <Link to={"/dashboard"} className="inline-flex items-center gap-2.5">
@@ -15,7 +18,7 @@ const Settings = () => {
         <h3 className="text-xl font-bold font-family-satoshi">Settings</h3>
 
         <div className="inline-flex gap-2.5 mt-2 md:mt-5">
-          {["profile", "admins"].map((nav) => (
+          {["profile", check && "admins"].map((nav) => (
             <NavLink
               to={`${nav !== "profile" ? `/settings/${nav}` : ""}`}
               end={nav === "profile"}

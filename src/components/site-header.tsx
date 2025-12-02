@@ -42,9 +42,9 @@ export function SiteHeader() {
               <Avatar className=" sm:size-10 lg:size-12 rounded-lg grayscale">
                 <AvatarImage src={user?.profilePics} alt={"profile picture"} />
                 <AvatarFallback className="rounded-md font-bold md:text-lg">
-                  {user?.name.split(" ")[0].split("")[0]}
+                  {user?.name.split(" ")[0]?.split("")[0]}
                   {""}
-                  {user?.name.split(" ")[1].split("")[0]}
+                  {user?.name.split(" ")[1]?.split("")[0]}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">

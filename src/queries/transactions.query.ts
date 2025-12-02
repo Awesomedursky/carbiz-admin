@@ -44,8 +44,6 @@ const fetchTransactions = () => {
     });
   }, [data?.AdminFetchAllTransactions.payload]);
 
-  console.log(data);
-
   return {
     data: data?.AdminFetchAllTransactions?.payload?.data || [],
     loading,

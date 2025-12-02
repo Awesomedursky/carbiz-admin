@@ -14,7 +14,7 @@ import NotificationDetails from "@/components/molecules/notification/Notificatio
 import { NotificationEntity } from "@/columns/notifications.columns";
 import { useDrawerStore } from "@/store/drawer.store";
 import NotificationForm from "@/components/molecules/notification/NotificationForm";
-import DeleteModal from "../DeleteModal";
+import GenericDisable from "../genericDisable";
 
 const NotificationActions: React.FC<{ notification: NotificationEntity }> = ({
   notification,
@@ -79,7 +79,7 @@ const NotificationActions: React.FC<{ notification: NotificationEntity }> = ({
           onSelect={() => {
             openModal({
               title: "Delete Notification",
-              content: DeleteModal,
+              content: GenericDisable,
               props: {
                 itemName: "Notification",
                 onDelete: () => onDelete(notification.id),

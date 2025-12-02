@@ -1,14 +1,16 @@
-import { UPDATE_CURRENT_USER_PROFILE } from "@/api/admin.profile";
-import { PROFILE_ADMIN } from "@/api/dashboard";
+import {
+  PROFILE_ADMIN,
+  UPDATE_CURRENT_USER_PROFILE,
+} from "@/api/admin.profile";
 import { useToast } from "@/hooks/Toast";
-import { AdminOutput } from "@/types/admin.type";
+import { adminEntity } from "@/types";
 import { useMutation } from "@apollo/client";
 
 interface AdminProfileResponseType {
   success: boolean;
   message: string;
   error: string;
-  payload: AdminOutput;
+  payload: adminEntity;
 }
 
 type updateAdminInput = {
@@ -28,8 +30,6 @@ const useAdminMutation = () => {
       refetchQueries: [PROFILE_ADMIN],
       onCompleted: (data) => {
         handleSuccess("Profile updated successfully", data.message);
-
-        console.log(data);
       },
       onError: (error) => {
         handleError("Update profile error", error.message);

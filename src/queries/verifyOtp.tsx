@@ -119,7 +119,6 @@ export const useVerifyOtpAdmin = () => {
     onError: (error) => {
       // Handles GraphQL errors or network issues
       handleError(error, "OTP request failed");
-      console.log("Mutation Error:", error);
     },
   });
 

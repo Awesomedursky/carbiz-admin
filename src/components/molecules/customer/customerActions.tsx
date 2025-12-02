@@ -20,7 +20,7 @@ const CustomerActions: React.FC<{ customer: Customer }> = ({ customer }) => {
   /** --- HANDLERS --- **/
 
   function onDelete(id: number) {
-    console.log(`Deleting notification with id: ${id}`);
+    // console.log(`Deleting notification with id: ${id}`);
   }
 
   /** --- RENDER --- **/

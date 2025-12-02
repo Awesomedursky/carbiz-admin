@@ -54,7 +54,7 @@ const DashboardCards = () => {
             .map((_, idx) => (
               <Skeleton
                 key={idx}
-                className=" rounded-lg h-24 sm:h-32 md:h-36 lg:h-44"
+                className=" rounded-lg h-24 sm:h-32 md:h-36 lg:h-40"
               />
             ))
         : dashboardAnalytics.map(({ title, value, name, color }) => (

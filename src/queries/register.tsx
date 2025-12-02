@@ -53,7 +53,6 @@ export const useRegisterMerchant = () => {
     onError: (error) => {
       // Handles GraphQL errors or network issues
       handleError(error, "Registration failed");
-      console.log("Mutation Error:", error);
     },
   });
 

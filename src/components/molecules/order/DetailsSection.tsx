@@ -175,7 +175,11 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
               <DetailRow
                 key={key}
                 label={label}
-                value={displayValue}
+                value={
+                  typeof displayValue === "string"
+                    ? displayValue.replaceAll("_", " ")
+                    : displayValue
+                }
                 isMultiline={typeof value === "string" && value.length > 5}
               />
             );

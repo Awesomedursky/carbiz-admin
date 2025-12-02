@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
 import DetailsSection from "@/components/molecules/order/DetailsSection";
 import Customer from "@/types/customer.type";
-
+import { BoxIcon } from "lucide-react";
 const PreviewOrder = () => {
   const { openModal } = useDrawerStore();
   const navigate = useNavigate();
@@ -33,14 +33,6 @@ const PreviewOrder = () => {
       });
     }
   }, [path]);
-
-  const riderDetails: Partial<RiderEntity> | undefined = data?.RidersRide?.rider
-    ? (Object.fromEntries(
-        Object.entries(data.RidersRide.rider ?? {}).filter(
-          ([key]) => key !== "__typename"
-        )
-      ) as Partial<RiderEntity>)
-    : undefined;
 
   const products: OrderItem[] = (data?.items ?? []).map((item, idx) => ({
     id: idx + 1,
@@ -146,13 +138,20 @@ const PreviewOrder = () => {
   );
 
   const merchants = Object.fromEntries(splitTwo);
-
   const customerDetails: Partial<Customer> | undefined = data?.customer
     ? (Object.fromEntries(
         Object.entries(data.customer ?? {}).filter(
           ([key]) => key !== "__typename"
         )
       ) as Partial<Customer>)
+    : undefined;
+
+  const riderDetails: Partial<RiderEntity> | undefined = data?.RidersRide?.rider
+    ? (Object.fromEntries(
+        Object.entries(data.RidersRide.rider ?? {}).filter(
+          ([key]) => key !== "__typename"
+        )
+      ) as Partial<RiderEntity>)
     : undefined;
 
   const popup = () =>
@@ -166,6 +165,7 @@ const PreviewOrder = () => {
 
   return (
     <div className="space-y-2.5 md:space-y-5 flex flex-col flex-1 h-full">
+      {/* Headder section, order ID, order status and button to prepare order for pickup */}
       <div className=" flex justify-between gap-y-1.5 items-center flex-wrap">
         <div className="flex items-center space-x-2 flex-wrap">
           <Button
@@ -193,7 +193,10 @@ const PreviewOrder = () => {
         </div>
 
         <CustomButton
-          disabled={data?.orderStatus !== "processing" ? false : true}
+          disabled={
+            data?.orderStatus === "processing" ||
+            data?.orderStatus === "delivered"
+          }
           // loading={makeOrderReadyLoading}
           onClick={popup}
         >
@@ -202,19 +205,21 @@ const PreviewOrder = () => {
       </div>
 
       <div className="flex-1">
+        {/* loading section */}
         {loading ? (
           <div className="flex items-center justify-center h-full w-full min-h-60vh">
             {" "}
             <Spinner className="size-8 text-primary" />
           </div>
         ) : (
+          // main section
           <div className="flex items-start gap-4  flex-col md:flex-row">
             <div className="w-full max-w-7xl col-span-3 space-y-4">
               <div className="bg-white border border-gray-200 rounded-[0.75rem] space-y-5">
                 <div className="p-4 border-b ">
                   <h3 className="text-base font-bold ">Order Items</h3>
                 </div>
-
+                {/* product details */}
                 <div className="px-6 pb-6 border-b last:border-0 mb-2">
                   {products?.map((product) => (
                     <OrderProductItemCard
@@ -254,6 +259,30 @@ const PreviewOrder = () => {
                   ))}
                 </div>
               </div>
+              <div className="bg-white border border-gray-200 rounded-[0.75rem] ">
+                <div className="p-4 border-b ">
+                  <h3 className="text-base font-bold ">Delivery Type</h3>
+                </div>
+                <div className=" p-4">
+                  <div className=" p-4 flex items-center space-x-1.5 bg-primary/10 rounded-sm">
+                    <div className=" border border-primary p-0.5 rounded-full">
+                      <p className=" size-4 bg-primary rounded-full"></p>
+                    </div>
+                    <p className=" bg-primary/10 rounded-full p-2 inline-flex">
+                      <BoxIcon className="size-5 text-primary" />
+                    </p>
+                    <p className="flex flex-col">
+                      <span className=" text-sm font-medium">
+                        {data?.deliveryType} Delivery
+                      </span>
+                      <span className="text-xs">
+                        {data?.deliveryType === "standard" ? "3 - 4" : "1 - 2"}{" "}
+                        business day
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
 
               {/* Order Timeline */}
               <div className="bg-white border border-gray-200 rounded-[0.75rem] space-y-5">
@@ -287,7 +316,7 @@ const PreviewOrder = () => {
               <DetailsSection
                 title="Riders Details"
                 details={riderDetails ?? {}}
-              />{" "}
+              />
             </div>
           </div>
         )}

@@ -15,6 +15,7 @@ import moment from "moment";
 import CustomButton from "../atoms/button/CustomButton";
 import { useRiderApproveDisapprove } from "@/queries/riders.query";
 import { useVerifyMerchant } from "@/queries/merchants";
+import { useDeleteAdmin } from "@/queries/admin.query";
 
 const GenericDisable = ({
   id,
@@ -27,12 +28,13 @@ const GenericDisable = ({
   name: string;
   created: string;
   type: "approve" | "reject";
-  state?: string;
+  state?: "rider" | "admin" | "merchant";
 }) => {
   const { title, closeModal } = useDrawerStore();
 
   const { approveDisapproveRider, loading } = useRiderApproveDisapprove(id);
   const { approveDisApproveMerchant, merchantLoading } = useVerifyMerchant(id);
+  const { deleteAdmin, loading: adminLoading } = useDeleteAdmin();
 
   const approveFunction = () => {
     switch (state) {
@@ -52,6 +54,10 @@ const GenericDisable = ({
           },
         });
         break;
+      case "admin":
+        deleteAdmin({ variables: { adminID: id } });
+        break;
+
       default:
         return null;
     }
@@ -128,6 +134,46 @@ const GenericDisable = ({
             loading={loading || merchantLoading}
           >
             Reject {title}
+          </CustomButton>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "delete") {
+    return (
+      <div className="p-5 w-full  space-y-6">
+        {/* ---- Header ---- */}
+        <div className="flex items-center flex-col  w-full">
+          <h2 className="text-lg md:text-xl font-bold text-center">
+            Delete {title}
+          </h2>
+          <p className="text-base">
+            This action will permanently delete this {title}.
+          </p>
+        </div>
+
+        {/* ---- Info ---- */}
+        <div className="space-y-3">
+          <div className=" bg-[#FBFBFB] border-[#ECECEB] border rounded-xl p-3 ">
+            <p className="font-semibold text-base">{name}</p>
+            <p className="text-sm text-gray-500">
+              {title} • ID: {id}
+            </p>
+          </div>
+        </div>
+
+        {/* ---- Buttons ---- */}
+        <div className="grid grid-cols-2 space-x-2.5">
+          <Button variant="outline" onClick={closeModal}>
+            Cancel
+          </Button>
+          <CustomButton
+            variant={"destructive"}
+            onClick={approveFunction}
+            loading={adminLoading}
+          >
+            Delete {title}
           </CustomButton>
         </div>
       </div>

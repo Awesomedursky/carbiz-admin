@@ -144,7 +144,6 @@ export const columns: ColumnDef<OrderEntity>[] = [
     id: "action",
     cell: ({ row }) => {
       const id = row.original?.id;
-      console.log(id);
       return (
         <div className=" font-normal px-7 py-3.">
           <Link to={`/orders/${id}`}>

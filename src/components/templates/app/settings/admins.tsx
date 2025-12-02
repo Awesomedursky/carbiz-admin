@@ -3,30 +3,37 @@ import AdminColumns from "@/columns/adminusers.column";
 
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-type adminType = {
-  name: string;
-  email: string;
-  role: string;
-  phoneNumber: string;
-};
+import { useDrawerStore } from "@/store/drawer.store";
+import NewAdminForm from "@/components/organisms/form/newAdmin.form";
+import { useAdminQuery } from "@/queries/admin.query";
 
 const Admins = () => {
-  // const fetchAllAdmins = useQuery<adminEntity>(FETCH_ALL_ADMINS, {});
-  const newData: adminType[] = [];
+  const { data, loading } = useAdminQuery();
+
+  const { openModal } = useDrawerStore();
+
+  const onOpenModal = () => {
+    openModal({
+      type: "dialog",
+      content: NewAdminForm,
+      props: { type: false },
+    });
+  };
 
   return (
     <div className="grid">
       {/* <div className="inline-flex justify-end"></div> */}
       <DataTable
+        loading={loading}
         tableName="Admins"
         isClickable
         columns={AdminColumns}
         showSearch={false}
-        data={newData}
+        data={Array.isArray(data) ? data : []}
         actions
       >
         <Button
+          onClick={onOpenModal}
           variant="default"
           className="md:py-6  border-0 shadow text-sm font-bold"
         >

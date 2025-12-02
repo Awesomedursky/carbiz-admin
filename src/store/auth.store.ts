@@ -1,17 +1,21 @@
-import { AdminOutput } from "@/types/admin.type";
+import { adminEntity } from "@/types";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 interface AuthStoreType {
-  user: AdminOutput | null;
-  setUser: (user: AdminOutput) => void;
+  user: adminEntity | null;
+  setUser: (user: adminEntity) => void;
   logout: () => void;
+  generatedPassword: string;
+  setGeneratedPassword: (text: string) => void;
 }
 
 export const useAuthStore = create<AuthStoreType>()(
-  persist(
+  persist<AuthStoreType>(
     (set) => ({
       user: null,
+      generatedPassword: "",
+      setGeneratedPassword: (generatedPassword) => set({ generatedPassword }),
       setUser: (user) => set({ user }),
       logout: () => {
         sessionStorage.removeItem("authToken");

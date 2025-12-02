@@ -1,20 +1,20 @@
+import { PROFILE_ADMIN } from "@/api/admin.profile";
 import {
   MERCHNAT_COUNT,
-  PROFILE_ADMIN,
   REVENUE,
   RIDERS_COUNT,
   TOTAL_CUSTOMER,
 } from "@/api/dashboard";
 import { useToast } from "@/hooks/Toast";
 import { useAuthStore } from "@/store/auth.store";
-import { AdminOutput } from "@/types/admin.type";
+import { adminEntity } from "@/types";
 import { useQuery } from "@apollo/client";
 
 interface profileAdmin {
   profileAdmin: {
     success: boolean;
     message: string;
-    payload: AdminOutput;
+    payload: adminEntity;
   };
 }
 

@@ -56,9 +56,19 @@ export const LOGIN = gql`
       payload {
         token
         user {
-          name
+          adminID
+          createdAt
+          deletedAt
           email
+          id
+          isVerified
+          name
+          phoneNumber
+          profilePics
           role
+          status
+          updatedAt
+          adminAccess
         }
       }
     }

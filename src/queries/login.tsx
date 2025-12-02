@@ -1,7 +1,7 @@
 import { LOGIN } from "@/api/auth";
 import { useToast } from "@/hooks/Toast";
 import { useAuthStore } from "@/store/auth.store";
-import { AdminOutput } from "@/types/admin.type";
+import { adminEntity } from "@/types";
 import { useMutation } from "@apollo/client";
 import { useNavigate } from "react-router";
 
@@ -11,7 +11,7 @@ interface LoginResponseTypeAdmin {
     message: string;
     payload: {
       token: string;
-      user: AdminOutput;
+      user: adminEntity;
     };
   };
 }

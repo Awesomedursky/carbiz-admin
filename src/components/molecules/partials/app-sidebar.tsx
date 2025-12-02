@@ -92,7 +92,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     logout();
     setTimeout(() => {
       nav("/");
-      handleSuccess("Merchant Logged out successfully");
+      handleSuccess("Admin Logged out successfully");
     }, 3000);
   };
   return (

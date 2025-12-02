@@ -9,7 +9,7 @@ import { newHandleRiderApprove, newHandleRiderReject } from "./RiderActions";
 const RidersDetails = ({ rider }: { rider: RiderEntity }) => {
   const { data, loading } = useFetchRider(rider?.riderID || "");
 
-  console.log(data);
+  console.log(data?.my_rides);
   const { openModal } = useDrawerStore();
 
   const handleApprove = () => {
@@ -78,7 +78,7 @@ const RidersDetails = ({ rider }: { rider: RiderEntity }) => {
 
       <div className="bg-white rounded-lg border border-gray-200 mb-4 shadow-sm">
         {/* <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 p-2.5">
-          My Products
+          My Orders
         </h3> */}
 
         {/* {my_products?.map((i: ProductEntity, idx: number) => (

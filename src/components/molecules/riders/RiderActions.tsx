@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDrawerStore } from "@/store/drawer.store";
-import DeleteModal from "@/components/molecules/DeleteModal";
 import RiderDetails from "@/components/molecules/riders/RiderDetails";
 import DisableRider from "./DisableRider";
 import RiderEntity from "@/types/rider.type";
@@ -59,10 +58,6 @@ export const newHandleRiderReject = (
 const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
   const { openModal } = useDrawerStore();
 
-  function onDelete(id: number) {
-    console.log(`Deleting rider with id: ${id}`);
-  }
-
   const handleApprove = () => {
     newHandleRiderApprove(openModal, rider);
   };
@@ -82,18 +77,18 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
     return displayStatus;
   };
 
-  const handleDelete = () => {
-    openModal({
-      type: "dialog",
-      title: "Disable Rider",
-      content: DeleteModal,
-      props: {
-        itemName: "Rider",
-        onDelete: () => onDelete(rider.id),
-      },
-      placement: "center",
-    });
-  };
+  // const handleDelete = () => {
+  //   openModal({
+  //     type: "dialog",
+  //     title: "Disable Rider",
+  //     content: GenericDisable,
+  //     props: {
+  //       itemName: "Rider",
+  //       onDelete: () => onDelete(rider.id),
+  //     },
+  //     placement: "center",
+  //   });
+  // };
 
   const handleDisable = () => {
     openModal({
@@ -130,23 +125,6 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
   //     placement: "center",
   //   });
   // };
-
-  const handleDeleteModal = () => {
-    openModal({
-      title: "Delete Request",
-      type: "dialog",
-
-      content: DeleteModal,
-      props: {
-        id: rider.id,
-        title: "Delete Request",
-        message: "Are you sure you want to delete this rider request?",
-        confirmLabel: "Delete Request",
-        onConfirm: handleDelete,
-      },
-      placement: "center",
-    });
-  };
 
   const getMenuItems = () => {
     switch (actualStatus()) {
@@ -191,13 +169,6 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
 
             <DropdownMenuItem onSelect={handleApprove}>
               Re-Approve Rider
-            </DropdownMenuItem>
-
-            <DropdownMenuItem
-              onSelect={handleDeleteModal}
-              className="text-red-600"
-            >
-              Delete Request
             </DropdownMenuItem>
           </>
         );
