@@ -17,13 +17,6 @@ import GenericDisable from "../genericDisable";
 const CustomerActions: React.FC<{ customer: Customer }> = ({ customer }) => {
   const { openModal } = useDrawerStore();
 
-  /** --- HANDLERS --- **/
-
-  function onDelete(id: number) {
-    // console.log(`Deleting notification with id: ${id}`);
-  }
-
-  /** --- RENDER --- **/
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -59,7 +52,7 @@ const CustomerActions: React.FC<{ customer: Customer }> = ({ customer }) => {
               content: GenericDisable,
               props: {
                 itemName: "Customer",
-                onDelete: () => onDelete(customer.id),
+                // onDelete: () => onDelete(customer.id),
               },
               placement: "center",
             });

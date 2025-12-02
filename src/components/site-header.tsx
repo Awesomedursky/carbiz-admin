@@ -24,6 +24,7 @@ export function SiteHeader() {
         }
         {/* <h1 className="text-base font-medium">Documents</h1> */}
         <div className="ml-auto flex items-center gap-2">
+          {/* notification trigger */}
           <button className="relative bg-[#F6F6F6] p-2 md:p-3 rounded-md hover:bg-primary cursor-pointer group">
             <Bell className="size-4 sm:size-6 group-hover:text-white" />
 
