@@ -1,7 +1,7 @@
 import { FETCH_ONE_ORDER, FETCH_ORDERS } from "@/api/orders";
 import { useToast } from "@/hooks/Toast";
 import useTableStore from "@/store/table.store";
-import { PaginationQuery } from "@/types";
+import { PaginationQuery } from "@/types/admin.type";
 import OrderEntity from "@/types/order.type";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import React from "react";

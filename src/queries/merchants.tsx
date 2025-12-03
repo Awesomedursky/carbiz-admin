@@ -6,7 +6,7 @@ import {
 import { useToast } from "@/hooks/Toast";
 import { useDrawerStore } from "@/store/drawer.store";
 import useTableStore from "@/store/table.store";
-import { PaginationQuery } from "@/types";
+import { PaginationQuery } from "@/types/admin.type";
 import MerchantData from "@/types/merchants.type";
 import { useMutation, useQuery } from "@apollo/client";
 import React from "react";

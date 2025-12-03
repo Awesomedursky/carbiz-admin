@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import DetailsSection from "../order/DetailsSection";
-import { adminEntity } from "@/types";
+import { adminEntity } from "@/types/admin.type";
 import { useFetchOneAdmin } from "@/queries/admin.query";
 
 const AdminDetail = ({ admin }: { admin: adminEntity }) => {

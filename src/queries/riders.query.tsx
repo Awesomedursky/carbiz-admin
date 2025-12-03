@@ -8,7 +8,7 @@ import {
 } from "@/api/riders";
 import RiderEntity from "@/types/rider.type";
 import useTableStore from "@/store/table.store";
-import { PaginationQuery } from "@/types";
+import { PaginationQuery } from "@/types/admin.type";
 import React from "react";
 import { useToast } from "@/hooks/Toast";
 import { useDrawerStore } from "@/store/drawer.store";

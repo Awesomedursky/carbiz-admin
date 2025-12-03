@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useDrawerStore } from "@/store/drawer.store";
 import GenericDisable from "../genericDisable";
-import { adminEntity } from "@/types";
+import { adminEntity } from "@/types/admin.type";
 import AdminDetail from "./adminDetail";
 import NewAdminForm from "@/components/organisms/form/newAdmin.form";
 

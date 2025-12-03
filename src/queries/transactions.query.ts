@@ -1,4 +1,4 @@
-import { PaginationQuery } from "@/types";
+import { PaginationQuery } from "@/types/admin.type";
 import { GET_TRANSACTIONS } from "@/api/transactions";
 import useTableStore from "@/store/table.store";
 import TransactionEntity from "@/types/transaction.types";

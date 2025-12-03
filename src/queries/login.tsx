@@ -1,7 +1,7 @@
 import { LOGIN } from "@/api/auth";
 import { useToast } from "@/hooks/Toast";
 import { useAuthStore } from "@/store/auth.store";
-import { adminEntity } from "@/types";
+import { adminEntity } from "@/types/admin.type";
 import { useMutation } from "@apollo/client";
 import { useNavigate } from "react-router";
 

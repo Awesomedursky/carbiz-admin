@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/Toast";
 import { useAuthStore } from "@/store/auth.store";
 import { useDrawerStore } from "@/store/drawer.store";
 import useTableStore from "@/store/table.store";
-import { adminEntity, PaginationQuery } from "@/types";
+import { adminEntity, PaginationQuery } from "@/types/admin.type";
 import { useMutation, useQuery } from "@apollo/client";
 import React from "react";
 

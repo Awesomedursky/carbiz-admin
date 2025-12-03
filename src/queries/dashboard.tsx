@@ -7,7 +7,7 @@ import {
 } from "@/api/dashboard";
 import { useToast } from "@/hooks/Toast";
 import { useAuthStore } from "@/store/auth.store";
-import { adminEntity } from "@/types";
+import { adminEntity } from "@/types/admin.type";
 import { useQuery } from "@apollo/client";
 
 interface profileAdmin {

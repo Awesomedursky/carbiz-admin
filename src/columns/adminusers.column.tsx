@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { adminEntity } from "@/types";
+import { adminEntity } from "@/types/admin.type";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import AdminActions from "@/components/molecules/admin/adminAction";
 

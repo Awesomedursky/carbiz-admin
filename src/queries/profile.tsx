@@ -3,7 +3,7 @@ import {
   UPDATE_CURRENT_USER_PROFILE,
 } from "@/api/admin.profile";
 import { useToast } from "@/hooks/Toast";
-import { adminEntity } from "@/types";
+import { adminEntity } from "@/types/admin.type";
 import { useMutation } from "@apollo/client";
 
 interface AdminProfileResponseType {

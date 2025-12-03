@@ -1,4 +1,4 @@
-import { adminEntity } from "@/types";
+import { adminEntity } from "@/types/admin.type";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 

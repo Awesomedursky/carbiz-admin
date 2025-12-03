@@ -1,6 +1,6 @@
 import { GET_CUSTOMERS, GET_ONE_CUSTOMER } from "@/api/customers";
 import useTableStore from "@/store/table.store";
-import { PaginationQuery } from "@/types";
+import { PaginationQuery } from "@/types/admin.type";
 import Customer from "@/types/customer.type";
 import { useQuery } from "@apollo/client";
 import React from "react";

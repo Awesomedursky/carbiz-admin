@@ -8,7 +8,7 @@ export type DrawerPlacement =
   | "bottom"
   | "center"
   | null;
-export type DrawerType = "dialog" | "drawer" | null;
+export type DrawerType = "dialog" | "drawer" | "popover" | null;
 
 export interface DrawerContentProps {
   [key: string]: any;
@@ -23,17 +23,20 @@ export interface DrawerOptions<T = any> {
   width?: number | null;
   showCloseIcon?: boolean;
   description?: string;
+  appNotificationCount?: number;
 }
 
 interface DrawerState<T = any> extends DrawerOptions<T> {
   isOpen: boolean;
   openModal: (options: DrawerOptions<T>) => void;
   closeModal: () => void;
+  setAppNotificationCount: (i: number) => void;
 }
 
 export const useDrawerStore = create<DrawerState>((set) => ({
   isOpen: false,
   type: null,
+  appNotificationCount: 0,
 
   openModal: ({
     type = "drawer",
@@ -65,4 +68,7 @@ export const useDrawerStore = create<DrawerState>((set) => ({
       title: undefined,
       props: null,
     }),
+  setAppNotificationCount: (appNotificationCount) => {
+    set({ appNotificationCount });
+  },
 }));
