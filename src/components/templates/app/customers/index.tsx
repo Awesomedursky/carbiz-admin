@@ -6,9 +6,10 @@ const Customers = () => {
   const { data, loading } = fetchCustomersQuery();
   return (
     <DataTable
+      message={data?.message}
       tableName="Customers"
       columns={CustomerColumns}
-      data={data || []}
+      data={data?.payload?.data || []}
       loading={loading}
       columnKey="customerID"
     />

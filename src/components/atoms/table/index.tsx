@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -16,11 +16,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SearchNormal } from "iconsax-reactjs";
-import { FunnelSimple } from "@phosphor-icons/react";
+import { FunnelSimple, WarningCircle } from "@phosphor-icons/react";
 import { Pagination } from "./pagination";
 import { useLocation, useNavigate } from "react-router";
 import useTableStore from "@/store/table.store";
 import { Spinner } from "@/components/ui/spinner";
+import { debounce } from "lodash";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -33,10 +34,12 @@ interface DataTableProps<TData, TValue> {
   children?: React.ReactNode;
   columnKey?: keyof TData; // Better type safety
   onPageChange?: (page: number) => void;
+  message?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
+  message,
   data,
   tableName = "Recent Records",
   isClickable = false,
@@ -51,7 +54,17 @@ export function DataTable<TData, TValue>({
   const { pathname } = useLocation();
   const route = pathname.split("/").pop() ?? "";
 
-  const { currentPage, pageSize, total = 0, setCurrentPage } = useTableStore();
+  const {
+    currentPage,
+    pageSize,
+    total = 0,
+    setCurrentPage,
+    setSearchTerm,
+  } = useTableStore();
+
+  const handleBlur = () => {
+    setSearchTerm("");
+  };
 
   const table = useReactTable<TData>({
     data,
@@ -67,10 +80,15 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const handleSearch = (value: string) => {
-    // Optional: Implement debounced or server-side searchExample:
-    table.setGlobalFilter(value);
-  };
+  const onSearch = useMemo(
+    () =>
+      debounce((val) => {
+        setSearchTerm(val);
+      }, 500),
+    []
+  );
+
+  
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -90,8 +108,9 @@ export function DataTable<TData, TValue>({
                 size={16}
               />
               <Input
+                onBlur={handleBlur}
                 placeholder="Search here..."
-                onChange={(e) => handleSearch(e.target.value)}
+                onChange={onSearch}
                 className="pl-8 md:min-w-sm text-sm md:py-6"
               />
             </div>
@@ -115,9 +134,12 @@ export function DataTable<TData, TValue>({
           <Spinner className=" text-primary size-12" />
         </div>
       ) : data.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-[50vh] border border-dashed border-gray-300 m-4">
-          <h3 className="text-lg font-medium text-gray-800">
-            No records found
+        <div className="flex flex-col items-center justify-center h-[20vh] border border-dashed border-gray-300 m-4">
+          <h3 className="text-lg font-medium text-primary uppercase inline-flex items-center flex-col justify-center">
+            <span>
+              <WarningCircle className=" size-14 text-primary" />
+            </span>
+            {message ? message : "No record found"}
           </h3>
           {/* <p className="text-sm text-gray-500 mt-1">
             Your journey begins here. Add your first record to get started.

@@ -3,33 +3,12 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/atoms/table";
 import { NotificationColumns } from "@/columns/notifications.columns";
 import NotificationForm from "@/components/molecules/notification/NotificationForm";
-import { useState } from "react";
-
-import fetchNotifications from "@/queries/notifications.query";
 
 import { useDrawerStore } from "@/store/drawer.store";
 import NotificationCards from "@/components/molecules/notification/NotificationCards";
 
 const NotificationCenter = () => {
-  const { data, loading } = fetchNotifications();
   const { openModal } = useDrawerStore();
-
-  const [, setNotifications] = useState<any[]>(data || []);
-  const [] = useState(false);
-
-  const mappedData =
-    data?.map((item: any) => ({
-      id: item.id,
-      title: item.title,
-      message: item.message,
-      audience: item.audience,
-      method: item.method,
-      sentBy: item.sentBy,
-      dateTime: item.dateTime,
-      isScheduled: item.isScheduled ?? false,
-      recurringType: item.recurringType ?? "",
-      status: item.status ?? "",
-    })) || [];
 
   return (
     <div className="space-y-6">
@@ -39,10 +18,10 @@ const NotificationCenter = () => {
         // isClickable
         tableName="Notification Center"
         columns={NotificationColumns}
-        data={mappedData}
+        data={[]}
         actions
         columnKey="id"
-        loading={loading}
+        loading={false}
       >
         <Button
           variant="default"
@@ -60,8 +39,6 @@ const NotificationCenter = () => {
               props: {
                 onCreate: (newNotification: any) => {
                   console.log("Created notification:", newNotification);
-
-                  setNotifications((prev) => [...prev, newNotification]);
                 },
               },
             })

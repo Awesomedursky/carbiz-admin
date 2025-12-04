@@ -10,6 +10,7 @@ export type PaginationQuery = {
   searchTerm?: string;
   endDate?: Date;
   startDate?: Date;
+  status?: "active" | "inactive";
 };
 
 export interface adminEntity {

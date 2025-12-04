@@ -1,8 +1,10 @@
 import { gql } from "@apollo/client";
 
 export const GET_CUSTOMERS = gql`
-  query AdminFetchAllCustomer($params: PaginationDto!) {
-    AdminFetchAllCustomer(paginationQuery: $params) {
+  query AdminFetchAllCustomersWithFilter(
+    $paginationQuery: PaginatedCustomerFiltersDto!
+  ) {
+    AdminFetchAllCustomersWithFilter(paginationQuery: $paginationQuery) {
       success
       message
       payload {

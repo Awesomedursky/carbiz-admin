@@ -4,7 +4,7 @@ export const FETCH_ALL_COMPLAINTS = gql`
   query AdminFetchAllComplaintsWithFilter(
     $paginationQuery: PaginatedComplaintFiltersDto!
   ) {
-    AdminFetchAllComplaintsWithFilter(params: $paginationQuery) {
+    AdminFetchAllComplaintsWithFilter(paginationQuery: $paginationQuery) {
       success
       message
       payload {
@@ -92,13 +92,6 @@ export const UPDATE_COMPLAINT = gql`
         closedAt
         closedComplaintsNote
         complaintID
-        createdAt
-        customer {
-          name
-          email
-          phoneNumber
-        }
-        deletedAt
         description
         id
         orderID

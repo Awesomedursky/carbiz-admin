@@ -1,25 +1,13 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
-import NotificationActions from "@/components/molecules/notification/NotificationActions";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ComplaintOutput } from "@/types/complaints.type";
+import moment from "moment";
+import CompliaintActions from "@/components/molecules/complaints/complaintActions";
+import Status, { StatusKey } from "@/lib/statusClass";
 
-export type NotificationEntity = {
-  id: number;
-  title: string;
-  audience: string;
-  method: "Push" | "Email" | "SMS" | "In-App";
-  sentBy: string;
-  dateTime: string | Date;
-  isScheduled: boolean;
-  recurringType: "One Time" | "Daily" | "Weekly" | "Bi-Weekly";
-  status: "Sent" | "Scheduled";
-  message?: string;
-  scheduledDate?: string;
-};
-
-export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
+export const ComplaintsColumn: ColumnDef<ComplaintOutput>[] = [
   {
     id: "id",
     header: ({ table }) => (
@@ -48,115 +36,57 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
     enableHiding: true,
   },
   {
-    accessorKey: "title",
+    accessorKey: "customer",
     header: () => (
       <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
-        Title
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className=" font-normal py-3.5 capitalize">{row.original.title}</div>
-    ),
-  },
-  {
-    accessorKey: "audience",
-    header: () => (
-      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
-        Audience
+        Customer
       </div>
     ),
     cell: ({ row }) => (
       <div className=" font-normal py-3.5 capitalize">
-        {row.original.audience}
+        <p className=" text-sm font-medium">{row.original.customer.name}</p>
+        <span className=" text-xs">{row.original.customer.email}</span>
       </div>
     ),
   },
   {
-    accessorKey: "method",
+    accessorKey: "order",
     header: () => (
       <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
-        Method
-      </div>
-    ),
-    cell: ({ row }) => {
-      const { method } = row.original;
-      const colorVariant =
-        method === "Email"
-          ? "outline"
-          : method === "Push"
-          ? "secondary"
-          : "default";
-
-      return (
-        <Badge variant={colorVariant} className="capitalize">
-          {method}
-        </Badge>
-      );
-    },
-  },
-  {
-    accessorKey: "sentBy",
-    header: () => (
-      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
-        Sent By
+        Order ID
       </div>
     ),
     cell: ({ row }) => (
       <div className=" font-normal py-3.5 capitalize">
-        {row.original.sentBy}
+        {row.original.orderID}
       </div>
     ),
   },
   {
-    accessorKey: "dateTime",
+    accessorKey: "category",
     header: () => (
       <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
-        Date/Time
+        Category
       </div>
     ),
-    cell: ({ row }) => {
-      const { dateTime, isScheduled } = row.original;
-      const formattedDate =
-        typeof dateTime === "string"
-          ? new Date(dateTime).toLocaleString()
-          : dateTime.toLocaleString();
-
-      return (
-        <div className=" font-normal py-3.5 capitalize">
-          <span className="text-gray-500">
-            {isScheduled ? "Scheduled:" : "Sent:"}
-          </span>{" "}
-          {formattedDate}
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <div className=" font-normal py-3.5 capitalize">
+        {row.original.category}
+      </div>
+    ),
   },
   {
-    accessorKey: "recurringType",
+    accessorKey: "createdby",
     header: () => (
       <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
-        Recurring Type
+        Created AT
       </div>
     ),
-    cell: ({ row }) => {
-      const { recurringType } = row.original;
-      const colorMap: Record<string, string> = {
-        "One Time": "bg-gray-100 text-gray-800",
-        Daily: "bg-blue-100 text-blue-700",
-        Weekly: "bg-purple-100 text-purple-700",
-        "Bi-Weekly": "bg-indigo-100 text-indigo-700",
-      };
-
-      return (
-        <span
-          className={`px-2 py-1 rounded-md text-xs font-medium ${
-            colorMap[recurringType] || "bg-gray-100 text-gray-800"
-          }`}
-        >
-          {recurringType}
-        </span>
-      );
-    },
+    cell: ({ row }) => (
+      <div className=" font-normal py-3.5 capitalize">
+        {moment(row.original.createdAt).format("DD-MM-YYYY hh:mm A")}
+      </div>
+    ),
   },
   {
     accessorKey: "status",
@@ -167,15 +97,12 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
     ),
     cell: ({ row }) => {
       const { status } = row.original;
-      const colorMap: Record<string, string> = {
-        Sent: "bg-green-100 text-green-700",
-        Scheduled: "bg-purple-100 text-purple-700",
-      };
 
       return (
         <span
           className={`px-2 py-1 rounded-md text-xs font-medium ${
-            colorMap[status] || "bg-gray-200 text-gray-800"
+            Status[status.toLowerCase() as StatusKey] ||
+            "bg-gray-200 text-gray-800"
           }`}
         >
           {status}
@@ -190,6 +117,6 @@ export const NotificationColumns: ColumnDef<NotificationEntity>[] = [
         Actions
       </div>
     ),
-    cell: ({ row }) => <NotificationActions notification={row.original} />,
+    cell: ({ row }) => <CompliaintActions complaint={row.original} />,
   },
 ];

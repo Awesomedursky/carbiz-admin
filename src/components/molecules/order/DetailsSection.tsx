@@ -59,6 +59,17 @@ const renderStatusBadge = (status: string | boolean | undefined) => {
     INACTIVE: "bg-gray-100 text-gray-700",
     REJECTED: "bg-red-100 text-red-700",
     FALSE: "bg-red-100 text-red-700",
+    PROCESSING: "bg-[#E2DAF4] text-[#7046C6]",
+    SHIPPED: "bg-[#FFF7E1] text-[#DC6803]",
+    CLOSED: "bg-[#FEE4E2] text-[#B42318]",
+    PAID: "bg-[#D1FADF] text-[#027A48]",
+    DELIVERD: "text-[#027A48] bg-[#D1FADF]",
+    CANCELLED: "bg-[#FEE4E2] text-[#B42318]",
+    AWAITING: "text-[#343239] bg-[#E6E5E8]",
+    PACKED_AND_READY_FOR_PICKUP: "text-[#343239] bg-[#E6E5E8]",
+    REFUNDED: "text-[#DC6803] bg-[#FFF7E1]",
+    INPROGRESS: "bg-[#E2DAF4] text-[#7046C6]",
+    RESOLVED: "text-[#027A48] bg-[#D1FADF]",
   };
 
   const colorClass =

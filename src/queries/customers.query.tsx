@@ -6,7 +6,7 @@ import { useQuery } from "@apollo/client";
 import React from "react";
 
 interface CustomerPaginatedResponseType {
-  AdminFetchAllCustomer: {
+  AdminFetchAllCustomersWithFilter: {
     message: string;
     success: boolean;
     payload: {
@@ -27,17 +27,18 @@ interface CustomerPreviewResponseType {
 }
 
 const fetchCustomersQuery = () => {
-  const { pageSize, currentPage } = useTableStore();
+  const { pageSize, currentPage, searchTerm } = useTableStore();
   const { data, loading, error, fetchMore } = useQuery<
     CustomerPaginatedResponseType,
-    { params: PaginationQuery }
+    { paginationQuery: PaginationQuery }
   >(GET_CUSTOMERS, {
     variables: {
-      params: {
+      paginationQuery: {
         limit: pageSize,
         page: currentPage,
         sortBy: "createdAt",
         sortOrder: "DESC",
+        searchTerm: searchTerm,
       },
     },
     fetchPolicy: "cache-and-network",
@@ -46,12 +47,12 @@ const fetchCustomersQuery = () => {
 
   React.useEffect(() => {
     useTableStore.setState({
-      total: data?.AdminFetchAllCustomer.payload?.total,
+      total: data?.AdminFetchAllCustomersWithFilter.payload?.total,
     });
-  }, [data?.AdminFetchAllCustomer.payload?.total]);
+  }, [data?.AdminFetchAllCustomersWithFilter.payload?.total]);
 
   return {
-    data: data?.AdminFetchAllCustomer.payload?.data,
+    data: data?.AdminFetchAllCustomersWithFilter,
     loading,
     error,
     fetchMore,

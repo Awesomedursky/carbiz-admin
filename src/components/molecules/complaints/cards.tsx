@@ -1,5 +1,6 @@
 import Analytics from "@/components/atoms/analytics";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useFetchComplainMetrics } from "@/queries/complaints.query";
 import {
   CheckCircle,
   HourglassSimpleMedium,
@@ -17,30 +18,31 @@ const analyticIcon = {
 type analyticKey = keyof typeof analyticIcon;
 
 const ComplaintsCards = () => {
-  // Mock data for now — replace with your API data later
-  const loading = false;
+  const { loading, data } = useFetchComplainMetrics();
+  console.log(data);
+
   const complaintsCard = [
     {
       title: "Resolved Complaints",
-      value: 0,
+      value: data?.resolved ?? 0,
       name: "resolved",
       color: "#4DA167",
     },
     {
       title: "Pending Complaints",
-      value: 0,
+      value: data?.pending ?? 0,
       name: "pending",
       color: "#DC6803",
     },
     {
       title: "In-Progress Complaints",
-      value: 0,
+      value: data?.inProgress ?? 0,
       name: "inProgress",
       color: "#7046C6",
     },
     {
       title: "Closed Complaints",
-      value: 0,
+      value: data?.closed ?? 0,
       name: "closed",
       color: "#0337C1",
     },

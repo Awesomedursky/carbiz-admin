@@ -135,7 +135,7 @@ export const ordersColumns: ColumnDef<OrderEntity>[] = [
             return "bg-[#E2DAF4] text-[#7046C6]";
           case "shipped":
             return "bg-[#FFF7E1] text-[#DC6803]";
-          case "canceled":
+          case "cancelled":
             return "text-[#B42318] bg-[#FEE4E2]";
           case "delivered":
             return "text-[#027A48] bg-[#D1FADF]";

@@ -1,6 +1,7 @@
 import {
   FETCH_ALL_COMPLAINTS,
   FETCH_COMPLAINTS_METRICS,
+  FETCH_ONE_COMPLAINTS,
   UPDATE_COMPLAINT,
 } from "@/api/complaints";
 import { useToast } from "@/hooks/Toast";
@@ -12,7 +13,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import React from "react";
 
 interface AdminFetchAllComplaintsWithFiltType {
-  AdminFetchAllComplaintsWithFiltType: {
+  AdminFetchAllComplaintsWithFilter: {
     message: string;
     success: boolean;
     payload: {
@@ -28,7 +29,19 @@ interface complaintMetricsType {
   AdminfetchComplaintMetrics: {
     message: string;
     success: boolean;
-    payload: any;
+    payload: {
+      closed: number;
+      inProgress: number;
+      pending: number;
+      percentages: {
+        resolved: number;
+        inProgress: number;
+        closed: number;
+        pending: number;
+      };
+      resolved: number;
+      total: number;
+    };
   };
 }
 
@@ -52,10 +65,10 @@ export const useFetchAllComplaints = () => {
   const { pageSize, currentPage } = useTableStore();
   const { data, loading, error, fetchMore } = useQuery<
     AdminFetchAllComplaintsWithFiltType,
-    { params: PaginationQuery }
+    { paginationQuery: PaginationQuery }
   >(FETCH_ALL_COMPLAINTS, {
     variables: {
-      params: {
+      paginationQuery: {
         limit: pageSize,
         page: currentPage,
         sortBy: "createdAt",
@@ -68,12 +81,12 @@ export const useFetchAllComplaints = () => {
 
   React.useEffect(() => {
     useTableStore.setState({
-      total: data?.AdminFetchAllComplaintsWithFiltType.payload.total,
+      total: data?.AdminFetchAllComplaintsWithFilter?.payload?.total,
     });
-  }, [data?.AdminFetchAllComplaintsWithFiltType.payload.total]);
+  }, [data?.AdminFetchAllComplaintsWithFilter?.payload?.total]);
 
   return {
-    data: data?.AdminFetchAllComplaintsWithFiltType?.payload,
+    data: data?.AdminFetchAllComplaintsWithFilter?.payload?.data,
     loading,
     error,
     fetchMore,
@@ -96,13 +109,13 @@ export const useFetchComplainMetrics = () => {
   };
 };
 
-export const useFetchOneComplaint = (complainID: string) => {
+export const useFetchOneComplaint = (complaintID: string) => {
   const { data, loading, error } = useQuery<
     AdminFetchoneComplaintType,
-    { complainID: string }
-  >(FETCH_ALL_COMPLAINTS, {
+    { complaintID: string }
+  >(FETCH_ONE_COMPLAINTS, {
     variables: {
-      complainID,
+      complaintID,
     },
     fetchPolicy: "cache-and-network",
     nextFetchPolicy: "cache-first",
@@ -115,6 +128,12 @@ export const useFetchOneComplaint = (complainID: string) => {
   };
 };
 
+interface updateInput {
+  closedComplaintsNote?: string;
+  resolutionNotes?: string;
+  status?: "Resolved" | "InProgress" | "Closed" | "Pending";
+}
+
 export const useUpdateComplaint = () => {
   const { handleError, handleSuccess } = useToast();
   const { pageSize, currentPage } = useTableStore();
@@ -122,13 +141,14 @@ export const useUpdateComplaint = () => {
 
   const [adminUpdateComplaint, { loading }] = useMutation<
     AdminUpdateComplaintType,
-    { complaintID: string; input: any }
+    { complaintID: string; input: updateInput }
   >(UPDATE_COMPLAINT, {
     refetchQueries: [
+      { query: FETCH_COMPLAINTS_METRICS },
       {
         query: FETCH_ALL_COMPLAINTS,
         variables: {
-          params: {
+          paginationQuery: {
             limit: pageSize,
             page: currentPage,
             sortBy: "createdAt",
