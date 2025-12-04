@@ -1,4 +1,3 @@
-
 import Merchant from "./merchants.type";
 import OrderEntity from "./order.type";
 import RiderEntity from "./rider.type";
@@ -8,6 +7,9 @@ export type PaginationQuery = {
   page: number;
   sortBy: string;
   sortOrder: string;
+  searchTerm?: string;
+  endDate?: Date;
+  startDate?: Date;
 };
 
 export interface adminEntity {

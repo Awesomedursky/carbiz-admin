@@ -6,8 +6,10 @@ import { cn } from "@/lib/utils";
 import { useAppNotificationQuery } from "@/queries/app-notification.query";
 import { useDrawerStore } from "@/store/drawer.store";
 import { AppNotificationOutput } from "@/types/app-notification.type";
+import { Settings } from "lucide-react";
 import moment from "moment";
 import { useEffect } from "react";
+import { Link } from "react-router";
 
 export const Content = () => {
   const { items, unreadCount, all, loading, loadMore, page, totalPages } =
@@ -21,9 +23,15 @@ export const Content = () => {
   }, [all]);
 
   return (
-    <PopoverContent className="w-96 p-0 shadow-xl rounded-2xl border bg-card overflow-clip">
+    <PopoverContent className="w-md p-0 shadow-xl rounded-2xl border bg-card overflow-clip">
       <div className="flex items-center justify-between px-4 py-3 border-b">
         <h2 className="font-semibold">Notifications</h2>
+
+        <CustomButton>
+          <Link to="/settings">
+            <Settings size={12} />
+          </Link>
+        </CustomButton>
       </div>
 
       <Tabs defaultValue="inbox" className="w-full">

@@ -186,15 +186,16 @@ export const useUpdateAdmin = () => {
       },
     ],
     onCompleted: (data) => {
-      if (data?.updateOtherAdmin?.success) {
-        handleSuccess(
-          "Admin updated successfully",
-          data?.updateOtherAdmin?.message
-        );
-        closeModal();
+      console.log(data);
+      if (!data?.updateOtherAdmin?.success) {
+        handleError("Error", data?.updateOtherAdmin?.message);
       }
 
-      handleError("Error", data?.updateOtherAdmin?.message);
+      handleSuccess(
+        "Admin updated successfully",
+        data?.updateOtherAdmin?.message
+      );
+      closeModal();
     },
     onError: (error) => {
       handleError("Admin Update Error", error.message);

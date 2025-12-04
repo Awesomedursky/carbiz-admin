@@ -1,60 +1,235 @@
-import NotificationEntity from "@/types/notification";
-import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/Toast";
+import { useDrawerStore } from "@/store/drawer.store";
+import useTableStore from "@/store/table.store";
+import { PaginationQuery } from "@/types/admin.type";
+import { useMutation, useQuery } from "@apollo/client";
+import React from "react";
+import {
+  NotificationCenterOutput,
+  NotificationMetricsOutput,
+} from "@/types/notification-center.type";
+import {
+  ALL_NOTIFICATION_CENTER,
+  CREATE_NOTIFICATION,
+  DELETE_NOTIFICATION_CENTER,
+  FETCH_ONE_NOTIFICATION_CENTER,
+  GET_NOTIFICATION_METRICS,
+  UPDATE_NOTIFICATION_CENTER,
+} from "@/api/notification";
 
-// 🧠 Mock notification data (temporary placeholder)
-const mockNotification: NotificationEntity = {
-  id: "notif-001",
-  title: "System Maintenance Alert",
-  message:
-    "We’ll be performing scheduled maintenance on the platform this Saturday at 11:00 PM.",
-  audience: "All Users",
-  method: "Email",
-  sentBy: "Admin",
-  dateTime: new Date("2025-10-05T23:00:00Z"),
-  isScheduled: true,
-  recurringType: "One Time",
-  status: "Scheduled",
-  recipients: [
-    { id: "r1", name: "John Doe", email: "john@example.com", status: "Sent" },
+export const useFetchAllNotificationMetrics = () => {
+  interface getNotificationMetricsType {
+    getNotificationMetrics: {
+      message: string;
+      success: boolean;
+      payload: NotificationMetricsOutput;
+    };
+  }
+  const { data, loading, error } = useQuery<getNotificationMetricsType>(
+    // {
+    //   filters: {
+    //     audience: string;
+    //     deliveryMethod: string;
+    //     endDate: Date;
+    //     startDate: Date;
+    //   };
+    // }
+    GET_NOTIFICATION_METRICS,
     {
-      id: "r2",
-      name: "Jane Smith",
-      email: "jane@example.com",
-      status: "Pending",
+      fetchPolicy: "cache-and-network",
+      nextFetchPolicy: "cache-first",
+    }
+  );
+
+  return {
+    data: data?.getNotificationMetrics?.payload,
+    loading,
+    error,
+  };
+};
+
+export const useFetchAllNotifications = () => {
+  interface AdminFetchAllNotificationsWithFilterType {
+    AdminFetchAllNotificationsWithFilter: {
+      message: string;
+      success: boolean;
+      payload: {
+        currentPage: number;
+        data: NotificationCenterOutput;
+        pageSize: number;
+        total: number;
+      };
+    };
+  }
+
+  const { pageSize, currentPage } = useTableStore();
+  const { data, loading, error, fetchMore } = useQuery<
+    AdminFetchAllNotificationsWithFilterType,
+    { paginationQuery: PaginationQuery }
+  >(ALL_NOTIFICATION_CENTER, {
+    variables: {
+      paginationQuery: {
+        limit: pageSize,
+        page: currentPage,
+        sortBy: "createdAt",
+        sortOrder: "DESC",
+      },
     },
-  ],
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
+  });
+
+  React.useEffect(() => {
+    useTableStore.setState({
+      total: data?.AdminFetchAllNotificationsWithFilter.payload.total,
+    });
+  }, [data?.AdminFetchAllNotificationsWithFilter.payload.total]);
+
+  return {
+    data: data?.AdminFetchAllNotificationsWithFilter?.payload,
+    loading,
+    error,
+    fetchMore,
+  };
 };
 
-// 🧩 Fetch all notifications (for Notification Center table)
-export const fetchNotifications = () => {
-  const [data, setData] = useState<NotificationEntity[]>([]);
-  const [loading, setLoading] = useState(true);
+export const useCreateNotificationCenter = () => {
+  interface AdminCreateNotificationCenterType {
+    AdminCreateNotificationCenter: {
+      message: string;
+      success: boolean;
+      payload: NotificationCenterOutput;
+    };
+  }
+  const { handleError, handleSuccess } = useToast();
+  const { pageSize, currentPage } = useTableStore();
+  const { closeModal } = useDrawerStore();
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setData([mockNotification]);
-      setLoading(false);
-    }, 1000);
-    return () => clearTimeout(timeout);
-  }, []);
+  const [adminUpdateComplaint, { loading }] = useMutation<
+    AdminCreateNotificationCenterType,
+    { input: any }
+  >(CREATE_NOTIFICATION, {
+    refetchQueries: [
+      {
+        query: ALL_NOTIFICATION_CENTER,
+        variables: {
+          params: {
+            limit: pageSize,
+            page: currentPage,
+            sortBy: "createdAt",
+            sortOrder: "DESC",
+          },
+        },
+      },
+    ],
+    onCompleted: (data) => {
+      handleSuccess(data?.AdminCreateNotificationCenter?.message);
+      closeModal();
+    },
+    onError: (error) => {
+      handleError("Error!", error.message);
+    },
+  });
 
-  return { data, loading };
+  return {
+    adminUpdateComplaint,
+    updateComplaintLoading: loading,
+  };
 };
 
-// 🧩 Fetch single notification by ID (for PreviewNotification)
-export const fetchNotificationPreviewQuery = (id: string) => {
-  const [data, setData] = useState<NotificationEntity | null>(null);
-  const [loading, setLoading] = useState(true);
+export const useupdateNotificationCenter = () => {
+  interface AdminUpdateNotificationCenterType {
+    AdminUpdateNotificationCenter: {
+      message: string;
+      success: boolean;
+      payload: NotificationCenterOutput;
+    };
+  }
+  const { handleError, handleSuccess } = useToast();
+  const { pageSize, currentPage } = useTableStore();
+  const { closeModal } = useDrawerStore();
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      // Mock fetching logic — normally you'd filter or call your GraphQL endpoint here
-      setData(mockNotification);
-      setLoading(false);
-    }, 800);
-    return () => clearTimeout(timeout);
-  }, [id]);
+  const [adminUpdateComplaint, { loading }] = useMutation<
+    AdminUpdateNotificationCenterType,
+    { notificationID: string; input: any }
+  >(UPDATE_NOTIFICATION_CENTER, {
+    refetchQueries: [
+      {
+        query: ALL_NOTIFICATION_CENTER,
+        variables: {
+          params: {
+            limit: pageSize,
+            page: currentPage,
+            sortBy: "createdAt",
+            sortOrder: "DESC",
+          },
+        },
+      },
+    ],
+    onCompleted: (data) => {
+      handleSuccess(data?.AdminUpdateNotificationCenter?.message);
+      closeModal();
+    },
+    onError: (error) => {
+      handleError("Error!", error.message);
+    },
+  });
 
-  return { data, loading };
+  return {
+    adminUpdateComplaint,
+    updateComplaintLoading: loading,
+  };
 };
-export default fetchNotifications;
+
+export const useDeleteoneNotificationCenter = (notificationID: string) => {
+  interface deleteNotificationCenterType {
+    deleteNotificationCenter: {
+      message: string;
+      success: boolean;
+      payload: any;
+    };
+  }
+
+  const { data, loading, error } = useQuery<
+    deleteNotificationCenterType,
+    { notificationID: string }
+  >(DELETE_NOTIFICATION_CENTER, {
+    variables: {
+      notificationID,
+    },
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
+  });
+
+  return {
+    data: data?.deleteNotificationCenter?.payload,
+    loading,
+    error,
+  };
+};
+
+export const useFetchOneNotification = (notificationID: string) => {
+  interface fetchOneNotificationType {
+    fetchOneNotificationCenter: {
+      message: string;
+      success: boolean;
+      payload: NotificationCenterOutput;
+    };
+  }
+  const { data, loading, error } = useQuery<
+    fetchOneNotificationType,
+    { notificationID: string }
+  >(FETCH_ONE_NOTIFICATION_CENTER, {
+    variables: {
+      notificationID,
+    },
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
+  });
+
+  return {
+    data: data?.fetchOneNotificationCenter?.payload,
+    loading,
+    error,
+  };
+};
