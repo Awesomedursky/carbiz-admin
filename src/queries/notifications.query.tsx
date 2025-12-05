@@ -16,6 +16,7 @@ import {
   GET_NOTIFICATION_METRICS,
   UPDATE_NOTIFICATION_CENTER,
 } from "@/api/notification";
+import { NotificationSchemaType } from "@/schema/notification.schema";
 
 export const useFetchAllNotificationMetrics = () => {
   interface getNotificationMetricsType {
@@ -25,6 +26,7 @@ export const useFetchAllNotificationMetrics = () => {
       payload: NotificationMetricsOutput;
     };
   }
+
   const { data, loading, error } = useQuery<getNotificationMetricsType>(
     // {
     //   filters: {
@@ -62,7 +64,7 @@ export const useFetchAllNotifications = () => {
     };
   }
 
-  const { pageSize, currentPage } = useTableStore();
+  const { pageSize, currentPage, searchTerm } = useTableStore();
   const { data, loading, error, fetchMore } = useQuery<
     AdminFetchAllNotificationsWithFilterType,
     { paginationQuery: PaginationQuery }
@@ -73,6 +75,7 @@ export const useFetchAllNotifications = () => {
         page: currentPage,
         sortBy: "createdAt",
         sortOrder: "DESC",
+        searchTerm,
       },
     },
     fetchPolicy: "cache-and-network",
@@ -86,7 +89,8 @@ export const useFetchAllNotifications = () => {
   }, [data?.AdminFetchAllNotificationsWithFilter.payload.total]);
 
   return {
-    data: data?.AdminFetchAllNotificationsWithFilter?.payload,
+    data: data?.AdminFetchAllNotificationsWithFilter?.payload?.data,
+    message: data?.AdminFetchAllNotificationsWithFilter?.message,
     loading,
     error,
     fetchMore,
@@ -96,6 +100,7 @@ export const useFetchAllNotifications = () => {
 export const useCreateNotificationCenter = () => {
   interface AdminCreateNotificationCenterType {
     AdminCreateNotificationCenter: {
+      errors: string;
       message: string;
       success: boolean;
       payload: NotificationCenterOutput;
@@ -105,9 +110,9 @@ export const useCreateNotificationCenter = () => {
   const { pageSize, currentPage } = useTableStore();
   const { closeModal } = useDrawerStore();
 
-  const [adminUpdateComplaint, { loading }] = useMutation<
+  const [createComplaint, { loading }] = useMutation<
     AdminCreateNotificationCenterType,
-    { input: any }
+    { input: NotificationSchemaType }
   >(CREATE_NOTIFICATION, {
     refetchQueries: [
       {
@@ -132,8 +137,8 @@ export const useCreateNotificationCenter = () => {
   });
 
   return {
-    adminUpdateComplaint,
-    updateComplaintLoading: loading,
+    createComplaint,
+    loading,
   };
 };
 

@@ -61,7 +61,7 @@ export const ALL_NOTIFICATION_CENTER = gql`
 export const CREATE_NOTIFICATION = gql`
   mutation AdminCreateNotificationCenter($input: CreateNotificationCenterDto!) {
     AdminCreateNotificationCenter(input: $input) {
-      error
+      errors
       message
       success
       payload {

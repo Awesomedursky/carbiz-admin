@@ -17,18 +17,9 @@ const index = () => {
           ...merchant,
           status: merchant.status as "string",
         }))}
-        actions
         columnKey="merchantID"
         loading={loading}
-      >
-        {/* <Button
-          variant="default"
-          className="md:py-6  border-0 shadow text-sm font-bold"
-        >
-          <Plus className="size-4" />
-          New Merchant
-        </Button> */}
-      </DataTable>
+      />
     </>
   );
 };

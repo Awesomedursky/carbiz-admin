@@ -19,7 +19,6 @@ type analyticKey = keyof typeof analyticIcon;
 
 const ComplaintsCards = () => {
   const { loading, data } = useFetchComplainMetrics();
-  console.log(data);
 
   const complaintsCard = [
     {

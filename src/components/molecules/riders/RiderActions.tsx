@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useDrawerStore } from "@/store/drawer.store";
 import RiderDetails from "@/components/molecules/riders/RiderDetails";
-import DisableRider from "./DisableRider";
 import RiderEntity from "@/types/rider.type";
 import GenericDisable from "../genericDisable";
 
@@ -93,9 +92,9 @@ const RiderActions: React.FC<RiderActionsProps> = ({ rider }) => {
   const handleDisable = () => {
     openModal({
       type: "dialog",
-      title: "Disable Rider",
-      content: DisableRider,
-      props: { rider },
+      title: "Rider",
+      content: GenericDisable,
+      props: { rider, id: rider.riderID },
       placement: "center",
     });
   };

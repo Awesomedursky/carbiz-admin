@@ -17,18 +17,9 @@ const Riders = () => {
       tableName="Riders"
       columns={RiderColumns}
       data={data}
-      actions
       columnKey="riderID"
       loading={loading}
-    >
-      {/* <Button
-        variant="secondary"
-        className="md:py-6 border-0 bg-white shadow text-sm font-bold flex items-center gap-2"
-      >
-        <Download className="size-4" />
-        Export Data
-      </Button> */}
-    </DataTable>
+    />
   );
 };
 

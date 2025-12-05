@@ -1,5 +1,6 @@
 import Analytics from "@/components/atoms/analytics";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useFetchAllNotificationMetrics } from "@/queries/notifications.query";
 import { Bell, PaperPlaneTilt, Envelope, Clock } from "@phosphor-icons/react";
 
 const analyticIcon = {
@@ -12,30 +13,29 @@ const analyticIcon = {
 type analyticKey = keyof typeof analyticIcon;
 
 const NotificationCards = () => {
-  // Mock data for now — replace with your API data later
-  const loading = false;
+  const { data, loading } = useFetchAllNotificationMetrics();
   const notificationStats = [
     {
       title: "Total Sent",
-      value: 160,
+      value: data?.totalSent ?? 0,
       name: "totalSent",
       color: "#027A48",
     },
     {
       title: "Sent via Push",
-      value: 56,
+      value: data?.totalSentViaPush ?? 0,
       name: "sentPush",
       color: "#DC6803",
     },
     {
       title: "Sent via Email",
-      value: 104,
+      value: data?.totalSentViaEmail ?? 0,
       name: "sentEmail",
       color: "#7046C6",
     },
     {
       title: "Scheduled",
-      value: 19,
+      value: data?.totalScheduled ?? 0,
       name: "scheduled",
       color: "#155EEF",
     },

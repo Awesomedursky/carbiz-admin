@@ -58,7 +58,11 @@ export const CustomDrawer = () => {
       )}
 
       {type === "dialog" && (
-        <Dialog open={isOpen} onOpenChange={(open) => !open && closeModal()}>
+        <Dialog
+          open={isOpen}
+          onOpenChange={(open) => !open && closeModal()}
+          // modal={false}
+        >
           <DialogContent
             style={{ width: width ? width : "" }}
             showCloseButton={false}

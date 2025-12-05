@@ -6,9 +6,11 @@ import NotificationForm from "@/components/molecules/notification/NotificationFo
 
 import { useDrawerStore } from "@/store/drawer.store";
 import NotificationCards from "@/components/molecules/notification/NotificationCards";
+import { useFetchAllNotifications } from "@/queries/notifications.query";
 
 const NotificationCenter = () => {
   const { openModal } = useDrawerStore();
+  const { data, loading, message } = useFetchAllNotifications();
 
   return (
     <div className="space-y-6">
@@ -16,12 +18,13 @@ const NotificationCenter = () => {
 
       <DataTable
         // isClickable
+        message={message}
         tableName="Notification Center"
         columns={NotificationColumns}
         data={[]}
         actions
         columnKey="id"
-        loading={false}
+        loading={loading}
       >
         <Button
           variant="default"
@@ -31,11 +34,7 @@ const NotificationCenter = () => {
               type: "dialog",
               title: "Create New Notification",
               content: NotificationForm,
-              width: 600,
               placement: "center",
-              showCloseIcon: false,
-              description:
-                "Fill the correct information in the field provided below.",
               props: {
                 onCreate: (newNotification: any) => {
                   console.log("Created notification:", newNotification);

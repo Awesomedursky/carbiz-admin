@@ -80,15 +80,23 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const onSearch = useMemo(
+  const debouncedSearch = React.useMemo(
     () =>
-      debounce((val) => {
-        setSearchTerm(val);
+      debounce((value: string) => {
+        setSearchTerm(value);
       }, 500),
-    []
+    [setSearchTerm]
   );
 
-  
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(e.target.value);
+  };
+
+  React.useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

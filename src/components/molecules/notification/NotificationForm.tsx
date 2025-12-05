@@ -1,20 +1,9 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import InputField from "@/components/atoms/form/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useDrawerStore } from "@/store/drawer.store";
 
 import {
@@ -25,6 +14,11 @@ import {
 import { NotificationEntity } from "@/columns/notifications.columns";
 import TextArea from "@/components/atoms/form/textarea";
 import SelectField from "@/components/atoms/form/select";
+import FormRadioGroup from "@/components/atoms/form/radio-group";
+import { BracketRadioItem } from "@/components/ui/radio-group";
+import { FormCalendar } from "@/components/atoms/form/calender";
+import { useCreateNotificationCenter } from "@/queries/notifications.query";
+import CustomButton from "@/components/atoms/button/CustomButton";
 
 type NotificationFormProps = {
   onClose: () => void;
@@ -32,168 +26,155 @@ type NotificationFormProps = {
   initialData?: NotificationEntity;
 };
 
-const NotificationForm = ({ onCreate, initialData }: NotificationFormProps) => {
-  const { closeModal } = useDrawerStore();
-
-  const [scheduleOption, setScheduleOption] = useState<"now" | "later">(
-    initialData?.isScheduled ? "later" : "now"
-  );
-  const [scheduledDate, setScheduledDate] = useState<string>("");
+const NotificationForm = ({ initialData }: NotificationFormProps) => {
+  const { closeModal, title } = useDrawerStore();
+  const { createComplaint, loading } = useCreateNotificationCenter();
 
   const form = useForm<NotificationSchemaType>({
     resolver: zodResolver(NotificationSchema),
-    defaultValues: {
-      title: initialData?.title || "",
-      message: initialData?.message || "",
-      audience: initialData?.audience || "",
-      method: (initialData?.method as any) || "Email",
-      recurringType: (initialData?.recurringType as any) || "One Time",
-      isScheduled: initialData?.isScheduled || false,
-      scheduledDate: initialData?.scheduledDate || "",
-      dateTime:
-        initialData?.dateTime instanceof Date
-          ? initialData.dateTime.toISOString()
-          : initialData?.dateTime || "",
-    },
+    // defaultValues: {
+    //   broadcastDateTime: z.string().optional(),
+    //     deliveryMethod: z.enum(["Email", "Push", "SMS", "In-App"]),
+    //     makeBroadcastRecurringType: z.enum([
+    //       "One Time",
+    //       "Daily",
+    //       "Weekly",
+    //       "Bi-Weekly",
+    //     ]),
+    //     notificationAudience: z.string().min(1, "Audience is required"),
+    //     notificationMessage: z.string().min(1, "Message is required"),
+    //     notificationTitle:
+    // },
   });
 
   const onSubmit = (data: NotificationSchemaType) => {
-    const newNotification: NotificationEntity = {
-      ...data,
-      id: initialData?.id ?? Date.now(),
-      isScheduled: scheduleOption === "later",
-      dateTime:
-        scheduleOption === "later" ? scheduledDate : new Date().toISOString(),
-      status: scheduleOption === "later" ? "Scheduled" : "Sent",
-      sentBy: "",
-    };
-
-    onCreate(newNotification);
-    closeModal();
+    const { time, recurring, ...others } = data;
+    createComplaint({ variables: { input: others } });
   };
 
+  const scheduleOption = form.watch("time");
+  const recurring = form.watch("recurring");
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-2 mt-0 mb-0"
+        className="space-y-5 mt-0 mb-0"
       >
-        {/* Title */}
-        <div>
-          <InputField
-            label="Notification Title"
-            control={form.control}
-            name="title"
-            placeholder="Enter notification title"
-          />
+        <div className="flex items-center flex-col  w-full">
+          <h2 className="text-lg md:text-xl font-bold text-center">{title}</h2>
+          <p className="text-base text-center">
+            Fill the correct information in the field provided below.
+          </p>
         </div>
 
-        {/* Message */}
-        <div>
-          <TextArea
-            label="Message"
-            name="message"
-            control={form.control}
-            placeholder="Write the message here..."
-          />
-        </div>
-
+        <InputField
+          label="Notification Title"
+          control={form.control}
+          name="notificationTitle"
+          placeholder="Enter notification title"
+        />
+        <TextArea
+          label="Message"
+          name="notificationMessage"
+          control={form.control}
+          placeholder="Write the message here..."
+        />
         {/* Delivery & Audience */}
         <div className="grid grid-cols-2 gap-3">
-          <div>
-            <SelectField
-              placeholder="select method"
-              control={form.control}
-              name="method"
-              label="Delivery Method"
-              items={[
-                { label: "Email", value: "email" },
-                { label: "Push", value: "push" },
-                { label: "SMS", value: "sms" },
-                { label: "In-App", value: "in-app" },
-              ]}
-            />
-          </div>
+          <SelectField
+            placeholder="select method"
+            control={form.control}
+            name="deliveryMethod"
+            label="Delivery Method"
+            items={[
+              { label: "Email", value: "Email" },
+              { label: "Push Notification", value: "Push_Notification" },
+            ]}
+          />
 
-          <div>
-            {/* <FormLabel>Audience</FormLabel> */}
-            <InputField
-              label="Audience"
-              control={form.control}
-              name="audience"
-              placeholder="e.g., Customers, Merchants"
-            />
-          </div>
+          <SelectField
+            placeholder="select message audience"
+            control={form.control}
+            name="notificationAudience"
+            label="Audience"
+            items={[
+              { label: "Merchant", value: "Merchants" },
+              { label: "Rider", value: "Riders" },
+              { label: "Customer", value: "Customers" },
+              { label: "All Users", value: "All_Users" },
+            ]}
+          />
         </div>
-
         {/* Schedule */}
-        <div>
-          <Label>Schedule Option</Label>
-          <div className="flex items-center gap-6 mt-2">
-            <div className="flex items-center gap-2">
-              <Checkbox
-                checked={scheduleOption === "now"}
-                onCheckedChange={() => setScheduleOption("now")}
-              />
-              <span>Send Now</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox
-                checked={scheduleOption === "later"}
-                onCheckedChange={() => setScheduleOption("later")}
-              />
-              <span>Send Later</span>
-            </div>
-          </div>
-        </div>
+        <FormRadioGroup
+          control={form.control}
+          name="time"
+          label="Schedule Option"
+          options={[
+            { label: "Send Now", value: "now" },
+            { label: "Schedule for later", value: "later" },
+          ]}
+          renderRadio={(value) => <BracketRadioItem value={value} />}
+        />
 
         {scheduleOption === "later" && (
           <div>
-            <Label>Pick Date and Time</Label>
-            <Input
-              type="datetime-local"
-              value={scheduledDate}
-              onChange={(e) => setScheduledDate(e.target.value)}
+            <FormCalendar
+              control={form.control}
+              name="broadcastDateTime"
+              label="Pick Date and Time"
+            />
+
+            <div className="flex items-center gap-2 py-2">
+              <input
+                type="checkbox"
+                className="h-4 w-4"
+                checked={recurring || false}
+                onChange={(e) => form.setValue("recurring", e.target.checked)}
+              />
+              <label className="text-sm font-medium">
+                Make this notification recurring
+              </label>
+            </div>
+          </div>
+        )}
+
+        {recurring && (
+          <div>
+            <SelectField
+              placeholder="Select recurring frequency"
+              control={form.control}
+              name="makeBroadcastRecurringType"
+              label="Repeat Every"
+              items={[
+                { label: "Once", value: "One_Type" },
+                { label: "Daily", value: "Daily" },
+                { label: "Weekly", value: "Weekly" },
+                { label: "Every 2 Weeks", value: "Bi_Weekly" },
+              ]}
             />
           </div>
         )}
 
-        {/* Recurrence */}
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <Label>Repeat Every</Label>
-            <Select
-              onValueChange={(value) =>
-                form.setValue("recurringType", value as any)
-              }
-              value={form.watch("recurringType")}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="One Time">One Time</SelectItem>
-                <SelectItem value="Daily">Daily</SelectItem>
-                <SelectItem value="Weekly">Weekly</SelectItem>
-                <SelectItem value="Bi-Weekly">Bi-Weekly</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <Label>End Date</Label>
-            <Input type="datetime-local" {...form.register("dateTime")} />
-          </div>
-        </div>
-
         {/* Buttons */}
-        <div className="flex justify-end gap-2 pt-2">
-          <Button type="button" variant="outline" onClick={closeModal}>
+        <div className="grid grid-cols-2 gap-2 pt-2">
+          <Button
+            size={"lg"}
+            type="button"
+            variant="outline"
+            onClick={closeModal}
+          >
             Cancel
           </Button>
-          <Button type="submit" variant="default">
+
+          <CustomButton
+            loading={loading}
+            size={"lg"}
+            type="submit"
+            variant="default"
+          >
             Save Notification
-          </Button>
+          </CustomButton>
         </div>
       </form>
     </Form>

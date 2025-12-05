@@ -1,13 +1,13 @@
 export interface NotificationMetricsOutput {
   audienceBreakdown: [AudienceMetricsOutput];
   methodBreakdown: [DeliveryMethodMetricsOutput];
-  totalDelivered: Number;
-  totalFailed: Number;
-  totalRecipients: Number;
-  totalScheduled: Number;
-  totalSent: Number;
-  totalSentViaEmail: Number;
-  totalSentViaPush: Number;
+  totalDelivered: number;
+  totalFailed: number;
+  totalRecipients: number;
+  totalScheduled: number;
+  totalSent: number;
+  totalSentViaEmail: number;
+  totalSentViaPush: number;
 }
 
 export interface NotificationCenterOutput {

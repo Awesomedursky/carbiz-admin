@@ -62,7 +62,7 @@ interface AdminUpdateComplaintType {
 }
 
 export const useFetchAllComplaints = () => {
-  const { pageSize, currentPage } = useTableStore();
+  const { pageSize, currentPage, searchTerm } = useTableStore();
   const { data, loading, error, fetchMore } = useQuery<
     AdminFetchAllComplaintsWithFiltType,
     { paginationQuery: PaginationQuery }
@@ -73,6 +73,7 @@ export const useFetchAllComplaints = () => {
         page: currentPage,
         sortBy: "createdAt",
         sortOrder: "DESC",
+        searchTerm,
       },
     },
     fetchPolicy: "cache-and-network",
