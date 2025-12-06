@@ -44,8 +44,8 @@ export const ComplaintsColumn: ColumnDef<ComplaintOutput>[] = [
     ),
     cell: ({ row }) => (
       <div className=" font-normal py-3.5 capitalize">
-        <p className=" text-sm font-medium">{row.original.customer.name}</p>
-        <span className=" text-xs">{row.original.customer.email}</span>
+        <p className=" text-sm font-medium">{row?.original?.customer?.name}</p>
+        <span className=" text-xs">{row?.original?.customer?.email}</span>
       </div>
     ),
   },

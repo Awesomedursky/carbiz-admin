@@ -9,6 +9,7 @@ import { Link } from "react-router";
 import logo from "@/assets/images/logo.svg";
 import { useDrawerStore } from "@/store/drawer.store";
 import { AppNotifcations } from "./molecules/app-notifications";
+import { Content } from "./molecules/app-notifications/popoverContent";
 
 export function SiteHeader() {
   const { user } = useAuthStore();
@@ -29,7 +30,7 @@ export function SiteHeader() {
         {/* <h1 className="text-base font-medium">Documents</h1> */}
         <div className="ml-auto flex items-center gap-2">
           {/* notification trigger */}
-          <AppNotifcations>
+          <AppNotifcations content={<Content />} popoverType="popover">
             <button
               className="relative bg-[#F6F6F6] p-2 md:p-3 rounded-md hover:bg-primary cursor-pointer group"
               onClick={() => openModal({ type: "popover" })}

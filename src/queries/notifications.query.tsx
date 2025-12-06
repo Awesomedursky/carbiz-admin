@@ -57,7 +57,7 @@ export const useFetchAllNotifications = () => {
       success: boolean;
       payload: {
         currentPage: number;
-        data: NotificationCenterOutput;
+        data: NotificationCenterOutput[];
         pageSize: number;
         total: number;
       };
@@ -118,7 +118,7 @@ export const useCreateNotificationCenter = () => {
       {
         query: ALL_NOTIFICATION_CENTER,
         variables: {
-          params: {
+          paginationQuery: {
             limit: pageSize,
             page: currentPage,
             sortBy: "createdAt",
@@ -128,8 +128,14 @@ export const useCreateNotificationCenter = () => {
       },
     ],
     onCompleted: (data) => {
-      handleSuccess(data?.AdminCreateNotificationCenter?.message);
-      closeModal();
+      if (data?.AdminCreateNotificationCenter?.success) {
+        handleSuccess(data?.AdminCreateNotificationCenter?.message);
+        closeModal();
+        return;
+      }
+      if (!data?.AdminCreateNotificationCenter?.success) {
+        handleError("Error!", data?.AdminCreateNotificationCenter?.message);
+      }
     },
     onError: (error) => {
       handleError("Error!", error.message);
@@ -159,6 +165,7 @@ export const useupdateNotificationCenter = () => {
     { notificationID: string; input: any }
   >(UPDATE_NOTIFICATION_CENTER, {
     refetchQueries: [
+      { query: GET_NOTIFICATION_METRICS },
       {
         query: ALL_NOTIFICATION_CENTER,
         variables: {
@@ -186,7 +193,7 @@ export const useupdateNotificationCenter = () => {
   };
 };
 
-export const useDeleteoneNotificationCenter = (notificationID: string) => {
+export const useDeleteoneNotificationCenter = () => {
   interface deleteNotificationCenterType {
     deleteNotificationCenter: {
       message: string;
@@ -195,21 +202,40 @@ export const useDeleteoneNotificationCenter = (notificationID: string) => {
     };
   }
 
-  const { data, loading, error } = useQuery<
+  const { handleError, handleSuccess } = useToast();
+  const { pageSize, currentPage } = useTableStore();
+  const { closeModal } = useDrawerStore();
+
+  const [deleteNotification, { loading }] = useMutation<
     deleteNotificationCenterType,
     { notificationID: string }
   >(DELETE_NOTIFICATION_CENTER, {
-    variables: {
-      notificationID,
+    refetchQueries: [
+      { query: GET_NOTIFICATION_METRICS },
+      {
+        query: ALL_NOTIFICATION_CENTER,
+        variables: {
+          paginationQuery: {
+            limit: pageSize,
+            page: currentPage,
+            sortBy: "createdAt",
+            sortOrder: "DESC",
+          },
+        },
+      },
+    ],
+    onCompleted: (data) => {
+      handleSuccess(data?.deleteNotificationCenter?.message);
+      closeModal();
     },
-    fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-first",
+    onError: (error) => {
+      handleError("Error!", error.message);
+    },
   });
 
   return {
-    data: data?.deleteNotificationCenter?.payload,
-    loading,
-    error,
+    deleteNotification,
+    deleteNotificationLoading: loading,
   };
 };
 

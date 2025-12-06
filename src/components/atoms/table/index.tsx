@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import {
   ColumnDef,
   flexRender,
@@ -22,6 +22,9 @@ import { useLocation, useNavigate } from "react-router";
 import useTableStore from "@/store/table.store";
 import { Spinner } from "@/components/ui/spinner";
 import { debounce } from "lodash";
+import { AppNotifcations } from "@/components/molecules/app-notifications";
+import GenericFilters from "@/components/molecules/genericFilters";
+import { useDrawerStore } from "@/store/drawer.store";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -62,8 +65,10 @@ export function DataTable<TData, TValue>({
     setSearchTerm,
   } = useTableStore();
 
+  const { openModal } = useDrawerStore();
+
   const handleBlur = () => {
-    setSearchTerm("");
+    setSearchTerm(undefined);
   };
 
   const table = useReactTable<TData>({
@@ -122,13 +127,16 @@ export function DataTable<TData, TValue>({
                 className="pl-8 md:min-w-sm text-sm md:py-6"
               />
             </div>
-            <Button
-              variant="outline"
-              className="md:py-6 border-0 shadow text-xs md:text-sm font-medium text-[#807F94]"
-            >
-              <FunnelSimple className="size-5" />
-              Filter
-            </Button>
+            <AppNotifcations popoverType="filter" content={<GenericFilters />}>
+              <Button
+                onClick={() => openModal({ type: "filter" })}
+                variant="outline"
+                className="md:py-6 border-0 shadow text-xs md:text-sm font-medium text-[#807F94]"
+              >
+                <FunnelSimple className="size-5" />
+                Filter
+              </Button>
+            </AppNotifcations>
           </div>
         )}
 

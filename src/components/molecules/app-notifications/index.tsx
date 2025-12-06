@@ -4,20 +4,21 @@ import { Content } from "./popoverContent";
 
 export const AppNotifcations = ({
   children,
+  content,
+  popoverType,
 }: {
   children: React.ReactNode;
+  content: React.ReactNode;
+  popoverType: "popover" | "filter";
 }) => {
   const { isOpen, closeModal, type } = useDrawerStore();
 
-  //   if (type !== "popover") return null;
+  const open = type === popoverType && isOpen;
 
   return (
-    <Popover
-      open={type === "popover" && isOpen}
-      onOpenChange={(open) => !open && closeModal()}
-    >
+    <Popover open={open} onOpenChange={(open) => !open && closeModal()}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <Content />
+      {content}
     </Popover>
   );
 };

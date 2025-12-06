@@ -8,7 +8,13 @@ export type DrawerPlacement =
   | "bottom"
   | "center"
   | null;
-export type DrawerType = "dialog" | "drawer" | "popover" | null;
+export type DrawerType =
+  | "dialog"
+  | "drawer"
+  | "popover"
+  | "notification"
+  | "filter"
+  | null;
 
 export interface DrawerContentProps {
   [key: string]: any;

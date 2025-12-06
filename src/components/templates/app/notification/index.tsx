@@ -19,9 +19,9 @@ const NotificationCenter = () => {
       <DataTable
         // isClickable
         message={message}
-        tableName="Notification Center"
+        // tableName="Notification Center"
         columns={NotificationColumns}
-        data={[]}
+        data={data ?? []}
         actions
         columnKey="id"
         loading={loading}
@@ -35,11 +35,6 @@ const NotificationCenter = () => {
               title: "Create New Notification",
               content: NotificationForm,
               placement: "center",
-              props: {
-                onCreate: (newNotification: any) => {
-                  console.log("Created notification:", newNotification);
-                },
-              },
             })
           }
         >

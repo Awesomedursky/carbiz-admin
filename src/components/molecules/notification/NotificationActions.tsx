@@ -11,26 +11,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import NotificationDetails from "@/components/molecules/notification/NotificationDetails";
-import { NotificationEntity } from "@/columns/notifications.columns";
 import { useDrawerStore } from "@/store/drawer.store";
 import NotificationForm from "@/components/molecules/notification/NotificationForm";
 import GenericDisable from "../genericDisable";
+import { NotificationCenterOutput } from "@/types/notification-center.type";
 
-const NotificationActions: React.FC<{ notification: NotificationEntity }> = ({
-  notification,
-}) => {
+const NotificationActions: React.FC<{
+  notification: NotificationCenterOutput;
+}> = ({ notification }) => {
   const { openModal } = useDrawerStore();
-
-  /** --- HANDLERS --- **/
-  const handleUpdateNotification = (
-    updatedNotification: NotificationEntity
-  ) => {
-    console.log("Updated notification:", updatedNotification);
-  };
-
-  function onDelete(id: number) {
-    console.log(`Deleting notification with id: ${id}`);
-  }
 
   /** --- RENDER --- **/
   return (
@@ -49,6 +38,7 @@ const NotificationActions: React.FC<{ notification: NotificationEntity }> = ({
         <DropdownMenuItem
           onSelect={() => {
             openModal({
+              type: "drawer",
               title: "Notification Details",
               content: NotificationDetails,
               props: { notification },
@@ -62,13 +52,12 @@ const NotificationActions: React.FC<{ notification: NotificationEntity }> = ({
         <DropdownMenuItem
           onSelect={() => {
             openModal({
-              title: "Edit Notification",
+              type: "dialog",
+              title: "Edit Notifications",
               content: NotificationForm,
               props: {
-                initialData: notification,
-                onCreate: handleUpdateNotification,
+                notification,
               },
-              placement: "right",
             });
           }}
         >
@@ -78,11 +67,15 @@ const NotificationActions: React.FC<{ notification: NotificationEntity }> = ({
         <DropdownMenuItem
           onSelect={() => {
             openModal({
-              title: "Delete Notification",
+              type: "dialog",
+              title: "Notification",
               content: GenericDisable,
               props: {
+                type: "delete",
                 itemName: "Notification",
-                onDelete: () => onDelete(notification.id),
+                id: notification?.notificationID,
+                name: notification?.notificationTitle,
+                state: "notification",
               },
               placement: "center",
             });

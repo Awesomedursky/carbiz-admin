@@ -10,8 +10,6 @@ import {
   NotificationSchema,
   NotificationSchemaType,
 } from "@/schema/notification.schema";
-
-import { NotificationEntity } from "@/columns/notifications.columns";
 import TextArea from "@/components/atoms/form/textarea";
 import SelectField from "@/components/atoms/form/select";
 import FormRadioGroup from "@/components/atoms/form/radio-group";
@@ -19,33 +17,33 @@ import { BracketRadioItem } from "@/components/ui/radio-group";
 import { FormCalendar } from "@/components/atoms/form/calender";
 import { useCreateNotificationCenter } from "@/queries/notifications.query";
 import CustomButton from "@/components/atoms/button/CustomButton";
+import { NotificationCenterOutput } from "@/types/notification-center.type";
+import React from "react";
 
-type NotificationFormProps = {
-  onClose: () => void;
-  onCreate: (newNotification: NotificationEntity) => void;
-  initialData?: NotificationEntity;
-};
-
-const NotificationForm = ({ initialData }: NotificationFormProps) => {
+const NotificationForm = (notification?: NotificationCenterOutput) => {
   const { closeModal, title } = useDrawerStore();
   const { createComplaint, loading } = useCreateNotificationCenter();
 
   const form = useForm<NotificationSchemaType>({
     resolver: zodResolver(NotificationSchema),
-    // defaultValues: {
-    //   broadcastDateTime: z.string().optional(),
-    //     deliveryMethod: z.enum(["Email", "Push", "SMS", "In-App"]),
-    //     makeBroadcastRecurringType: z.enum([
-    //       "One Time",
-    //       "Daily",
-    //       "Weekly",
-    //       "Bi-Weekly",
-    //     ]),
-    //     notificationAudience: z.string().min(1, "Audience is required"),
-    //     notificationMessage: z.string().min(1, "Message is required"),
-    //     notificationTitle:
-    // },
+    defaultValues: {},
   });
+
+  React.useEffect(() => {
+    if (notification) {
+      form.reset({
+        notificationTitle: notification.notificationTitle,
+        notificationMessage: notification.notificationMessage,
+        deliveryMethod: notification.deliveryMethod,
+        notificationAudience: notification.notificationAudience,
+        broadcastDateTime: notification.broadcastDateTime ?? undefined,
+        time: notification.broadcastDateTime ? "later" : undefined,
+        recurring: !!notification.makeBroadcastRecurringType,
+        makeBroadcastRecurringType:
+          notification.makeBroadcastRecurringType ?? undefined,
+      });
+    }
+  }, [notification]);
 
   const onSubmit = (data: NotificationSchemaType) => {
     const { time, recurring, ...others } = data;

@@ -112,7 +112,7 @@ export const DELETE_NOTIFICATION_CENTER = gql`
   mutation deleteNotificationCenter($notificationID: String!) {
     deleteNotificationCenter(notificationID: $notificationID) {
       errors
-      messsage
+      message
       payload
       success
     }

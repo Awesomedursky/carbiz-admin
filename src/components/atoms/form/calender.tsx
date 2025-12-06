@@ -41,13 +41,15 @@ export function FormCalendar({
   description,
   placeholder = "Pick a date...",
   className,
+  type,
 }: {
-  control: Control<any>;
+  control?: Control<any>;
   name: string;
   label?: string;
   description?: string;
   placeholder?: string;
   className?: string;
+  type?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -58,7 +60,6 @@ export function FormCalendar({
       render={({ field }) => {
         const selected = field.value ? new Date(field.value) : undefined;
 
-        // Always keep time when selecting a new date
         const handleSelectDate = (newDate?: Date) => {
           if (!newDate) return;
 
@@ -121,27 +122,29 @@ export function FormCalendar({
                     />
 
                     {/* Time Picker */}
-                    <div className="inline-flex items-center gap-2">
-                      <Input
-                        type="time"
-                        value={
-                          selected
-                            ? `${String(selected.getHours()).padStart(
-                                2,
-                                "0"
-                              )}:${String(selected.getMinutes()).padStart(
-                                2,
-                                "0"
-                              )}`
-                            : "00:00"
-                        }
-                        onChange={(e) => handleTimeChange(e.target.value)}
-                      />
+                    {!type && (
+                      <div className="inline-flex items-center gap-2">
+                        <Input
+                          type="time"
+                          value={
+                            selected
+                              ? `${String(selected.getHours()).padStart(
+                                  2,
+                                  "0"
+                                )}:${String(selected.getMinutes()).padStart(
+                                  2,
+                                  "0"
+                                )}`
+                              : "00:00"
+                          }
+                          onChange={(e) => handleTimeChange(e.target.value)}
+                        />
 
-                      <Button size="sm" onClick={() => setOpen(false)}>
-                        Done
-                      </Button>
-                    </div>
+                        <Button size="sm" onClick={() => setOpen(false)}>
+                          Done
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </PopoverContent>
               </Popover>

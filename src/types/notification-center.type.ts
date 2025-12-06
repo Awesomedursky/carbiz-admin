@@ -11,13 +11,13 @@ export interface NotificationMetricsOutput {
 }
 
 export interface NotificationCenterOutput {
-  broadcastDateTime: Date;
+  broadcastDateTime: string;
   createdAt: Date;
   deletedAt: Date;
-  deliveryMethod: string;
-  id: Number;
-  makeBroadcastRecurringType: string;
-  notificationAudience: string;
+  deliveryMethod: "Email" | "Push_Notification" | undefined;
+  id: number;
+  makeBroadcastRecurringType: "One_Type" | "Daily" | "Bi_Weekly" | "Weekly";
+  notificationAudience: "Merchants" | "Riders" | "Customers" | "All_Users";
   notificationID: string;
   notificationMessage: string;
   notificationTitle: string;

@@ -17,17 +17,12 @@ const Dashboard = () => {
 
   return (
     <div className="font-satoshi">
-      {/* User breadcrumb */}
-
-      {/* New user card */}
-
-      {/* summary card */}
       <div className="pb-6 md:pb-10">
         <DashboardCards />
       </div>
 
-      {/* Recent order logs */}
       <DataTable
+        tableName="orders"
         loading={loading}
         columnKey="orderID"
         columns={ordersColumns}

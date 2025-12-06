@@ -1,91 +1,32 @@
 import React from "react";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-
-interface NotificationEntity {
-  id: number;
-  title: string;
-  audience: string;
-  method: "Push" | "Email" | "SMS" | "In-App";
-  sentBy: string;
-  dateTime: string | Date;
-  isScheduled: boolean;
-  recurringType: "One Time" | "Daily" | "Weekly" | "Bi-Weekly";
-  status: "Sent" | "Scheduled";
-  message?: string;
-}
+import { useFetchOneNotification } from "@/queries/notifications.query";
+import { NotificationCenterOutput } from "@/types/notification-center.type";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface NotificationDetailsProps {
-  notification: NotificationEntity;
+  notification: NotificationCenterOutput;
 }
 
 const NotificationDetails: React.FC<NotificationDetailsProps> = ({
   notification,
 }) => {
-  if (!notification) {
+  const { data, loading } = useFetchOneNotification(
+    notification?.notificationID
+  );
+
+  console.log(data);
+
+  if (loading) {
     return (
-      <div className="text-center text-gray-500 py-6">
-        Loading notification details...
+      <div className="grid w-full p-2.5 md:p-3.5 grid-cols-1 space-y-1.5 h-full">
+        {Array.from({ length: 2 }).map((_, p) => (
+          <Skeleton key={p} className=" h-30" />
+        ))}
       </div>
     );
   }
 
-  return (
-    <Card className="shadow-none border-none">
-      <CardHeader>
-        <h2 className="text-xl font-semibold">{notification.title}</h2>
-        
-      </CardHeader>
-
-      <Separator className="my-3" />
-
-      <CardContent className="space-y-3">
-        <p className="text-gray-700 leading-relaxed">{notification.message}</p>
-
-        <div className="flex items-center gap-2">
-          <span
-            className={`px-2 py-1 text-xs rounded-full ${
-              notification.status === "Sent"
-                ? "bg-green-100 text-green-700"
-                : notification.status === "Scheduled"
-                ? "bg-yellow-100 text-yellow-700"
-                : "bg-gray-100 text-gray-600"
-            }`}
-          >
-            {notification.status}
-          </span>
-        </div>
-
-        <Separator />
-
-        <div className="grid grid-cols-2 gap-y-2 text-sm">
-          <span className="text-gray-500">Delivery Method</span>
-          <span className="font-medium">{notification.method}</span>
-
-          <span className="text-gray-500">Audience</span>
-          <span className="font-medium">{notification.audience}</span>
-
-          <span className="text-gray-500">Frequency</span>
-          
-          <span className="font-medium">{notification.recurringType}</span>
-
-          <span className="text-sm text-gray-500"> Sent by</span>
-           <span className="font-medium">{notification.sentBy}</span>
-           
-           <span className="text-gray-500">Time Sent</span> 
-           <span className="font-medium"> {new Date(notification.dateTime).toLocaleString()}</span>
-        
-
-          <span className="text-gray-500">Created At</span>
-          <span className="font-medium">
-            {typeof notification.dateTime === "string"
-              ? new Date(notification.dateTime).toLocaleString()
-              : notification.dateTime.toLocaleString()}
-          </span>
-        </div>
-      </CardContent>
-    </Card>
-  );
+  return <div>Notificaton</div>;
 };
 
 export default NotificationDetails;

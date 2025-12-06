@@ -16,6 +16,7 @@ import CustomButton from "../atoms/button/CustomButton";
 import { useRiderApproveDisapprove } from "@/queries/riders.query";
 import { useVerifyMerchant } from "@/queries/merchants";
 import { useDeleteAdmin } from "@/queries/admin.query";
+import { useDeleteoneNotificationCenter } from "@/queries/notifications.query";
 
 const GenericDisable = ({
   id,
@@ -27,14 +28,16 @@ const GenericDisable = ({
   id: string;
   name: string;
   created: string;
-  type: "approve" | "reject";
-  state?: "rider" | "admin" | "merchant";
+  type: "approve" | "reject" | "delete";
+  state?: "rider" | "admin" | "merchant" | "notification";
 }) => {
   const { title, closeModal } = useDrawerStore();
 
   const { approveDisapproveRider, loading } = useRiderApproveDisapprove(id);
   const { approveDisApproveMerchant, merchantLoading } = useVerifyMerchant(id);
   const { deleteAdmin, loading: adminLoading } = useDeleteAdmin();
+  const { deleteNotification, deleteNotificationLoading } =
+    useDeleteoneNotificationCenter();
 
   const approveFunction = () => {
     switch (state) {
@@ -56,6 +59,10 @@ const GenericDisable = ({
         break;
       case "admin":
         deleteAdmin({ variables: { adminID: id } });
+        break;
+
+      case "notification":
+        deleteNotification({ variables: { notificationID: id } });
         break;
 
       default:
@@ -171,7 +178,7 @@ const GenericDisable = ({
           <CustomButton
             variant={"destructive"}
             onClick={approveFunction}
-            loading={adminLoading}
+            loading={adminLoading || deleteNotificationLoading}
           >
             Delete {title}
           </CustomButton>
