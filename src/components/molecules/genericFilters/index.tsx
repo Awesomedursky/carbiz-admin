@@ -127,8 +127,10 @@ import { PopoverContent } from "@/components/ui/popover";
 
 const GenericFilters = () => {
   return (
-    <PopoverContent align="end" className=" mt-2 w-xs">
-      <div>Test test</div>
+    <PopoverContent align="end" className=" mt-2 w-xs p-0">
+      <h3 className="p-4">Filter by</h3>
+      <hr />
+      <div></div>
     </PopoverContent>
   );
 };

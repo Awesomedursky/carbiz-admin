@@ -50,7 +50,7 @@ interface MerchantsTotalRevenueWithDeliveryFee {
   };
 }
 
-export const useMerchantProfile = () => {
+export const useAdminProfile = () => {
   const { handleError } = useToast();
   const { setUser } = useAuthStore();
 
@@ -64,14 +64,26 @@ export const useMerchantProfile = () => {
       handleError(error, "Error fetching Admin profile");
     },
     fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
   });
 
+  return {
+    loading,
+    error,
+    data: data?.profileAdmin?.payload,
+  };
+};
+
+export const useFetchAdminMetrics = () => {
+  const { handleError } = useToast();
   const merchantCount = useQuery<AdminFetchMerchantCount>(MERCHNAT_COUNT, {
     onCompleted: () => {},
     onError: (error) => {
       handleError(error, "Error fetching  product count");
     },
     fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
+    pollInterval: 100000,
   });
 
   const customerCount = useQuery<AdminFetchCustomerCount>(TOTAL_CUSTOMER, {
@@ -80,6 +92,8 @@ export const useMerchantProfile = () => {
       handleError(error, "Error fetching  customer count");
     },
     fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
+    pollInterval: 100000,
   });
 
   const ridersCount = useQuery<AdminFetchRiderCount>(RIDERS_COUNT, {
@@ -88,6 +102,8 @@ export const useMerchantProfile = () => {
       handleError(error, "Error fetching  customer count");
     },
     fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-first",
+    pollInterval: 100000,
   });
 
   const revenue = useQuery<MerchantsTotalRevenueWithDeliveryFee>(REVENUE, {
@@ -97,12 +113,10 @@ export const useMerchantProfile = () => {
     },
     fetchPolicy: "cache-and-network",
     nextFetchPolicy: "cache-first",
+    pollInterval: 100000,
   });
 
   return {
-    loading,
-    error,
-    data: data?.profileAdmin?.payload,
     merchantCount,
     customerCount,
     ridersCount,

@@ -78,6 +78,7 @@ export const useFetchAllComplaints = () => {
     },
     fetchPolicy: "cache-and-network",
     nextFetchPolicy: "cache-first",
+    pollInterval: 60000,
   });
 
   React.useEffect(() => {

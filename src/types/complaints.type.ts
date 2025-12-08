@@ -16,4 +16,5 @@ export interface ComplaintOutput {
   status: string;
   title: string;
   updatedAt: Date;
+  proofImage: string;
 }

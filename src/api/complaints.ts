@@ -73,6 +73,7 @@ export const FETCH_ONE_COMPLAINTS = gql`
         status
         title
         updatedAt
+        proofImage
       }
     }
   }

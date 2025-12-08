@@ -1,6 +1,6 @@
 import { ArrowSwapHorizontal, MoneySend, People, Car } from "iconsax-reactjs";
 import Analytics from "../atoms/analytics";
-import { useMerchantProfile } from "@/queries/dashboard";
+import { useFetchAdminMetrics } from "@/queries/dashboard";
 import { Skeleton } from "../ui/skeleton";
 
 const analyticIcon = {
@@ -13,7 +13,7 @@ const analyticIcon = {
 type analyticKey = keyof typeof analyticIcon;
 const DashboardCards = () => {
   const { merchantCount, customerCount, revenue, ridersCount } =
-    useMerchantProfile();
+    useFetchAdminMetrics();
   const { loading, data } = merchantCount;
 
   const dashboardAnalytics = [

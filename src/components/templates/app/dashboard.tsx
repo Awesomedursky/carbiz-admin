@@ -2,14 +2,16 @@ import { ordersColumns } from "@/columns/orders.column";
 import { DataTable } from "@/components/atoms/table";
 import DashboardCards from "@/components/molecules/DashboardCards";
 import { Spinner } from "@/components/ui/spinner";
+import { useAdminProfile } from "@/queries/dashboard";
 import fetchOrdersQuery from "@/queries/orders.query";
 
 const Dashboard = () => {
   const { data, loading } = fetchOrdersQuery();
+  const { loading: profileLoading } = useAdminProfile();
 
-  if (loading) {
+  if (profileLoading) {
     return (
-      <div className="flex items-center justify-center min-h-8/12">
+      <div className="flex items-center justify-center h-full">
         <Spinner className="text-primary size-10 " />
       </div>
     );

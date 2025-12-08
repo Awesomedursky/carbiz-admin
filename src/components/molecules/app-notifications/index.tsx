@@ -1,6 +1,5 @@
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { useDrawerStore } from "@/store/drawer.store";
-import { Content } from "./popoverContent";
 
 export const AppNotifcations = ({
   children,
