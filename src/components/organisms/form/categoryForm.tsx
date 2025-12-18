@@ -22,7 +22,7 @@ const CategoryForm = ({ type, id }: { type: boolean; id?: string }) => {
   const { addProductCategory, loading: addLoading } = useAddProductCategory();
   const { mutate, updateLoading } = useUpdateProductCategory();
   const { data: productCategoryData, loading: fetchLoading } =
-    useFetchOneProductCategory(id!, !type || !id);
+    useFetchOneProductCategory({ productCategoryID: id!, skip: !type || !id });
 
   const form = useForm<Type>({
     resolver: zodResolver(

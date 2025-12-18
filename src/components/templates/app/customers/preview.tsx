@@ -48,6 +48,7 @@ const PreviewCustomer = () => {
 
       {data?.my_orders && (
         <DataTable
+          tableKey="orders"
           tableName="Orders"
           columns={ordersColumns}
           data={data?.my_orders || []}

@@ -39,7 +39,8 @@ export type tableKeyType =
   | "payouts"
   | "notifications"
   | "settings"
-  | "transactions";
+  | "transactions"
+  | "payout";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

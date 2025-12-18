@@ -9,6 +9,7 @@ const Payouts = () => {
 
   return (
     <DataTable
+      tableKey="payout"
       tableName="Payouts"
       isClickable
       columns={PayoutsColumn}
