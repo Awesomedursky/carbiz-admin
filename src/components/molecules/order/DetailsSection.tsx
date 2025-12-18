@@ -153,7 +153,7 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
             ) {
               displayValue = renderStatusBadge(value);
             } else if (isDateValue(value)) {
-              displayValue = moment(value).format("YYYY-MM-DD HH:mm");
+              displayValue = moment(value).format("YYYY-MM-DD HH:mm A");
             } else if (isLinkValue(value)) {
               displayValue = (
                 <Dialog>

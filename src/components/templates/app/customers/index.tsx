@@ -3,10 +3,11 @@ import CustomerColumns from "@/columns/customers.column";
 import fetchCustomersQuery from "@/queries/customers.query";
 
 const Customers = () => {
-  const { data, loading } = fetchCustomersQuery();
+  const { data, loading, message } = fetchCustomersQuery();
   return (
     <DataTable
-      message={data?.message}
+      tableKey="customers"
+      message={message}
       tableName="Customers"
       columns={CustomerColumns}
       data={data?.payload?.data || []}

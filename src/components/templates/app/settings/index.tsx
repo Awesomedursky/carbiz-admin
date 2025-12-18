@@ -14,23 +14,30 @@ const Settings = () => {
         </h4>
       </Link>
 
-      <div className="bg-white p-5 md:p-10 border border-background-light rounded-md">
+      <div className="bg-white p-5 md:p-10 border border-background-light rounded-md overflow-clip">
         <h3 className="text-xl font-bold font-family-satoshi">Settings</h3>
 
-        <div className="inline-flex gap-2.5 mt-2 md:mt-5">
-          {["profile", check && "admins"].map((nav) => (
-            <NavLink
-              to={`${nav !== "profile" ? `/settings/${nav}` : ""}`}
-              end={nav === "profile"}
-              className={({ isActive }) =>
-                isActive
-                  ? "text-primary border-b border-b-primary capitalize text-base font-bold font-family-satoshi p-2 px-2.5"
-                  : "capitalize text-base text-[#837E8E] font-medium font-family-satoshi p-2"
-              }
-            >
-              {nav}
-            </NavLink>
-          ))}
+        <div className="inline-flex gap-2.5 mt-2 md:mt-5 flex-wrap">
+          {[
+            "profile",
+            check && "admins",
+            check && "product_category",
+            check && "pricing",
+          ]
+            .filter(Boolean)
+            .map((nav) => (
+              <NavLink
+                to={`${nav !== "profile" ? `/settings/${nav}` : ""}`}
+                end={nav === "profile"}
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-primary border-b border-b-primary capitalize sm:text-base font-bold font-family-satoshi p-1 transition-all duration-300"
+                    : "capitalize text-base text-[#837E8E] font-medium font-family-satoshi p-1 sm:text-base text-nowrap transition-all duration-300"
+                }
+              >
+                {(nav as string).replaceAll("_", " ")}
+              </NavLink>
+            ))}
         </div>
 
         <div className=" py-5 md:py-10">

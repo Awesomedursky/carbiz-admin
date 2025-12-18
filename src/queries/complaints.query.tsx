@@ -5,8 +5,8 @@ import {
   UPDATE_COMPLAINT,
 } from "@/api/complaints";
 import { useToast } from "@/hooks/Toast";
+import { useTableState } from "@/hooks/useTableState";
 import { useDrawerStore } from "@/store/drawer.store";
-import useTableStore from "@/store/table.store";
 import { PaginationQuery } from "@/types/admin.type";
 import { ComplaintOutput } from "@/types/complaints.type";
 import { useMutation, useQuery } from "@apollo/client";
@@ -62,8 +62,11 @@ interface AdminUpdateComplaintType {
 }
 
 export const useFetchAllComplaints = () => {
-  const { pageSize, currentPage, searchTerm } = useTableStore();
-  const { data, loading, error, fetchMore } = useQuery<
+  const { pageSize, currentPage, searchTerm, filters, setPageTotal, update } =
+    useTableState("complaints");
+  const { status, sortBy, sortOrder, startDate, endDate } = filters;
+
+  const { data, loading, error, fetchMore, refetch } = useQuery<
     AdminFetchAllComplaintsWithFiltType,
     { paginationQuery: PaginationQuery }
   >(FETCH_ALL_COMPLAINTS, {
@@ -71,9 +74,12 @@ export const useFetchAllComplaints = () => {
       paginationQuery: {
         limit: pageSize,
         page: currentPage,
-        sortBy: "createdAt",
-        sortOrder: "DESC",
+        sortBy,
+        sortOrder,
         searchTerm,
+        ...(status && { status }),
+        ...(startDate && { startDate }),
+        ...(endDate && { endDate }),
       },
     },
     fetchPolicy: "cache-and-network",
@@ -82,13 +88,19 @@ export const useFetchAllComplaints = () => {
   });
 
   React.useEffect(() => {
-    useTableStore.setState({
-      total: data?.AdminFetchAllComplaintsWithFilter?.payload?.total,
-    });
-  }, [data?.AdminFetchAllComplaintsWithFilter?.payload?.total]);
+    if (data?.AdminFetchAllComplaintsWithFilter?.payload?.total != null) {
+      const total = data?.AdminFetchAllComplaintsWithFilter.payload.total;
+      setPageTotal(total);
+    }
+  }, [data?.AdminFetchAllComplaintsWithFilter?.payload?.total, update]);
+
+  React.useEffect(() => {
+    refetch();
+  }, [currentPage, pageSize, startDate, endDate, sortBy, sortOrder, status]);
 
   return {
     data: data?.AdminFetchAllComplaintsWithFilter?.payload?.data,
+    message: data?.AdminFetchAllComplaintsWithFilter?.message,
     loading,
     error,
     fetchMore,
@@ -138,7 +150,7 @@ interface updateInput {
 
 export const useUpdateComplaint = () => {
   const { handleError, handleSuccess } = useToast();
-  const { pageSize, currentPage } = useTableStore();
+  const { pageSize, currentPage, filters } = useTableState("complaints");
   const { closeModal } = useDrawerStore();
 
   const [adminUpdateComplaint, { loading }] = useMutation<
@@ -153,8 +165,8 @@ export const useUpdateComplaint = () => {
           paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortBy: "createdAt",
-            sortOrder: "DESC",
+            sortBy: filters.sortBy,
+            sortOrder: filters.sortOrder,
           },
         },
       },

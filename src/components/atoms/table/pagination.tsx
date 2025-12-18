@@ -126,12 +126,12 @@ export const Pagination = ({
       </div>
       <div className="flex items-center gap-2 flex-1 justify-center">
         <Button
+          className=" p-1"
           disabled={currentPage === 1}
           onClick={() => onPageChange(currentPage - 1)}
           variant="outline"
-          size="lg"
         >
-          <ChevronLeft className="h-4 w-4 mr-1" />
+          <ChevronLeft className="" />
           Prev
         </Button>
         <span className="text-sm text-muted-foreground">
@@ -141,10 +141,9 @@ export const Pagination = ({
           disabled={currentPage === totalPages}
           onClick={() => onPageChange(currentPage + 1)}
           variant="outline"
-          size="lg"
         >
           Next
-          <ChevronRight className="h-4 w-4 ml-1" />
+          <ChevronRight className="size-4" />
         </Button>
       </div>
     </div>

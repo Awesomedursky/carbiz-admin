@@ -17,6 +17,7 @@ import { useRiderApproveDisapprove } from "@/queries/riders.query";
 import { useVerifyMerchant } from "@/queries/merchants";
 import { useDeleteAdmin } from "@/queries/admin.query";
 import { useDeleteoneNotificationCenter } from "@/queries/notifications.query";
+import { useDeleteProductCategory } from "@/queries/product-categories.query";
 
 const GenericDisable = ({
   id,
@@ -29,7 +30,7 @@ const GenericDisable = ({
   name: string;
   created: string;
   type: "approve" | "reject" | "delete";
-  state?: "rider" | "admin" | "merchant" | "notification";
+  state?: "rider" | "admin" | "merchant" | "notification" | "product-category";
 }) => {
   const { title, closeModal } = useDrawerStore();
 
@@ -38,6 +39,8 @@ const GenericDisable = ({
   const { deleteAdmin, loading: adminLoading } = useDeleteAdmin();
   const { deleteNotification, deleteNotificationLoading } =
     useDeleteoneNotificationCenter();
+  const { deleteProductCategory, loadingDelProductCategory } =
+    useDeleteProductCategory();
 
   const approveFunction = () => {
     switch (state) {
@@ -63,6 +66,10 @@ const GenericDisable = ({
 
       case "notification":
         deleteNotification({ variables: { notificationID: id } });
+        break;
+
+      case "product-category":
+        deleteProductCategory({ variables: { productCategoryID: id } });
         break;
 
       default:
@@ -178,7 +185,11 @@ const GenericDisable = ({
           <CustomButton
             variant={"destructive"}
             onClick={approveFunction}
-            loading={adminLoading || deleteNotificationLoading}
+            loading={
+              adminLoading ||
+              deleteNotificationLoading ||
+              loadingDelProductCategory
+            }
           >
             Delete {title}
           </CustomButton>

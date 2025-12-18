@@ -77,8 +77,10 @@ export const UPDATE_CURRENT_USER_PROFILE = gql`
 `;
 
 export const FETCH_ALL_ADMINS = gql`
-  query AdminFetchAllAdmins($params: PaginationDto!) {
-    AdminFetchAllAdmins(paginationQuery: $params) {
+  query AdminFetchAllAdminsWithFilter(
+    $paginationQuery: PaginatedAdminFiltersDto!
+  ) {
+    AdminFetchAllAdminsWithFilter(paginationQuery: $paginationQuery) {
       errors
       message
       payload {

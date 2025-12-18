@@ -1,140 +1,110 @@
 import { create } from "zustand";
 
-interface TableStore {
+export type TableFilterType = {
+  adminAccess?: ("SUPER_ADMIN" | "ADMIN")[];
+  endDate?: string;
+  startDate?: string;
+  sortBy: string;
+  sortOrder: "ASC" | "DESC";
+  status?: ("ACTIVE" | "INACTIVE")[];
+  sentBy?: ("SYSTEM" | "ADMIN")[];
+  recurringType?: ("DAILY" | "WEEKLY" | "MONTHLY")[];
+  method?: ("EMAIL" | "SMS" | "PUSH")[];
+  deliveryStatus?: ("PENDING" | "ENROUTE" | "DELIVERED")[];
+  paymentStatus?: ("PAID" | "UNPAID" | "FAILED")[];
+  paymentMethod?: ("CARD" | "TRANSFER" | "CASH")[];
+  role?: ("RIDER" | "MERCHANT" | "CUSTOMER")[];
+  availabilityStatus?: ("AVAILABLE" | "UNAVAILABLE")[];
+  audience?: "MERCHANTS" | "RIDERS" | "CUSTOMERS" | "ALL_USERS"[];
+  deliveryMethod?: ("EMAIL" | "PUSH_NOTIFICATION")[];
+};
+
+export interface TableState {
   total: number;
   pageSize: number;
   currentPage: number;
-  setCurrentPage: (page: number) => void;
-  searchTerm: string | undefined;
-  setSearchTerm: (s: string | undefined) => void;
+  searchTerm?: string;
+  filters: TableFilterType;
 }
 
-const useTableStore = create<TableStore>((set) => ({
+export interface TableStore {
+  tables: Record<string, TableState>;
+  initTable: (key: string) => void;
+  setCurrentPage: (key: string, page: number) => void;
+  setSearchTerm: (key: string, term: string | undefined) => void;
+  updateFilters: (key: string, patch: Partial<TableFilterType>) => void;
+  resetFilters: (key: string) => void;
+  setTotal: (key: string, total: number) => void;
+}
+
+export const defaultFilters: TableFilterType = {
+  sortBy: "createdAt",
+  sortOrder: "DESC",
+};
+
+export const defaultTableState: TableState = {
   total: 1,
   pageSize: 10,
   currentPage: 1,
   searchTerm: undefined,
-  setSearchTerm: (searchTerm) => set({ searchTerm }),
-  setCurrentPage: (page: number) => set({ currentPage: page }),
+  filters: defaultFilters,
+};
+
+export const useTableStore = create<TableStore>((set) => ({
+  tables: {},
+
+  initTable: (key) =>
+    set((state) => {
+      if (state.tables[key]) return state; // already exists
+      return {
+        tables: {
+          ...state.tables,
+          [key]: { ...defaultTableState },
+        },
+      };
+    }),
+
+  setCurrentPage: (key, page) =>
+    set((state) => ({
+      tables: {
+        ...state.tables,
+        [key]: { ...state.tables[key], currentPage: page },
+      },
+    })),
+
+  setTotal: (key, total) =>
+    set((state) => ({
+      tables: {
+        ...state.tables,
+        [key]: { ...state.tables[key], total },
+      },
+    })),
+
+  setSearchTerm: (key, term) =>
+    set((state) => ({
+      tables: {
+        ...state.tables,
+        [key]: { ...state.tables[key], searchTerm: term },
+      },
+    })),
+
+  updateFilters: (key, patch) =>
+    set((state) => ({
+      tables: {
+        ...state.tables,
+        [key]: {
+          ...state.tables[key],
+          filters: { ...state.tables[key].filters, ...patch },
+          currentPage: 1,
+        },
+      },
+    })),
+
+  resetFilters: (key) =>
+    set((state) => ({
+      tables: {
+        ...state.tables,
+        [key]: { ...defaultTableState },
+      },
+    })),
 }));
-
-export default useTableStore;
-
-// import { create } from "zustand";
-
-// // 1. Define all filters (all optional)
-// export interface TableFilters {
-//   adminAccess?: string;
-//   endDate?: string;
-//   startDate?: string;
-//   sortBy?: string;
-//   sortOrder?: "asc" | "desc";
-//   status?: string;
-//   sentBy?: string;
-//   recurringType?: string;
-//   method?: string;
-//   deliveryStatus?: string;
-//   paymentStatus?: string;
-//   paymentMethod?: string;
-//   role?: string;
-//   availabilityStatus?: string;
-// }
-
-// // 2. Define the structure for each table
-// export interface TableState {
-//   total: number;
-//   pageSize: number;
-//   currentPage: number;
-//   searchTerm?: string;
-//   filters: TableFilters;
-// }
-
-// // 3. Zustand store
-// interface TableStore {
-//   tables: Record<string, TableState>;
-
-//   initTable: (key: string) => void;
-
-//   setCurrentPage: (key: string, page: number) => void;
-//   setSearchTerm: (key: string, term: string | undefined) => void;
-//   setTotal: (key: string, total: number) => void;
-
-//   // Filter actions
-//   setFilters: (key: string, filters: Partial<TableFilters>) => void;
-//   resetFilters: (key: string) => void;
-//   clearAllTableState: (key: string) => void;
-// }
-
-// const useTableStore = create<TableStore>((set, get) => ({
-//   tables: {},
-
-//   initTable: (key) => {
-//     const tables = get().tables;
-
-//     if (!tables[key]) {
-//       tables[key] = {
-//         total: 0,
-//         pageSize: 10,
-//         currentPage: 1,
-//         searchTerm: undefined,
-//         filters: {},
-//       };
-//       set({ tables });
-//     }
-//   },
-
-//   setCurrentPage: (key, page) => {
-//     const tables = get().tables;
-//     if (!tables[key]) return;
-
-//     tables[key].currentPage = page;
-//     set({ tables });
-//   },
-
-//   setSearchTerm: (key, term) => {
-//     const tables = get().tables;
-//     if (!tables[key]) return;
-
-//     tables[key].searchTerm = term;
-//     set({ tables });
-//   },
-
-//   setTotal: (key, total) => {
-//     const tables = get().tables;
-//     if (!tables[key]) return;
-
-//     tables[key].total = total;
-//     set({ tables });
-//   },
-
-//   setFilters: (key, filters) => {
-//     const tables = get().tables;
-//     if (!tables[key]) return;
-
-//     tables[key].filters = {
-//       ...tables[key].filters,
-//       ...filters,
-//     };
-
-//     set({ tables });
-//   },
-
-//   resetFilters: (key) => {
-//     const tables = get().tables;
-//     if (!tables[key]) return;
-
-//     tables[key].filters = {};
-//     set({ tables });
-//   },
-
-//   clearAllTableState: (key) => {
-//     const tables = get().tables;
-//     if (!tables[key]) return;
-
-//     delete tables[key]; // remove entire table state
-
-//     set({ tables });
-//   },
-// }));
-
-// export default useTableStore;

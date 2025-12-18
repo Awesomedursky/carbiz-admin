@@ -1,5 +1,5 @@
 import { GET_CUSTOMERS, GET_ONE_CUSTOMER } from "@/api/customers";
-import useTableStore from "@/store/table.store";
+import { useTableState } from "@/hooks/useTableState";
 import { PaginationQuery } from "@/types/admin.type";
 import Customer from "@/types/customer.type";
 import { useQuery } from "@apollo/client";
@@ -27,8 +27,10 @@ interface CustomerPreviewResponseType {
 }
 
 const fetchCustomersQuery = () => {
-  const { pageSize, currentPage, searchTerm } = useTableStore();
-  const { data, loading, error, fetchMore } = useQuery<
+  const { currentPage, pageSize, filters, update, searchTerm, setPageTotal } =
+    useTableState("customers");
+  const { sortBy, sortOrder, startDate, endDate, status } = filters;
+  const { data, loading, error, fetchMore, refetch } = useQuery<
     CustomerPaginatedResponseType,
     { paginationQuery: PaginationQuery }
   >(GET_CUSTOMERS, {
@@ -36,9 +38,12 @@ const fetchCustomersQuery = () => {
       paginationQuery: {
         limit: pageSize,
         page: currentPage,
-        sortBy: "createdAt",
-        sortOrder: "DESC",
-        searchTerm: searchTerm,
+        sortBy,
+        sortOrder,
+        searchTerm,
+        ...(startDate && { startDate }),
+        ...(endDate && { endDate }),
+        ...(status && { status }),
       },
     },
     fetchPolicy: "cache-and-network",
@@ -46,13 +51,19 @@ const fetchCustomersQuery = () => {
   });
 
   React.useEffect(() => {
-    useTableStore.setState({
-      total: data?.AdminFetchAllCustomersWithFilter.payload?.total,
-    });
-  }, [data?.AdminFetchAllCustomersWithFilter.payload?.total]);
+    if (data?.AdminFetchAllCustomersWithFilter?.payload?.total != null) {
+      const total = data?.AdminFetchAllCustomersWithFilter.payload.total;
+      setPageTotal(total);
+    }
+  }, [data?.AdminFetchAllCustomersWithFilter.payload?.total, update]);
+
+  React.useEffect(() => {
+    refetch();
+  }, [currentPage, pageSize, startDate, endDate, sortBy, sortOrder, status]);
 
   return {
     data: data?.AdminFetchAllCustomersWithFilter,
+    message: data?.AdminFetchAllCustomersWithFilter?.message,
     loading,
     error,
     fetchMore,

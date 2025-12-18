@@ -14,47 +14,78 @@ import TextArea from "@/components/atoms/form/textarea";
 import SelectField from "@/components/atoms/form/select";
 import FormRadioGroup from "@/components/atoms/form/radio-group";
 import { BracketRadioItem } from "@/components/ui/radio-group";
-import { FormCalendar } from "@/components/atoms/form/calender";
-import { useCreateNotificationCenter } from "@/queries/notifications.query";
+import { FormCalendar } from "@/components/atoms/form/calender-time";
+import {
+  useCreateNotificationCenter,
+  useFetchOneNotification,
+  useupdateNotificationCenter,
+} from "@/queries/notifications.query";
 import CustomButton from "@/components/atoms/button/CustomButton";
-import { NotificationCenterOutput } from "@/types/notification-center.type";
 import React from "react";
+import { Spinner } from "@/components/ui/spinner";
 
-const NotificationForm = (notification?: NotificationCenterOutput) => {
+const NotificationForm = ({ type, id }: { type: boolean; id?: string }) => {
   const { closeModal, title } = useDrawerStore();
   const { createComplaint, loading } = useCreateNotificationCenter();
+  const { updateNotification, updateLoading } = useupdateNotificationCenter();
+  const { data, loading: previewLoading } = useFetchOneNotification(
+    id!,
+    !type || !id
+  );
 
   const form = useForm<NotificationSchemaType>({
     resolver: zodResolver(NotificationSchema),
-    defaultValues: {},
   });
 
   React.useEffect(() => {
-    if (notification) {
+    if (data) {
       form.reset({
-        notificationTitle: notification.notificationTitle,
-        notificationMessage: notification.notificationMessage,
-        deliveryMethod: notification.deliveryMethod,
-        notificationAudience: notification.notificationAudience,
-        broadcastDateTime: notification.broadcastDateTime ?? undefined,
-        time: notification.broadcastDateTime ? "later" : undefined,
-        recurring: !!notification.makeBroadcastRecurringType,
+        notificationTitle: data.notificationTitle,
+        notificationMessage: data.notificationMessage,
+        deliveryMethod: data.deliveryMethod,
+        notificationAudience: data.notificationAudience,
+        broadcastDateTime: data.broadcastDateTime ?? undefined,
+        time: data.broadcastDateTime ? "later" : undefined,
+        recurring: !!data.makeBroadcastRecurringType,
         makeBroadcastRecurringType:
-          notification.makeBroadcastRecurringType ?? undefined,
+          data.makeBroadcastRecurringType ?? undefined,
       });
     }
-  }, [notification]);
+  }, [data]);
 
   const onSubmit = (data: NotificationSchemaType) => {
     const { time, recurring, ...others } = data;
+    const { makeBroadcastRecurringType, ...updated } = others;
+
+    if (type && id) {
+      updateNotification({
+        variables: {
+          notificationID: id,
+          input: {
+            makeBroadcastRecuringType: others.makeBroadcastRecurringType,
+            ...updated,
+          },
+        },
+      });
+      return;
+    }
     createComplaint({ variables: { input: others } });
   };
+
+  if (previewLoading) {
+    return (
+      <div className="flex  items-center justify-center">
+        <Spinner className=" size-12 text-primary" />
+      </div>
+    );
+  }
 
   const scheduleOption = form.watch("time");
   const recurring = form.watch("recurring");
   return (
     <Form {...form}>
       <form
+        key={data ? data?.notificationID : "new"}
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-5 mt-0 mb-0"
       >
@@ -96,9 +127,9 @@ const NotificationForm = (notification?: NotificationCenterOutput) => {
             name="notificationAudience"
             label="Audience"
             items={[
-              { label: "Merchant", value: "Merchants" },
-              { label: "Rider", value: "Riders" },
-              { label: "Customer", value: "Customers" },
+              { label: "Merchants", value: "Merchants" },
+              { label: "Riders", value: "Riders" },
+              { label: "Customers", value: "Customers" },
               { label: "All Users", value: "All_Users" },
             ]}
           />
@@ -166,12 +197,12 @@ const NotificationForm = (notification?: NotificationCenterOutput) => {
           </Button>
 
           <CustomButton
-            loading={loading}
+            loading={loading || updateLoading}
             size={"lg"}
             type="submit"
             variant="default"
           >
-            Save Notification
+            {type ? "Edit Notification" : "Save Notification"}
           </CustomButton>
         </div>
       </form>

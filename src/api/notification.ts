@@ -30,10 +30,8 @@ export const GET_NOTIFICATION_METRICS = gql`
 `;
 
 export const ALL_NOTIFICATION_CENTER = gql`
-  query AdminFetchAllNotificationsWithFilter(
-    $paginationQuery: PaginatedNotificationFiltersDto!
-  ) {
-    AdminFetchAllNotificationsWithFilter(paginationQuery: $paginationQuery) {
+  query fetchallNotificationCenter($paginationQuery: PaginationDto!) {
+    fetchallNotificationCenter(paginationQuery: $paginationQuery) {
       message
       errors
       success
@@ -120,10 +118,10 @@ export const DELETE_NOTIFICATION_CENTER = gql`
 `;
 
 export const FETCH_ONE_NOTIFICATION_CENTER = gql`
-  mutation fetchOneNotificationCenter($notificationID: String!) {
+  query fetchOneNotificationCenter($notificationID: String!) {
     fetchOneNotificationCenter(notificationID: $notificationID) {
       errors
-      messsage
+      message
       payload {
         broadcastDateTime
         createdAt

@@ -9,16 +9,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-// import NotificationDetails from "@/components/molecules/notification/NotificationDetails";
 import { useDrawerStore } from "@/store/drawer.store";
-import NotificationForm from "@/components/molecules/notification/NotificationForm";
 import GenericDisable from "../genericDisable";
-import { NotificationCenterOutput } from "@/types/notification-center.type";
+import { productCategoryType } from "@/queries/product-categories.query";
+import { ProductCategoryDetails } from "./productCategoryDetails";
+import CategoryForm from "@/components/organisms/form/categoryForm";
 
-const NotificationActions: React.FC<{
-  notification: NotificationCenterOutput;
-}> = ({ notification }) => {
+const ProductCategoryActions: React.FC<{
+  category: productCategoryType;
+}> = ({ category }) => {
   const { openModal } = useDrawerStore();
 
   /** --- RENDER --- **/
@@ -35,29 +34,28 @@ const NotificationActions: React.FC<{
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="z-50">
-        {/* <DropdownMenuItem
+        <DropdownMenuItem
           onSelect={() => {
             openModal({
               type: "drawer",
-              title: "Notification Details",
-              content: NotificationDetails,
-              props: { notification },
+              title: "Product Category Details",
+              content: ProductCategoryDetails,
+              props: { id: category.productCategoryID },
               placement: "right",
             });
           }}
         >
           View
-        </DropdownMenuItem> */}
+        </DropdownMenuItem>
 
         <DropdownMenuItem
           onSelect={() => {
             openModal({
               type: "dialog",
-              title: "Edit Notifications",
-              content: NotificationForm,
+              content: CategoryForm,
               props: {
-                id: notification?.notificationID,
                 type: true,
+                id: category?.productCategoryID,
               },
             });
           }}
@@ -69,14 +67,14 @@ const NotificationActions: React.FC<{
           onSelect={() => {
             openModal({
               type: "dialog",
-              title: "Notification",
+              title: "Product Category",
               content: GenericDisable,
               props: {
                 type: "delete",
-                itemName: "Notification",
-                id: notification?.notificationID,
-                name: notification?.notificationTitle,
-                state: "notification",
+                itemName: "Product-Category",
+                id: category.productCategoryID,
+                name: category.productCategoryName,
+                state: "product-category",
               },
               placement: "center",
             });
@@ -90,4 +88,4 @@ const NotificationActions: React.FC<{
   );
 };
 
-export default NotificationActions;
+export default ProductCategoryActions;

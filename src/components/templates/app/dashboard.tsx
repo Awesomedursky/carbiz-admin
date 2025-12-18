@@ -3,10 +3,10 @@ import { DataTable } from "@/components/atoms/table";
 import DashboardCards from "@/components/molecules/DashboardCards";
 import { Spinner } from "@/components/ui/spinner";
 import { useAdminProfile } from "@/queries/dashboard";
-import fetchOrdersQuery from "@/queries/orders.query";
+import { useFetchAllOrders } from "@/queries/orders.query";
 
 const Dashboard = () => {
-  const { data, loading } = fetchOrdersQuery();
+  const { data, loading, message } = useFetchAllOrders();
   const { loading: profileLoading } = useAdminProfile();
 
   if (profileLoading) {
@@ -24,7 +24,9 @@ const Dashboard = () => {
       </div>
 
       <DataTable
-        tableName="orders"
+        message={message}
+        tableKey="orders"
+        tableName="Recent Orders"
         loading={loading}
         columnKey="orderID"
         columns={ordersColumns}

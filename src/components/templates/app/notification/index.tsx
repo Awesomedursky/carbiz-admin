@@ -17,6 +17,7 @@ const NotificationCenter = () => {
       <NotificationCards />
 
       <DataTable
+        tableKey="notifications"
         // isClickable
         message={message}
         // tableName="Notification Center"

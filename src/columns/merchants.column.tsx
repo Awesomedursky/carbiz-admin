@@ -139,7 +139,7 @@ const MerchantColumn: ColumnDef<Merchant>[] = [
   {
     id: "actions",
     header: () => (
-      <div className=" text-base  font-[500] text-black bg-[#FAFAFB] px-7 py-3.5">
+      <div className=" text-base  font-[500] text-black bg-[#FAFAFB] py-3.5">
         Actions
       </div>
     ),

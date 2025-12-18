@@ -1,9 +1,9 @@
 import { PaginationQuery } from "@/types/admin.type";
 import { GET_TRANSACTIONS } from "@/api/transactions";
-import useTableStore from "@/store/table.store";
 import TransactionEntity from "@/types/transaction.types";
 import { useQuery } from "@apollo/client";
 import React from "react";
+import { useTableState } from "@/hooks/useTableState";
 
 interface TransactionsResponseType {
   AdminFetchAllTransactions: {
@@ -19,7 +19,8 @@ interface TransactionsResponseType {
 }
 
 const fetchTransactions = () => {
-  const { pageSize, currentPage } = useTableStore();
+  const { pageSize, currentPage, filters, setPageTotal } =
+    useTableState("transactions");
   const { data, loading, error, fetchMore } = useQuery<
     TransactionsResponseType,
     { params: PaginationQuery }
@@ -28,8 +29,8 @@ const fetchTransactions = () => {
       params: {
         limit: pageSize,
         page: currentPage,
-        sortBy: "createdAT",
-        sortOrder: "DESC",
+        sortBy: filters?.sortBy,
+        sortOrder: filters?.sortOrder,
       },
     },
     fetchPolicy: "cache-and-network",
@@ -38,14 +39,12 @@ const fetchTransactions = () => {
 
   React.useEffect(() => {
     if (!data?.AdminFetchAllTransactions.payload) return;
-
-    useTableStore.setState({
-      total: data?.AdminFetchAllTransactions.payload.total,
-    });
+    setPageTotal(data?.AdminFetchAllTransactions?.payload.total);
   }, [data?.AdminFetchAllTransactions.payload]);
 
   return {
     data: data?.AdminFetchAllTransactions?.payload?.data || [],
+    message: data?.AdminFetchAllTransactions?.message,
     loading,
     error,
     fetchMore,

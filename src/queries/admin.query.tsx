@@ -6,9 +6,9 @@ import {
   UPDATE_ADMIN,
 } from "@/api/admin.profile";
 import { useToast } from "@/hooks/Toast";
+import { useTableState } from "@/hooks/useTableState";
 import { useAuthStore } from "@/store/auth.store";
 import { useDrawerStore } from "@/store/drawer.store";
-import useTableStore from "@/store/table.store";
 import { adminEntity, PaginationQuery } from "@/types/admin.type";
 import { useMutation, useQuery } from "@apollo/client";
 import React from "react";
@@ -30,7 +30,7 @@ interface addAdminType {
 export const useAddAdmin = () => {
   const { handleError, handleSuccess } = useToast();
   const { setGeneratedPassword } = useAuthStore();
-  const { pageSize, currentPage } = useTableStore();
+  const { pageSize, currentPage, filters } = useTableState("admin");
 
   const [addAdmin, { loading }] = useMutation<
     addAdminType,
@@ -40,11 +40,11 @@ export const useAddAdmin = () => {
       {
         query: FETCH_ALL_ADMINS,
         variables: {
-          params: {
+          paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortBy: "createdAt",
-            sortOrder: "DESC",
+            sortBy: filters.sortBy,
+            sortOrder: filters.sortOrder,
           },
         },
       },
@@ -80,7 +80,7 @@ export const useAddAdmin = () => {
 
 export const useAdminQuery = () => {
   interface adminResponseType {
-    AdminFetchAllAdmins: {
+    AdminFetchAllAdminsWithFilter: {
       message: string;
       success: boolean;
       payload: {
@@ -91,18 +91,24 @@ export const useAdminQuery = () => {
       };
     };
   }
-  const { pageSize, currentPage } = useTableStore();
+  const { currentPage, pageSize, filters, update, searchTerm, setPageTotal } =
+    useTableState("admin");
+  const { adminAccess, startDate, endDate, sortBy, sortOrder } = filters;
 
-  const { data, loading, error, fetchMore } = useQuery<
+  const { data, loading, error, fetchMore, refetch } = useQuery<
     adminResponseType,
-    { params: PaginationQuery }
+    { paginationQuery: PaginationQuery }
   >(FETCH_ALL_ADMINS, {
     variables: {
-      params: {
+      paginationQuery: {
         limit: pageSize,
         page: currentPage,
-        sortBy: "createdAt",
-        sortOrder: "DESC",
+        sortBy,
+        sortOrder,
+        searchTerm,
+        ...(startDate && { startDate }),
+        ...(endDate && { endDate }),
+        ...(adminAccess && { adminAccess }),
       },
     },
     fetchPolicy: "cache-and-network",
@@ -110,13 +116,19 @@ export const useAdminQuery = () => {
   });
 
   React.useEffect(() => {
-    useTableStore.setState({
-      total: data?.AdminFetchAllAdmins.payload.total,
-    });
-  }, [data?.AdminFetchAllAdmins.payload.total]);
+    if (data?.AdminFetchAllAdminsWithFilter?.payload?.total != null) {
+      const total = data.AdminFetchAllAdminsWithFilter.payload.total;
+      setPageTotal(total);
+    }
+  }, [data?.AdminFetchAllAdminsWithFilter?.payload.total, update]);
+
+  React.useEffect(() => {
+    refetch();
+  }, [currentPage, pageSize, searchTerm, startDate, endDate, adminAccess]);
 
   return {
-    data: data?.AdminFetchAllAdmins.payload.data,
+    data: data?.AdminFetchAllAdminsWithFilter?.payload.data,
+    message: data?.AdminFetchAllAdminsWithFilter?.message,
     loading,
     error,
     fetchMore,
@@ -152,7 +164,8 @@ export const useFetchOneAdmin = (adminID: string, skip?: boolean) => {
 
 export const useUpdateAdmin = () => {
   const { handleError, handleSuccess } = useToast();
-  const { pageSize, currentPage } = useTableStore();
+  const { pageSize, currentPage, filters } = useTableState("admin");
+  const { sortBy, sortOrder } = filters;
   const { closeModal } = useDrawerStore();
   interface updateOtherAdmin {
     updateOtherAdmin: {
@@ -176,11 +189,11 @@ export const useUpdateAdmin = () => {
       {
         query: FETCH_ALL_ADMINS,
         variables: {
-          params: {
+          paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortBy: "createdAt",
-            sortOrder: "DESC",
+            sortBy,
+            sortOrder,
           },
         },
       },
@@ -213,7 +226,8 @@ export const useDeleteAdmin = () => {
       payload: boolean;
     };
   }
-  const { pageSize, currentPage } = useTableStore();
+  const { pageSize, currentPage, filters } = useTableState("admin");
+  const { sortBy, sortOrder } = filters;
   const { handleError, handleInfo, handleSuccess } = useToast();
   const { closeModal } = useDrawerStore();
   const [deleteAdmin, { loading }] = useMutation<
@@ -224,11 +238,11 @@ export const useDeleteAdmin = () => {
       {
         query: FETCH_ALL_ADMINS,
         variables: {
-          params: {
+          paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortBy: "createdAt",
-            sortOrder: "DESC",
+            sortBy,
+            sortOrder,
           },
         },
       },

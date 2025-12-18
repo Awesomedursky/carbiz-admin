@@ -51,6 +51,7 @@ const CustomerActions: React.FC<{ customer: Customer }> = ({ customer }) => {
               title: "Customer",
               content: GenericDisable,
               props: {
+                id: customer?.customerID,
                 itemName: "Customer",
                 // onDelete: () => onDelete(customer.id),
               },

@@ -1,13 +1,13 @@
 import { FETCH_ONE_ORDER, FETCH_ORDERS } from "@/api/orders";
 import { useToast } from "@/hooks/Toast";
-import useTableStore from "@/store/table.store";
+import { useTableState } from "@/hooks/useTableState";
 import { PaginationQuery } from "@/types/admin.type";
 import OrderEntity from "@/types/order.type";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import React from "react";
 
 interface AdminFetchAllOrdersResponseType {
-  AdminFetchAllOrders: {
+  AdminFetchAllOrdersWithFilter: {
     message: string;
     success: boolean;
     payload: {
@@ -18,40 +18,71 @@ interface AdminFetchAllOrdersResponseType {
     };
   };
 }
+34;
+export const useFetchAllOrders = () => {
+  const { currentPage, pageSize, filters, update, searchTerm, setPageTotal } =
+    useTableState("orders");
 
-const fetchOrdersQuery = () => {
-  const { pageSize, currentPage } = useTableStore();
-  const { data, loading, error, fetchMore } = useQuery<
+  const {
+    startDate,
+    endDate,
+    sortBy,
+    sortOrder,
+    deliveryStatus,
+    paymentStatus,
+  } = filters;
+
+  const { data, loading, error, refetch } = useQuery<
     AdminFetchAllOrdersResponseType,
-    { params: PaginationQuery }
+    { paginationQuery: PaginationQuery }
   >(FETCH_ORDERS, {
     variables: {
-      params: {
+      paginationQuery: {
         limit: pageSize,
         page: currentPage,
-        sortBy: "createdAT",
-        sortOrder: "DESC",
+        searchTerm,
+        sortBy,
+        sortOrder,
+        ...(startDate && { startDate }),
+        ...(endDate && { endDate }),
+        ...(deliveryStatus && { deliveryStatus }),
+        ...(paymentStatus && { paymentStatus }),
       },
     },
     fetchPolicy: "cache-and-network",
     nextFetchPolicy: "cache-first",
   });
 
+  // Update total in the table state
   React.useEffect(() => {
-    useTableStore.setState({
-      total: data?.AdminFetchAllOrders.payload?.total,
-    });
-  }, [data?.AdminFetchAllOrders.payload?.total]);
+    if (data?.AdminFetchAllOrdersWithFilter?.payload?.total != null) {
+      const total = data.AdminFetchAllOrdersWithFilter.payload.total;
+      setPageTotal(total);
+    }
+  }, [data?.AdminFetchAllOrdersWithFilter?.payload?.total, update]);
+
+  // Refetch whenever relevant filters or pagination change
+  React.useEffect(() => {
+    refetch();
+  }, [
+    currentPage,
+    pageSize,
+    startDate,
+    endDate,
+    sortBy,
+    sortOrder,
+    deliveryStatus,
+    paymentStatus,
+  ]);
 
   return {
-    data: data?.AdminFetchAllOrders.payload?.data,
+    data: data?.AdminFetchAllOrdersWithFilter?.payload?.data ?? [],
     loading,
     error,
-    fetchMore,
+    refetch,
+    message: data?.AdminFetchAllOrdersWithFilter?.message,
   };
 };
-
-export default fetchOrdersQuery;
 
 export const useFetchOrder = () => {
   const { handleError } = useToast();

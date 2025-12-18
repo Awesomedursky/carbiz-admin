@@ -51,14 +51,19 @@ const CustomerDetails = ({ customer }: CustomerType) => {
 
         {my_orders && my_orders.length !== 0 && (
           <div className="grid grid-cols-1 space-y-1.5 p-3">
-            {my_orders?.map((order: any) => (
+            {my_orders?.map((order: any, idx: number) => (
               <div className="p-2 border rounded-lg justify-between flex items-center">
-                <p className="font-bold text-sm flex items-center space-x-1.5">
-                  <BoxIcon className="p-2 border rounded-lg size-10" />
-                  <span className="font-bold text-sm uppercase">
-                    {order?.orderID}
+                <div className="flex items-center space-x-1.5">
+                  <span className=" p-2 rounded-lg border size-10 flex items-center justify-center">
+                    {idx + 1}
                   </span>
-                </p>
+                  <p className="font-bold text-sm flex items-center space-x-1.5">
+                    <BoxIcon className="p-2 border rounded-lg size-10" />
+                    <span className="font-bold text-sm uppercase">
+                      {order?.orderID}
+                    </span>
+                  </p>
+                </div>
                 <button
                   //   to={"/customers"}
                   onClick={() => navigate(`${order?.orderID}`)}

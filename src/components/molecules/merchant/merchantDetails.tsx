@@ -7,10 +7,26 @@ import ProductEntity from "@/types/product.type";
 import { useDrawerStore } from "@/store/drawer.store";
 import { newHandleApprove, newHandleRejectModal } from "./MerchantActions";
 import Merchant from "@/types/merchants.type";
+import GenericDisable from "../genericDisable";
 
 const MerchantDetails = ({ merchant }: { merchant: Merchant }) => {
   const { data, loading } = useFetchOneMerchant(merchant?.merchantID || "");
   const { openModal } = useDrawerStore();
+
+  const disableMerchant = () => {
+    openModal({
+      title: "Merchant",
+      content: GenericDisable,
+      type: "dialog",
+      props: {
+        id: merchant?.merchantID,
+        name: merchant?.businessName,
+        created: merchant?.createdAt,
+        state: "merchant",
+      },
+      placement: "center",
+    });
+  };
 
   const handleApprove = () => {
     newHandleApprove(openModal, merchant);
@@ -78,7 +94,7 @@ const MerchantDetails = ({ merchant }: { merchant: Merchant }) => {
       );
     }
     return (
-      <div className="flex place-self-end">
+      <div className="flex place-self-end" onClick={disableMerchant}>
         <Button variant={"destructive"}>Disable Merchant</Button>
       </div>
     );

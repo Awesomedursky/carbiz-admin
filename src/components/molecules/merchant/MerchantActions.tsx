@@ -49,18 +49,9 @@ export const newHandleRejectModal = (
     placement: "center",
   });
 };
+
 const MerchantAction = ({ merchant }: { merchant: Merchant }) => {
   const { openModal } = useDrawerStore();
-
-  // const handleReject = () => {
-  //   openModal({
-  //     type: "dialog",
-  //     title: "Disable Rider",
-  //     content: DisableRider,
-  //     props: { merchant },
-  //     placement: "center",
-  //   });
-  // };
 
   const handleApprove = () => {
     newHandleApprove(openModal, merchant);
@@ -69,29 +60,6 @@ const MerchantAction = ({ merchant }: { merchant: Merchant }) => {
   const handleRejectModal = () => {
     newHandleRejectModal(openModal, merchant);
   };
-
-  // const handleDelete = () => {
-  //   openModal({
-  //     type: "dialog",
-  //     title: "Disable Rider",
-  //     content: DeleteModal,
-  //     props: {
-  //       itemName: "Rider",
-  //       onDelete: () => onDelete(merchant.id),
-  //     },
-  //     placement: "center",
-  //   });
-  // };
-
-  // const handleDisable = () => {
-  //   openModal({
-  //     type: "dialog",
-  //     title: "Disable Rider",
-  //     content: DisableRider,
-  //     props: { merchant },
-  //     placement: "center",
-  //   });
-  // };
 
   const handleViewDetails = () => {
     openModal({
@@ -102,23 +70,6 @@ const MerchantAction = ({ merchant }: { merchant: Merchant }) => {
       placement: "right",
     });
   };
-
-  // const handleDeleteModal = () => {
-  //   openModal({
-  //     title: "Delete Request",
-  //     type: "dialog",
-
-  //     content: DeleteModal,
-  //     props: {
-  //       id: merchant.id,
-  //       title: "Delete Request",
-  //       message: "Are you sure you want to delete this rider request?",
-  //       confirmLabel: "Delete Request",
-  //       onConfirm: handleDelete,
-  //     },
-  //     placement: "center",
-  //   });
-  // };
 
   const getMenuItems = () => {
     const { status, isApproved } = merchant;

@@ -4,14 +4,15 @@ import ComplaintsCards from "@/components/molecules/complaints/cards";
 import { useFetchAllComplaints } from "@/queries/complaints.query";
 
 const Complaints = () => {
-  const { data, loading } = useFetchAllComplaints();
+  const { data, loading, message } = useFetchAllComplaints();
 
   return (
     <div className="space-y-6">
       <ComplaintsCards />
 
       <DataTable
-        // isClickable
+        tableKey="complaints"
+        message={message}
         tableName="Complaints"
         columns={ComplaintsColumn}
         data={data ?? []}

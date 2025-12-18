@@ -86,13 +86,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { logout } = useAuthStore();
   const [isLoggingOut, setIsLoggingOut] = React.useState<boolean>(false);
   const { handleSuccess } = useToast();
+  const { user } = useAuthStore();
+  const check = user?.adminAccess.toLowerCase() !== "sub_admin";
+
+  const newNavlist = !check
+    ? data.navMain?.filter((i) => i.title.toLowerCase() !== "payouts")
+    : data?.navMain;
+
   const nav = useNavigate();
   const onLogout = () => {
     setIsLoggingOut(true);
-    logout();
     setTimeout(() => {
       nav("/");
       handleSuccess("Admin Logged out successfully");
+      logout();
     }, 3000);
   };
   return (
@@ -116,7 +123,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={newNavlist} />
       </SidebarContent>
       <SidebarFooter>
         <Button

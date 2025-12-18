@@ -10,18 +10,20 @@ import {
   ResetPassword,
   VerifyOtp,
   Dashboard,
-  Customers,
   Orders,
+  PreviewOrder,
+  Customers,
   PreviewCustomer,
   Settings,
   Profile,
   Admins,
   Payouts,
-  PreviewOrder,
   Merchants,
   Notification,
   Riders,
   Complaints,
+  ProductCategory,
+  Pricing,
   // Products,
   // ProductPreview,
 } from "@/pages";
@@ -67,19 +69,6 @@ const router = createBrowserRouter([
         Component: Dashboard,
       },
       {
-        path: "customers",
-        children: [
-          {
-            path: "",
-            Component: Customers,
-          },
-          {
-            path: ":id",
-            Component: PreviewCustomer,
-          },
-        ],
-      },
-      {
         path: "orders",
         children: [
           {
@@ -89,6 +78,19 @@ const router = createBrowserRouter([
           {
             path: ":id",
             Component: PreviewOrder,
+          },
+        ],
+      },
+      {
+        path: "customers",
+        children: [
+          {
+            path: "",
+            Component: Customers,
+          },
+          {
+            path: ":id",
+            Component: PreviewCustomer,
           },
         ],
       },
@@ -132,6 +134,14 @@ const router = createBrowserRouter([
           {
             path: "admins",
             Component: Admins,
+          },
+          {
+            path: "product_category",
+            Component: ProductCategory,
+          },
+          {
+            path: "pricing",
+            Component: Pricing,
           },
         ],
       },

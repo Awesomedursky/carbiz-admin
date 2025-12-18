@@ -4,15 +4,15 @@ import {
   VERIFY_MERCHANT,
 } from "@/api/merchants";
 import { useToast } from "@/hooks/Toast";
+import { useTableState } from "@/hooks/useTableState";
 import { useDrawerStore } from "@/store/drawer.store";
-import useTableStore from "@/store/table.store";
 import { PaginationQuery } from "@/types/admin.type";
 import MerchantData from "@/types/merchants.type";
 import { useMutation, useQuery } from "@apollo/client";
 import React from "react";
 
 interface MerchantPaginatedResponseType {
-  AdminFetchAllMerchants: {
+  AdminFetchAllMerchantsWithFilter: {
     message: string;
     success: boolean;
     payload: {
@@ -45,18 +45,25 @@ interface VerifyMerchantResponseType {
 }
 
 const useMerchantQuery = () => {
-  const { pageSize, currentPage } = useTableStore();
+  const { pageSize, currentPage, searchTerm, filters, setPageTotal } =
+    useTableState("merchants");
 
-  const { data, loading, error, fetchMore } = useQuery<
+  const { sortBy, sortOrder, startDate, endDate, status } = filters;
+
+  const { data, loading, error, fetchMore, refetch } = useQuery<
     MerchantPaginatedResponseType,
-    { params: PaginationQuery }
+    { paginationQuery: PaginationQuery }
   >(GET_MERCHANTS, {
     variables: {
-      params: {
+      paginationQuery: {
         limit: pageSize,
         page: currentPage,
-        sortBy: "createdAt",
-        sortOrder: "DESC",
+        sortBy,
+        sortOrder,
+        searchTerm,
+        ...(startDate && { startDate }),
+        ...(endDate && { endDate }),
+        ...(status && { status }),
       },
     },
     fetchPolicy: "cache-and-network",
@@ -64,13 +71,19 @@ const useMerchantQuery = () => {
   });
 
   React.useEffect(() => {
-    useTableStore.setState({
-      total: data?.AdminFetchAllMerchants.payload.total,
-    });
-  }, [data?.AdminFetchAllMerchants.payload.total]);
+    if (data?.AdminFetchAllMerchantsWithFilter?.payload?.total != null) {
+      const total = data?.AdminFetchAllMerchantsWithFilter.payload.total;
+      setPageTotal(total);
+    }
+  }, [data?.AdminFetchAllMerchantsWithFilter.payload.total]);
+
+  React.useEffect(() => {
+    refetch();
+  }, [currentPage, pageSize, startDate, endDate, sortBy, sortOrder, status]);
 
   return {
-    data: data?.AdminFetchAllMerchants.payload.data,
+    data: data?.AdminFetchAllMerchantsWithFilter.payload.data,
+    message: data?.AdminFetchAllMerchantsWithFilter.message,
     loading,
     error,
     fetchMore,
@@ -97,7 +110,8 @@ export const useFetchOneMerchant = (id: string) => {
 
 export const useVerifyMerchant = (merchantID: string) => {
   const { handleError, handleSuccess } = useToast();
-  const { pageSize, currentPage } = useTableStore();
+  const { pageSize, currentPage, filters } = useTableState("merchants");
+  const { sortBy, sortOrder } = filters;
   const { closeModal } = useDrawerStore();
 
   const [approveDisApproveMerchant, { loading: merchantLoading }] = useMutation<
@@ -108,11 +122,11 @@ export const useVerifyMerchant = (merchantID: string) => {
       {
         query: GET_MERCHANTS,
         variables: {
-          params: {
+          paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortBy: "createdAt",
-            sortOrder: "DESC",
+            sortBy,
+            sortOrder,
           },
         },
       },

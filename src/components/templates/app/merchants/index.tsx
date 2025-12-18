@@ -6,11 +6,13 @@ import useMerchantQuery from "@/queries/merchants";
 import MerchantColumn from "@/columns/merchants.column";
 
 const index = () => {
-  const { data, loading } = useMerchantQuery();
+  const { data, loading, message } = useMerchantQuery();
 
   return (
     <>
       <DataTable
+        message={message}
+        tableKey="merchants"
         tableName="Merchants"
         columns={MerchantColumn}
         data={(data || []).map((merchant) => ({

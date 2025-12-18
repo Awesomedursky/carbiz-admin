@@ -1,21 +1,21 @@
 import { DataTable } from "@/components/atoms/table";
-import AdminColumns from "@/columns/adminusers.column";
-
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useDrawerStore } from "@/store/drawer.store";
-import NewAdminForm from "@/components/organisms/form/newAdmin.form";
-import { useAdminQuery } from "@/queries/admin.query";
+import CategoryForm from "@/components/organisms/form/categoryForm";
+import { useFetchAllProductCategoryQuery } from "@/queries/product-categories.query";
+import ProductCategoryColumn from "@/columns/product-categories.column";
 
-const Admins = () => {
-  const { data, loading, message } = useAdminQuery();
+const ProductCategory = () => {
+  const { data: rawData, loading } = useFetchAllProductCategoryQuery();
+  const data = rawData?.payload?.data;
 
   const { openModal } = useDrawerStore();
 
   const onOpenModal = () => {
     openModal({
       type: "dialog",
-      content: NewAdminForm,
+      content: CategoryForm,
       props: { type: false },
     });
   };
@@ -24,12 +24,11 @@ const Admins = () => {
     <div className="">
       {/* <div className="inline-flex justify-end"></div> */}
       <DataTable
-        tableKey="admin"
-        message={message}
+        tableKey="products"
         loading={loading}
-        tableName="Admins"
-        isClickable
-        columns={AdminColumns}
+        tableName="Product Categories"
+        message={rawData?.message}
+        columns={ProductCategoryColumn}
         showSearch={false}
         data={Array.isArray(data) ? data : []}
         actions
@@ -40,11 +39,11 @@ const Admins = () => {
           className="md:py-6  border-0 shadow text-sm font-bold"
         >
           <Plus className="size-4" />
-          New Admin
+          Create Product Category
         </Button>
       </DataTable>
     </div>
   );
 };
 
-export default Admins;
+export default ProductCategory;

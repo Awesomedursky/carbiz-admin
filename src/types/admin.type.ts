@@ -8,9 +8,8 @@ export type PaginationQuery = {
   sortBy: string;
   sortOrder: string;
   searchTerm?: string;
-  endDate?: Date;
-  startDate?: Date;
-  status?: "active" | "inactive";
+  endDate?: Date | string | undefined;
+  startDate?: Date | string | undefined;
 };
 
 export interface adminEntity {

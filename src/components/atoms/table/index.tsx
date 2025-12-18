@@ -19,17 +19,33 @@ import { SearchNormal } from "iconsax-reactjs";
 import { FunnelSimple, WarningCircle } from "@phosphor-icons/react";
 import { Pagination } from "./pagination";
 import { useLocation, useNavigate } from "react-router";
-import useTableStore from "@/store/table.store";
 import { Spinner } from "@/components/ui/spinner";
 import { debounce } from "lodash";
 import { AppNotifcations } from "@/components/molecules/app-notifications";
 import GenericFilters from "@/components/molecules/genericFilters";
 import { useDrawerStore } from "@/store/drawer.store";
+import { useTableState } from "@/hooks/useTableState";
+import { hasActiveFilters } from "@/lib/utils";
+import { defaultFilters } from "@/store/table.store";
+
+export type tableKeyType =
+  | "admin"
+  | "complaints"
+  | "customers"
+  | "merchants"
+  | "orders"
+  | "products"
+  | "riders"
+  | "payouts"
+  | "notifications"
+  | "settings"
+  | "transactions";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   tableName?: string;
+  tableKey: tableKeyType;
   isClickable?: boolean;
   showSearch?: boolean;
   actions?: boolean;
@@ -51,25 +67,28 @@ export function DataTable<TData, TValue>({
   loading = false,
   children,
   columnKey,
+  tableKey,
   onPageChange,
 }: DataTableProps<TData, TValue>) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const route = pathname.split("/").pop() ?? "";
 
-  const {
-    currentPage,
-    pageSize,
-    total = 0,
-    setCurrentPage,
-    setSearchTerm,
-  } = useTableStore();
+  const { currentPage, pageSize, total, setPage, setSearch, filters } =
+    useTableState(tableKey);
 
   const { openModal } = useDrawerStore();
 
   const handleBlur = () => {
-    setSearchTerm(undefined);
+    setSearch("");
   };
+
+  const isFilterActive = React.useMemo(
+    () => hasActiveFilters(filters, defaultFilters),
+    [filters]
+  );
+
+  console.log(isFilterActive);
 
   const table = useReactTable<TData>({
     data,
@@ -86,11 +105,8 @@ export function DataTable<TData, TValue>({
   });
 
   const debouncedSearch = React.useMemo(
-    () =>
-      debounce((value: string) => {
-        setSearchTerm(value);
-      }, 500),
-    [setSearchTerm]
+    () => debounce((value: string) => setSearch(value), 500),
+    [setSearch]
   );
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,7 +120,7 @@ export function DataTable<TData, TValue>({
   }, [debouncedSearch]);
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    setPage(page);
     onPageChange?.(page);
   };
 
@@ -127,14 +143,20 @@ export function DataTable<TData, TValue>({
                 className="pl-8 md:min-w-sm text-sm md:py-6"
               />
             </div>
-            <AppNotifcations popoverType="filter" content={<GenericFilters />}>
+            <AppNotifcations
+              popoverType="filter"
+              content={<GenericFilters tableKey={tableKey} />}
+            >
               <Button
                 onClick={() => openModal({ type: "filter" })}
                 variant="outline"
-                className="md:py-6 border-0 shadow text-xs md:text-sm font-medium text-[#807F94]"
+                className="md:py-6 border-0 shadow text-xs md:text-sm font-medium text-[#807F94] relative"
               >
                 <FunnelSimple className="size-5" />
                 Filter
+                {isFilterActive && (
+                  <span className="absolute top-1 right-1 size-2 rounded-full bg-primary animate-pulse" />
+                )}
               </Button>
             </AppNotifcations>
           </div>
@@ -155,7 +177,7 @@ export function DataTable<TData, TValue>({
             <span>
               <WarningCircle className=" size-14 text-primary" />
             </span>
-            {message ? message : "No record found"}
+            {message ? message.replaceAll("_", " ") : "No record found"}
           </h3>
           {/* <p className="text-sm text-gray-500 mt-1">
             Your journey begins here. Add your first record to get started.

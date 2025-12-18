@@ -1,8 +1,10 @@
 import { gql } from "@apollo/client";
 
 export const ADMIN_FETCH_ALL_RIDERS = gql`
-  query AdminFetchAllRiders($params: PaginationDto!) {
-    AdminFetchAllRiders(paginationQuery: $params) {
+  query AdminFetchAllRidersWithFilter(
+    $paginationQuery: PaginatedRiderFiltersDto!
+  ) {
+    AdminFetchAllRidersWithFilter(paginationQuery: $paginationQuery) {
       success
       message
       status
@@ -92,8 +94,8 @@ export const ADMIN_APPROVE_OR_DISAPPROVE_RIDER = gql`
 `;
 
 export const ADMIN_FETCH_ALL_AVAILABLE_RIDERS = gql`
-  query AdminFetchAllAvailableRiders($params: PaginationDto!) {
-    AdminFetchAllAvailableRiders(paginationQuery: $params) {
+  query AdminFetchAllAvailableRiders($paginationQuery: PaginationDto!) {
+    AdminFetchAllAvailableRiders(paginationQuery: $paginationQuery) {
       success
       message
       status
