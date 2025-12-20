@@ -1,9 +1,9 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import TransactionEntity from "@/types/payouts.types";
+import { PayoutOutput } from "@/types/admin.type";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 
-export const PayoutsColumn: ColumnDef<TransactionEntity>[] = [
+export const PayoutsColumn: ColumnDef<PayoutOutput>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -39,9 +39,7 @@ export const PayoutsColumn: ColumnDef<TransactionEntity>[] = [
       </div>
     ),
     cell: ({ row }) => {
-      const merchant = row.getValue(
-        "merchant"
-      ) as TransactionEntity["merchant"];
+      const merchant = row.getValue("merchant") as PayoutOutput["merchant"];
       const merchantName = merchant?.businessName || "Unknown Merchant";
 
       return (

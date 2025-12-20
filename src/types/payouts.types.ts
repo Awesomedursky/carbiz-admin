@@ -1,5 +1,6 @@
 import { adminEntity } from "./admin.type";
-import { MerchantEntity } from "./merchants.type";
+import Customer from "./customer.type";
+import Merchant, { MerchantEntity } from "./merchants.type";
 import OrderEntity from "./order.type";
 import RiderEntity from "./rider.type";
 
@@ -33,26 +34,26 @@ export interface PayoutOutput {
   updatedAt: Date;
 }
 
-// type TransactionEntity = {
-//   amount: number;
-//   createdAt: Date;
-//   customer: Customer;
-//   description: string;
-//   id: number;
-//   merchant: Merchant;
-//   metadata: TransactionMetadata;
-//   orderID: string;
-//   reference: string;
-//   rider: RiderEntity;
-//   status: string;
-//   transactionID: string;
-//   type: string;
-// };
+type TransactionEntity = {
+  amount: number;
+  createdAt: Date;
+  customer: Customer;
+  description: string;
+  id: number;
+  merchant: Merchant;
+  metadata: TransactionMetadata;
+  orderID: string;
+  reference: string;
+  rider: RiderEntity;
+  status: string;
+  transactionID: string;
+  type: string;
+};
 
-// export default TransactionEntity;
+export default TransactionEntity;
 
-// type TransactionMetadata = {
-//   additionalInfo: string;
-//   orderReference: string;
-//   type: string;
-// };
+type TransactionMetadata = {
+  additionalInfo: string;
+  orderReference: string;
+  type: string;
+};
