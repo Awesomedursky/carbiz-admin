@@ -14,6 +14,8 @@ export const FETCH_ORDERS = gql`
         pageSize
         total
         data {
+          trackingID
+          shippingAddress
           id
           orderID
           createdAT

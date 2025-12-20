@@ -1,5 +1,5 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import TransactionEntity from "@/types/transaction.types";
+import TransactionEntity from "@/types/payouts.types";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
 

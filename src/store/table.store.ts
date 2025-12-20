@@ -10,7 +10,7 @@ export type TableFilterType = {
   sentBy?: ("SYSTEM" | "ADMIN")[];
   recurringType?: ("DAILY" | "WEEKLY" | "MONTHLY")[];
   method?: ("EMAIL" | "SMS" | "PUSH")[];
-  deliveryStatus?: ("PENDING" | "ENROUTE" | "DELIVERED")[];
+  orderStatus?: ("PENDING" | "ENROUTE" | "DELIVERED")[];
   paymentStatus?: ("PAID" | "UNPAID" | "FAILED")[];
   paymentMethod?: ("CARD" | "TRANSFER" | "CASH")[];
   role?: ("RIDER" | "MERCHANT" | "CUSTOMER")[];

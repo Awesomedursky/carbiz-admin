@@ -27,6 +27,7 @@ interface OrderEntity {
   updatedAT: Date;
   vehicleType: string;
   pooledSavings: number;
+  shippingAddress: string;
 }
 
 export default OrderEntity;

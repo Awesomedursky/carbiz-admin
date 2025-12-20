@@ -90,6 +90,21 @@ export const ordersColumns: ColumnDef<OrderEntity>[] = [
     },
   },
   {
+    accessorKey: "trackingID",
+    header: () => (
+      <div className=" text-base  font-[500] text-black bg-[#FAFAFB] p-2  sm:px-3 md:py-3.5">
+        Tracking ID
+      </div>
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className=" font-normal p-2  md:py-2.5">
+          {row.getValue("trackingID") ?? "-"}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "paymentStatus",
     header: () => (
       <div className=" text-base  font-[500] text-black bg-[#FAFAFB] p-2  sm:px-3 md:py-3.5">

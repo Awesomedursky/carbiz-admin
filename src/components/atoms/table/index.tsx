@@ -80,16 +80,14 @@ export function DataTable<TData, TValue>({
 
   const { openModal } = useDrawerStore();
 
-  const handleBlur = () => {
-    setSearch("");
-  };
+  // const handleBlur = () => {
+  //   setSearch("");
+  // };
 
   const isFilterActive = React.useMemo(
     () => hasActiveFilters(filters, defaultFilters),
     [filters]
   );
-
-  console.log(isFilterActive);
 
   const table = useReactTable<TData>({
     data,
@@ -138,7 +136,7 @@ export function DataTable<TData, TValue>({
                 size={16}
               />
               <Input
-                onBlur={handleBlur}
+                // onBlur={handleBlur}
                 placeholder="Search here..."
                 onChange={onSearch}
                 className="pl-8 md:min-w-sm text-sm md:py-6"

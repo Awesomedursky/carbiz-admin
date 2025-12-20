@@ -1,9 +1,13 @@
 import { PayoutsColumn } from "@/columns/payouts.columns";
 import { DataTable } from "@/components/atoms/table";
-import fetchTransactions from "@/queries/transactions.query";
+import payoutQuery from "@/queries/payouts.query";
 
 const Payouts = () => {
-  const { data, loading } = fetchTransactions();
+  const { data, loading, singlePayoutDetails } = payoutQuery(
+    "CARBIZ_PAYOUT_ID_123"
+  );
+
+  console.log("Single Payout Details:", singlePayoutDetails);
 
   console.log("Payouts Data:", data);
 
@@ -13,7 +17,7 @@ const Payouts = () => {
       tableName="Payouts"
       isClickable
       columns={PayoutsColumn}
-      data={data}
+      data={[]}
       loading={loading}
     />
   );

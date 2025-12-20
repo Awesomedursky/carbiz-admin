@@ -1,5 +1,5 @@
 import OrderEntity from "./order.type";
-import TransactionEntity from "./transaction.types";
+import TransactionEntity from "./payouts.types";
 
 interface Customer {
   addresses: Address[];

@@ -8,6 +8,7 @@ import SelectField from "@/components/atoms/form/select";
 import CustomButton from "@/components/atoms/button/CustomButton";
 import { useTableState } from "@/hooks/useTableState";
 import { tableKeyType } from "@/components/atoms/table";
+import { CANCELLED } from "dns/promises";
 
 type FilterValues = Record<string, any>;
 
@@ -24,7 +25,7 @@ const TABLE_SPECIFIC_FILTERS: Record<string, string[]> = {
   customers: ["status"],
   merchants: ["status"],
   notifications: ["method", "recurringType", "sentBy", "status"],
-  orders: ["deliveryStatus", "paymentStatus"],
+  orders: ["orderStatus", "paymentStatus"],
   payouts: [
     "invoiceStatus",
     "paymentMethod",
@@ -69,11 +70,20 @@ const GenericFilters = ({ tableKey }: GenericFiltersProps) => {
       { label: "System", value: "SYSTEM" },
       { label: "Admin", value: "ADMIN" },
     ],
-    deliveryStatus: [
-      { label: "Packed", value: "packed" },
-      { label: "Picked Up", value: "pickedUp" },
-      { label: "In Transit", value: "inTransit" },
-      { label: "Delivered", value: "delivered" },
+    orderStatus: [
+      { label: "Processing", value: "Processing" },
+      {
+        label: "Packed and Ready for Pickup",
+        value: "Parked_And_Ready_For_Pickup",
+      },
+      { label: "Rider Assigned", value: "Rider_Assigned" },
+      { label: "In Transit", value: "In_Transit" },
+      {
+        label: "Awaiting Rider Acceptance",
+        value: "AWAITING_RIDER_ACCEPTANCE",
+      },
+      { label: "Cancelled", value: "Cancelled" },
+      { label: "Delivered", value: "Delivered" },
     ],
     paymentStatus: [
       { label: "Paid", value: "paid" },

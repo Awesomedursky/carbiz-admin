@@ -1,7 +1,7 @@
 import BankEntity from "./bank.type";
 import OrderEntity from "./order.type";
 import ProductEntity from "./product.type";
-import TransactionEntity from "./transaction.types";
+import TransactionEntity from "./payouts.types";
 
 type LocationType = {
   latitude: GLfloat;

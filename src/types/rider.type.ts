@@ -1,6 +1,6 @@
 import BankEntity from "./bank.type";
 import { RiderRidesEntity } from "./order.type";
-import TransactionEntity from "./transaction.types";
+import TransactionEntity from "./payouts.types";
 import WalletEntity from "./wallet";
 
 interface RiderEntity {

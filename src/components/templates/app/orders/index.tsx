@@ -13,7 +13,7 @@ const Orders = () => {
         loading={loading}
         columnKey="orderID"
         tableName="Orders"
-        isClickable
+        // isClickable
         columns={ordersColumns}
         data={data || []}
       />
