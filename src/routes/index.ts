@@ -13,7 +13,6 @@ import {
   Orders,
   PreviewOrder,
   Customers,
-  PreviewCustomer,
   Settings,
   Profile,
   Admins,
@@ -87,10 +86,6 @@ const router = createBrowserRouter([
           {
             path: "",
             Component: Customers,
-          },
-          {
-            path: ":id",
-            Component: PreviewCustomer,
           },
         ],
       },

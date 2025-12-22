@@ -12,8 +12,29 @@ export const GET_PAYOUTS = gql`
         pageSize
         total
         data {
+          merchant {
+            businessName
+            merchantID
+            bank_details {
+              accountNumber
+            }
+          }
+          rider {
+            riderID
+            firstName
+            lastName
+            bank_details {
+              accountNumber
+            }
+          }
+          payoutID
+          netPayout
+          paymentMethod
+          paymentStatus
           commision
+          payoutAt
           createdAt
+          payoutRequetID
         }
       }
     }
@@ -26,20 +47,47 @@ export const FETCH_ONE_PAYOUT = gql`
       success
       message
       payload {
-        commision
-        completedOn
-        createdAt
-        deletedAt
-        grossSaleAmount
-        id
-        invoiceStatus
-        netPayout
+        payoutID
+        payoutAt
         paymentMethod
+        invoiceStatus
+        merchant {
+          businessName
+          merchantID
+          bank_details {
+            accountName
+            accountNumber
+            bankName
+          }
+        }
+        rider {
+          firstName
+          lastName
+          riderID
+          bank_details {
+            accountName
+            accountNumber
+            bankName
+          }
+        }
+        grossSaleAmount
+        commision
+        taxDeduction
+        processingFee
+        totalDeductions
+        netPayout
+        relatedOrders {
+          orderID
+        }
+        completedBy {
+          adminAccess
+          name
+        }
+        completedOn
+        transactionReference
         paymentNote
         paymentReceipt
-        paymentStatus
-        payoutAt
-        payoutID
+        payoutRequetID
       }
     }
   }

@@ -11,7 +11,6 @@ export { default as Orders } from "@/components/templates/app/orders";
 export { default as PreviewOrder } from "@/components/templates/app/orders/preview";
 
 export { default as Customers } from "@/components/templates/app/customers";
-export { default as PreviewCustomer } from "@/components/templates/app/customers/preview";
 
 export { default as Notification } from "@/components/templates/app/notification";
 export { default as Riders } from "@/components/templates/app/riders";

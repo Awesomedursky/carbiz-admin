@@ -3,21 +3,16 @@ import { DataTable } from "@/components/atoms/table";
 import payoutQuery from "@/queries/payouts.query";
 
 const Payouts = () => {
-  const { data, loading, singlePayoutDetails } = payoutQuery(
-    "CARBIZ_PAYOUT_ID_123"
-  );
-
-  console.log("Single Payout Details:", singlePayoutDetails);
-
-  console.log("Payouts Data:", data);
+  const { data, loading, message } = payoutQuery();
 
   return (
     <DataTable
       tableKey="payout"
+      message={message}
       tableName="Payouts"
       isClickable
       columns={PayoutsColumn}
-      data={[]}
+      data={data ?? []}
       loading={loading}
     />
   );

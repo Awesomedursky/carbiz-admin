@@ -14,7 +14,13 @@ import RiderEntity from "@/types/rider.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-const AssignAvailaRider = ({ orderID }: { orderID: string }) => {
+const AssignAvailaRider = ({
+  orderID,
+  isPooled,
+}: {
+  orderID: string;
+  isPooled: boolean;
+}) => {
   const { closeModal } = useDrawerStore();
   const { data, loading } = useFetchAllAvailableRiders();
   const { assignOrdertoRider, assignRiderLoading } =
@@ -39,7 +45,11 @@ const AssignAvailaRider = ({ orderID }: { orderID: string }) => {
 
   const handleSubmit = async (e: AssignRiderSchemaType) => {
     await assignOrdertoRider({
-      variables: { orderID: orderID, riderID: e?.riderID },
+      variables: {
+        orderID: orderID,
+        riderID: e?.riderID,
+        isPoolAssignment: isPooled,
+      },
     });
   };
 

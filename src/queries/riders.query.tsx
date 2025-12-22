@@ -225,7 +225,7 @@ export const useAssignOrdertoRider = (orderID: string) => {
   const { handleError, handleInfo, handleSuccess } = useToast();
   const [assignOrdertoRider, { loading }] = useMutation<
     assignType,
-    { orderID: string; riderID: string }
+    { orderID: string; riderID: string; isPoolAssignment: boolean }
   >(ADMIN_ASSIGN_RIDER_TO_ORDER, {
     refetchQueries: [
       {

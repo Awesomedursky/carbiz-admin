@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { Control } from "react-hook-form";
 import { DocumentUpload, Gallery } from "iconsax-reactjs";
 import fileUploadReq from "@/api/uploader";
-import { Progress } from "@/components/ui/progress";
 import {
   FormControl,
   FormField,
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import CustomButton from "../button/CustomButton";
 import { useToast } from "@/hooks/Toast";
+import CircularProgress from "../progress";
 
 interface ImagePickerProp {
   name: string;
@@ -90,16 +90,16 @@ const ImagePicker: React.FC<ImagePickerProp> = ({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className="w-full md:max-w-[50%]">
+        <FormItem className="w-full relative ">
           {label && (
             <FormLabel className="text-sm lg:text-base text-primary-dark font-medium mb-1">
               {label}
             </FormLabel>
           )}
           <FormControl>
-            <div className="flex flex-col items-center space-y-3">
+            <div className="flex flex-col items-center space-y-3 ">
               <div
-                className={`w-full h-48 bg-[#FEFEFE] border border-[#F3F2F4] rounded-xl flex justify-center items-center overflow-hidden`}
+                className={`w-full h-48 bg-[#FEFEFE] border border-[#F3F2F4] rounded-xl flex justify-center items-center overflow-hidden relative`}
               >
                 {previewUrl ? (
                   <img
@@ -136,7 +136,11 @@ const ImagePicker: React.FC<ImagePickerProp> = ({
                 <span>{selectedFile ? "Upload" : "Select Image"}</span>
               </CustomButton>
               {progress > 0 && uploading && (
-                <Progress className="w-full" value={progress} />
+                <div className="absolute inset-0 z-10 flex items-center justify-center">
+                  <CircularProgress progress={progress} />
+                </div>
+
+                // <Progress className="w-full" value={progress} />
               )}
             </div>
           </FormControl>

@@ -1,6 +1,6 @@
 import { adminEntity } from "./admin.type";
 import Customer from "./customer.type";
-import Merchant, { MerchantEntity } from "./merchants.type";
+import Merchant from "./merchants.type";
 import OrderEntity from "./order.type";
 import RiderEntity from "./rider.type";
 
@@ -13,7 +13,7 @@ export interface PayoutOutput {
   grossSaleAmount: GLfloat;
   id: Number;
   invoiceStatus: string;
-  merchant: MerchantEntity;
+  merchant: Merchant;
   netPayout: GLfloat;
   paymentMethod: string;
   paymentNote: string;

@@ -116,8 +116,16 @@ export const ADMIN_FETCH_ALL_AVAILABLE_RIDERS = gql`
 `;
 
 export const ADMIN_ASSIGN_RIDER_TO_ORDER = gql`
-  mutation AdminAssignAnOrderToArider($orderID: String!, $riderID: String!) {
-    AdminAssignAnOrderToArider(orderID: $orderID, riderID: $riderID) {
+  mutation AdminAssignAnOrderToArider(
+    $orderID: String!
+    $riderID: String!
+    $isPoolAssignment: Boolean!
+  ) {
+    AdminAssignAnOrderToArider(
+      orderID: $orderID
+      riderID: $riderID
+      isPoolAssignment: $isPoolAssignment
+    ) {
       success
       message
       status

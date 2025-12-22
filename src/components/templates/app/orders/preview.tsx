@@ -160,7 +160,7 @@ const PreviewOrder = () => {
       title: "Assign Order to Rider",
       description: "Select the Rider you want to deliver this Package",
       content: AssignAvailaRider,
-      props: { orderID: path },
+      props: { orderID: path, isPooled: data?.isPooled },
     });
 
   return (

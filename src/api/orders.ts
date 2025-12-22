@@ -76,6 +76,7 @@ export const FETCH_ONE_ORDER = gql`
       status
       errors
       payload {
+        isPooled
         orderID
         deliveryType
         createdAT

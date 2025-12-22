@@ -57,10 +57,14 @@ export function CalendarOnly({
 
         const handleSelectDate = (newDate?: Date) => {
           if (!newDate) return;
-
-          const updated = new Date(newDate);
-
-          field.onChange(updated?.toISOString());
+          const utcDate = new Date(
+            Date.UTC(
+              newDate.getFullYear(),
+              newDate.getMonth(),
+              newDate.getDate()
+            )
+          );
+          field.onChange(utcDate.toISOString());
           setOpen(false);
         };
 

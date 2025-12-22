@@ -120,17 +120,19 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
   const [showContent, setShowContent] = useState(true);
 
   return (
-    <div className="bg-white rounded-lg border border-[#F1ECF9] mb-4 shadow-sm">
+    <div className="bg-white rounded-lg border border-[#F1ECF9] mb-4 shadow-sm overflow-clip">
       {/* Header */}
       {title && (
-        <div className="flex justify-between items-center  p-2.5">
-          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-          <button
-            onClick={() => setShowContent((prev) => !prev)}
-            className="text-primary text-sm font-semibold hover:underline cursor-pointer"
-          >
-            {showContent ? "Hide" : viewText}
-          </button>
+        <div className=" border-b ">
+          <div className="flex justify-between items-center  p-2.5">
+            <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+            <button
+              onClick={() => setShowContent((prev) => !prev)}
+              className="text-primary text-sm font-semibold hover:underline cursor-pointer"
+            >
+              {showContent ? "Hide" : viewText}
+            </button>
+          </div>
         </div>
       )}
 
@@ -149,7 +151,8 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
             if (
               typeof value === "boolean" ||
               key.toLowerCase() === "status" ||
-              key.toLowerCase() === "isverified"
+              key.toLowerCase() === "isverified" ||
+              key.toLowerCase() === "invoicestatus"
             ) {
               displayValue = renderStatusBadge(value);
             } else if (isDateValue(value)) {

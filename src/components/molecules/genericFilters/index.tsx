@@ -143,6 +143,7 @@ const GenericFilters = ({ tableKey }: GenericFiltersProps) => {
   });
 
   const onSubmit = (values: FilterValues) => {
+    console.log("Filter Values:", values);
     update(values);
   };
 
@@ -171,8 +172,8 @@ const GenericFilters = ({ tableKey }: GenericFiltersProps) => {
                 <span
                   className="text-primary font-semibold text-sm md:text-base cursor-pointer"
                   onClick={() => {
-                    form.setValue("startDate", undefined);
-                    form.setValue("endDate", undefined);
+                    form.setValue("startDate", "");
+                    form.setValue("endDate", "");
                   }}
                 >
                   Reset
@@ -216,7 +217,7 @@ const GenericFilters = ({ tableKey }: GenericFiltersProps) => {
                     className="text-primary font-semibold text-sm md:text-base cursor-pointer"
                     onClick={() => {
                       selectFields.forEach((field) =>
-                        form.setValue(field as any, undefined)
+                        form.setValue(field as any, "")
                       );
                     }}
                   >
