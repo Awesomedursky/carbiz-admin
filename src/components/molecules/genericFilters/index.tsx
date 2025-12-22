@@ -91,9 +91,8 @@ const GenericFilters = ({ tableKey }: GenericFiltersProps) => {
       { label: "Cancelled", value: "CANCELLED" },
     ],
     paymentMethod: [
-      { label: "Card", value: "CARD" },
-      { label: "Transfer", value: "TRANSFER" },
-      { label: "Cash", value: "CASH" },
+      { label: "Paystack", value: "Paystack" },
+      { label: "Bank Transfer", value: "Bank_Transfer" },
     ],
     payoutStatus: [
       { label: "Pending", value: "PENDING" },
@@ -107,7 +106,6 @@ const GenericFilters = ({ tableKey }: GenericFiltersProps) => {
     role: [
       { label: "Rider", value: "RIDER" },
       { label: "Merchant", value: "MERCHANT" },
-      { label: "Customer", value: "CUSTOMER" },
     ],
     availabilityStatus: [
       { label: "Available", value: "Available" },

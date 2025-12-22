@@ -7,7 +7,7 @@ const Payouts = () => {
 
   return (
     <DataTable
-      tableKey="payout"
+      tableKey="payouts"
       message={message}
       tableName="Payouts"
       isClickable
