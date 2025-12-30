@@ -126,6 +126,7 @@ export const FETCH_ONE_ORDER = gql`
           quantity
           price
         }
+        shippingAddress
         total
         pooledSavings
         subTotal

@@ -23,7 +23,7 @@ const TABLE_SPECIFIC_FILTERS: Record<string, string[]> = {
   complaints: ["status"],
   customers: ["status"],
   merchants: ["status"],
-  notifications: ["method", "recurringType", "sentBy", "status"],
+  notifications: ["method", "recurringType", "Audience"],
   orders: ["orderStatus", "paymentStatus"],
   payouts: [
     "invoiceStatus",
@@ -57,17 +57,20 @@ const GenericFilters = ({ tableKey }: GenericFiltersProps) => {
       { label: "Admin", value: "ADMIN" },
     ],
     method: [
-      { label: "Email", value: "EMAIL" },
-      { label: "Push", value: "PUSH_NOTIFICATION" },
+      { label: "Email", value: "Email" },
+      { label: "Push", value: "Push_Notification" },
     ],
     recurringType: [
-      { label: "Daily", value: "DAILY" },
-      { label: "Weekly", value: "WEEKLY" },
-      { label: "Monthly", value: "MONTHLY" },
+      { label: "Once", value: "One_Type" },
+      { label: "Daily", value: "Daily" },
+      { label: "Bi Weekly", value: "Bi_Weekly" },
+      { label: "Weekly", value: "Weekly" },
     ],
-    sentBy: [
-      { label: "System", value: "SYSTEM" },
-      { label: "Admin", value: "ADMIN" },
+    Audience: [
+      { label: "All User", value: "All_Users" },
+      { label: "Customers", value: "Customers" },
+      { label: "Riders", value: "Riders" },
+      { label: "Merchants", value: "Merchants" },
     ],
     orderStatus: [
       { label: "Processing", value: "Processing" },

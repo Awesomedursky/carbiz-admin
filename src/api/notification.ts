@@ -30,8 +30,10 @@ export const GET_NOTIFICATION_METRICS = gql`
 `;
 
 export const ALL_NOTIFICATION_CENTER = gql`
-  query fetchallNotificationCenter($paginationQuery: PaginationDto!) {
-    fetchallNotificationCenter(paginationQuery: $paginationQuery) {
+  query AdminFetchAllNotificationsWithFilter(
+    $paginationQuery: PaginatedNotificationFiltersDto!
+  ) {
+    AdminFetchAllNotificationsWithFilter(paginationQuery: $paginationQuery) {
       message
       errors
       success

@@ -52,7 +52,7 @@ export const useFetchAllNotificationMetrics = () => {
 
 export const useFetchAllNotifications = () => {
   interface AdminFetchAllNotificationsWithFilterType {
-    fetchallNotificationCenter: {
+    AdminFetchAllNotificationsWithFilter: {
       message: string;
       success: boolean;
       payload: {
@@ -64,18 +64,17 @@ export const useFetchAllNotifications = () => {
     };
   }
 
-  const { pageSize, currentPage, filters, setPageTotal } =
+  const { pageSize, currentPage, filters, setPageTotal, searchTerm } =
     useTableState("notifications");
 
   const {
     sortBy,
     sortOrder,
-    //   method,
-    //   recurringType,
-    //   sentBy,
-    //   status,
-    //   startDate,
-    //   endDate,
+    method,
+    recurringType,
+    Audience,
+    startDate,
+    endDate,
   } = filters;
 
   const { data, loading, error, fetchMore } = useQuery<
@@ -88,7 +87,12 @@ export const useFetchAllNotifications = () => {
         page: currentPage,
         sortBy,
         sortOrder,
-        // searchTerm,
+        searchTerm,
+        ...(method && { method }),
+        ...(recurringType && { recurringType }),
+        ...(Audience && { sentby: Audience }),
+        ...(startDate && { startDate }),
+        ...(endDate && { endDate }),
       },
     },
     fetchPolicy: "cache-and-network",
@@ -96,15 +100,15 @@ export const useFetchAllNotifications = () => {
   });
 
   React.useEffect(() => {
-    if (data?.fetchallNotificationCenter?.payload?.total != null) {
-      const total = data?.fetchallNotificationCenter.payload.total;
+    if (data?.AdminFetchAllNotificationsWithFilter?.payload?.total != null) {
+      const total = data?.AdminFetchAllNotificationsWithFilter.payload.total;
       setPageTotal(total);
     }
-  }, [data?.fetchallNotificationCenter.payload.total]);
+  }, [data?.AdminFetchAllNotificationsWithFilter.payload.total]);
 
   return {
-    data: data?.fetchallNotificationCenter?.payload?.data,
-    message: data?.fetchallNotificationCenter?.message,
+    data: data?.AdminFetchAllNotificationsWithFilter?.payload?.data,
+    message: data?.AdminFetchAllNotificationsWithFilter?.message,
     loading,
     error,
     fetchMore,

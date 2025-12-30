@@ -70,7 +70,7 @@ export const NotificationColumns: ColumnDef<NotificationCenterOutput>[] = [
     ),
     cell: ({ row }) => (
       <div className=" font-normal py-3.5 capitalize">
-        {row?.original?.notificationAudience}
+        {row?.original?.notificationAudience.replaceAll("_", " ")}
       </div>
     ),
   },

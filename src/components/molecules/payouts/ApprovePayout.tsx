@@ -48,7 +48,6 @@ const ApprovePayout = ({
         input: { ...data, payoutId },
       },
     });
-    console.log({ ...data, payoutId });
   };
 
   const type = form.watch("paymentMethod");

@@ -7,7 +7,7 @@ export type TableFilterType = {
   sortBy: string;
   sortOrder: "ASC" | "DESC";
   status?: ("ACTIVE" | "INACTIVE")[];
-  sentBy?: ("SYSTEM" | "ADMIN")[];
+  Audience?: ("SYSTEM" | "ADMIN")[];
   recurringType?: ("DAILY" | "WEEKLY" | "MONTHLY")[];
   method?: ("EMAIL" | "SMS" | "PUSH")[];
   orderStatus?: ("PENDING" | "ENROUTE" | "DELIVERED")[];

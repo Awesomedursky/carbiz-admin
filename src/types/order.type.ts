@@ -29,7 +29,6 @@ interface OrderEntity {
   pooledSavings: number;
   shippingAddress: string;
 }
-
 export default OrderEntity;
 
 export type OrderItemsEntity = {

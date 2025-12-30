@@ -137,6 +137,12 @@ const PreviewOrder = () => {
     ([key]) => key !== "__typename"
   );
 
+  const address = Object.fromEntries(
+    Object.entries(data ?? {}).filter(
+      ([key]) => key.toLowerCase() === "shippingaddress"
+    )
+  );
+
   const merchants = Object.fromEntries(splitTwo);
   const customerDetails: Partial<Customer> | undefined = data?.customer
     ? (Object.fromEntries(
@@ -302,6 +308,11 @@ const PreviewOrder = () => {
             </div>
 
             <div className="w-full bg-white p-2 border-gray-200 rounded-[0.75rem]">
+              {/* Delievery Details */}
+              <DetailsSection
+                title=" Order Delievery Details"
+                details={address ?? {}}
+              />
               {/* Merchant Details */}
               <DetailsSection
                 title="Merchant Details"
