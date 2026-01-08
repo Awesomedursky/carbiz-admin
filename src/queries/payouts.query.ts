@@ -45,7 +45,7 @@ export type initiatePayoutType = {
   paymentMethod: string;
   paymentNote?: string;
   payoutId?: string;
-  transactionReference?: string;
+  transactionReference: string;
 };
 
 const payoutQuery = () => {

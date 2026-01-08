@@ -11,19 +11,6 @@ import MerchantData from "@/types/merchants.type";
 import { useMutation, useQuery } from "@apollo/client";
 import React from "react";
 
-interface MerchantPaginatedResponseType {
-  AdminFetchAllMerchantsWithFilter: {
-    message: string;
-    success: boolean;
-    payload: {
-      currentPage: number;
-      data: MerchantData[];
-      pageSize: number;
-      total: number;
-    };
-  };
-}
-
 interface MerchantPreviewResponseType {
   AdminFetchOneMerchant: {
     message: string;
@@ -41,6 +28,19 @@ interface VerifyMerchantResponseType {
     };
     status: number;
     success: boolean;
+  };
+}
+
+interface MerchantPaginatedResponseType {
+  AdminFetchAllMerchantsWithFilter: {
+    message: string;
+    success: boolean;
+    payload: {
+      currentPage: number;
+      data: MerchantData[];
+      pageSize: number;
+      total: number;
+    };
   };
 }
 

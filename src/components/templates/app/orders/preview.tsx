@@ -36,7 +36,7 @@ const PreviewOrder = () => {
 
   const products: OrderItem[] = (data?.items ?? []).map((item, idx) => ({
     id: idx + 1,
-    title: item?.product.productName,
+    title: item?.product?.productName,
     originalPrice: item?.product?.price || 0,
     color: item?.product?.productColor || "N/A",
     image: item?.product?.productImages?.[0] || "",
@@ -200,8 +200,8 @@ const PreviewOrder = () => {
 
         <CustomButton
           disabled={
-            data?.orderStatus === "processing" ||
-            data?.orderStatus === "delivered"
+            data?.orderStatus?.toLowerCase() === "processing" ||
+            data?.orderStatus?.toLowerCase() === "delivered"
           }
           // loading={makeOrderReadyLoading}
           onClick={popup}

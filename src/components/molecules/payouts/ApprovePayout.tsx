@@ -15,7 +15,9 @@ const initiatePayoutSchema = z.object({
     .min(1, "payment method is required"),
   paymentNote: z.string().optional(),
   payoutId: z.string().optional(),
-  transactionReference: z.string().optional(),
+  transactionReference: z.string({
+    message: "Transaction reference is required",
+  }),
 });
 
 const ApprovePayout = ({
@@ -49,8 +51,6 @@ const ApprovePayout = ({
       },
     });
   };
-
-  const type = form.watch("paymentMethod");
 
   return (
     <Form {...form}>
@@ -106,13 +106,11 @@ const ApprovePayout = ({
             label="Payment Notes"
           />
 
-          {type === "Bank_Transfer" && (
-            <ImagePicker
-              name="transactionReference"
-              control={form.control}
-              label="Upload payment receipt"
-            />
-          )}
+          <ImagePicker
+            name="transactionReference"
+            control={form.control}
+            label="Upload payment receipt"
+          />
 
           {/* ---- Buttons ---- */}
           <div className="grid grid-cols-2 space-x-2.5">
