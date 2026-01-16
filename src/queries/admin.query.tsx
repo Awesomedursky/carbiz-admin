@@ -10,7 +10,7 @@ import { usePaginatedQuery } from "@/hooks/usePagination";
 import { useTableState } from "@/hooks/useTableState";
 import { useAuthStore } from "@/store/auth.store";
 import { useDrawerStore } from "@/store/drawer.store";
-import { adminEntity, PaginationQuery } from "@/types/admin.type";
+import { adminEntity } from "@/types/admin.type";
 import { useMutation, useQuery } from "@apollo/client";
 import React from "react";
 
