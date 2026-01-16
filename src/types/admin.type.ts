@@ -1,14 +1,11 @@
+import { TableFilterType } from "@/store/table.store";
 import { PayoutOutput } from "./payouts.types";
 
 export type PaginationQuery = {
   limit: number;
   page: number;
-  sortBy: string;
-  sortOrder: string;
   searchTerm?: string;
-  endDate?: Date | string | undefined;
-  startDate?: Date | string | undefined;
-};
+} & TableFilterType;
 
 export interface adminEntity {
   adminAccess: string;

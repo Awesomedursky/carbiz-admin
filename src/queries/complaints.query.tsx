@@ -64,7 +64,7 @@ interface AdminUpdateComplaintType {
 export const useFetchAllComplaints = () => {
   const { pageSize, currentPage, searchTerm, filters, setPageTotal, update } =
     useTableState("complaints");
-  const { status, sortBy, sortOrder, startDate, endDate } = filters;
+  const { status, sortOrder, startDate, endDate } = filters;
 
   const { data, loading, error, fetchMore, refetch } = useQuery<
     AdminFetchAllComplaintsWithFiltType,
@@ -74,7 +74,6 @@ export const useFetchAllComplaints = () => {
       paginationQuery: {
         limit: pageSize,
         page: currentPage,
-        sortBy,
         sortOrder,
         searchTerm,
         ...(status && { status }),
@@ -96,7 +95,7 @@ export const useFetchAllComplaints = () => {
 
   React.useEffect(() => {
     refetch();
-  }, [currentPage, pageSize, startDate, endDate, sortBy, sortOrder, status]);
+  }, [currentPage, pageSize, startDate, endDate, sortOrder, status]);
 
   return {
     data: data?.AdminFetchAllComplaintsWithFilter?.payload?.data,
@@ -165,7 +164,6 @@ export const useUpdateComplaint = () => {
           paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortBy: filters.sortBy,
             sortOrder: filters.sortOrder,
           },
         },

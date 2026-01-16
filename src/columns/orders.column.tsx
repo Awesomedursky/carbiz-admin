@@ -112,7 +112,8 @@ export const ordersColumns: ColumnDef<OrderEntity>[] = [
       </div>
     ),
     cell: ({ row }) => {
-      const status: string | undefined = row.getValue("paymentStatus");
+      const status: string | undefined =
+        row.original?.paymentStatus?.toLowerCase();
       const statusColor = () => {
         switch (status?.toLocaleLowerCase()) {
           case "paid":
@@ -158,11 +159,13 @@ export const ordersColumns: ColumnDef<OrderEntity>[] = [
             return "text-[#343239] bg-[#E6E5E8]";
           case "packed_and_ready_for_pickup":
             return "text-[#343239] bg-[#E6E5E8]";
+          case "awaiting_rider_acceptance":
+            return "bg-[#BBE4E2] text-[#027A48]";
           default:
             return null;
         }
       };
-      const displayStatus = statusStr.replaceAll("_", " ");
+      const displayStatus = statusStr.replaceAll("_", " ").toLowerCase();
       return (
         <div className={` font-normal p-2  md:py-2.5 `}>
           <span className={`px-3 py-1 rounded-2xl ${statusColor()} capitalize`}>

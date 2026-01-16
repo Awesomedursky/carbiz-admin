@@ -14,6 +14,7 @@ export const FETCH_ALL_PRODUCT_CATEGORY = gql`
         pageSize
         total
         data {
+          commissionRate
           createdAt
           productCategoryID
           productCategoryName
@@ -29,6 +30,7 @@ export const FETCH_ONE_PRODUCT_CATEGORY = gql`
       errors
       message
       payload {
+        commissionRate
         createdAt
         productCategoryID
         productCategoryName

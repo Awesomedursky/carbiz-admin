@@ -17,6 +17,7 @@ import React from "react";
 
 export interface productCategoryType {
   createdAt: string;
+  commissionRate: number;
   productCategoryID: string;
   productCategoryName: string;
   products: ProductEntity[];
@@ -46,7 +47,6 @@ export const useAddProductCategory = () => {
           paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortBy: "createdAt",
             sortOrder: "DESC",
           },
         },
@@ -99,7 +99,7 @@ export const useFetchAllProductCategoryQuery = () => {
   const { pageSize, currentPage, setPageTotal, filters, searchTerm } =
     useTableState("products");
 
-  const { endDate, startDate, sortBy, sortOrder } = filters;
+  const { endDate, startDate, sortOrder } = filters;
 
   const { data, loading, error, fetchMore, refetch } = useQuery<
     categoryResType,
@@ -109,7 +109,6 @@ export const useFetchAllProductCategoryQuery = () => {
       paginationQuery: {
         limit: pageSize,
         page: currentPage,
-        sortBy,
         sortOrder,
         searchTerm,
         ...(endDate && { endDate }),
@@ -132,7 +131,7 @@ export const useFetchAllProductCategoryQuery = () => {
 
   React.useEffect(() => {
     refetch();
-  }, [currentPage, pageSize, startDate, endDate, sortBy, sortOrder]);
+  }, [currentPage, pageSize, startDate, endDate, sortOrder]);
 
   return {
     data: data?.AdminFetchAllProductCategoriesWithFilter,
@@ -200,7 +199,6 @@ export const useUpdateProductCategory = () => {
           paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortBy: filters.sortBy,
             sortOrder: filters?.sortOrder,
           },
         },
@@ -248,7 +246,6 @@ export const useDeleteProductCategory = () => {
           paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortBy: filters.sortBy,
             sortOrder: filters.sortOrder,
           },
         },

@@ -59,7 +59,6 @@ const payoutQuery = () => {
       paginationQuery: {
         limit: pageSize,
         page: currentPage,
-        sortBy: filters?.sortBy,
         sortOrder: filters?.sortOrder,
       },
     },

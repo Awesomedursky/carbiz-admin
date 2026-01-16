@@ -94,7 +94,9 @@ export const ADMIN_APPROVE_OR_DISAPPROVE_RIDER = gql`
 `;
 
 export const ADMIN_FETCH_ALL_AVAILABLE_RIDERS = gql`
-  query AdminFetchAllAvailableRiders($paginationQuery: PaginationDto!) {
+  query AdminFetchAllAvailableRiders(
+    $paginationQuery: PaginatedRiderFiltersDto!
+  ) {
     AdminFetchAllAvailableRiders(paginationQuery: $paginationQuery) {
       success
       message

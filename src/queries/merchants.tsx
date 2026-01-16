@@ -48,7 +48,7 @@ const useMerchantQuery = () => {
   const { pageSize, currentPage, searchTerm, filters, setPageTotal } =
     useTableState("merchants");
 
-  const { sortBy, sortOrder, startDate, endDate, status } = filters;
+  const { sortOrder, startDate, endDate, status } = filters;
 
   const { data, loading, error, fetchMore, refetch } = useQuery<
     MerchantPaginatedResponseType,
@@ -58,7 +58,6 @@ const useMerchantQuery = () => {
       paginationQuery: {
         limit: pageSize,
         page: currentPage,
-        sortBy,
         sortOrder,
         searchTerm,
         ...(startDate && { startDate }),
@@ -79,7 +78,7 @@ const useMerchantQuery = () => {
 
   React.useEffect(() => {
     refetch();
-  }, [currentPage, pageSize, startDate, endDate, sortBy, sortOrder, status]);
+  }, [currentPage, pageSize, startDate, endDate, sortOrder, status]);
 
   return {
     data: data?.AdminFetchAllMerchantsWithFilter.payload.data,
@@ -111,7 +110,7 @@ export const useFetchOneMerchant = (id: string) => {
 export const useVerifyMerchant = (merchantID: string) => {
   const { handleError, handleSuccess } = useToast();
   const { pageSize, currentPage, filters } = useTableState("merchants");
-  const { sortBy, sortOrder } = filters;
+  const {  sortOrder } = filters;
   const { closeModal } = useDrawerStore();
 
   const [approveDisApproveMerchant, { loading: merchantLoading }] = useMutation<
@@ -125,7 +124,6 @@ export const useVerifyMerchant = (merchantID: string) => {
           paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortBy,
             sortOrder,
           },
         },

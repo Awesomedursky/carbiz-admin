@@ -25,15 +25,24 @@ const PreviewOrder = () => {
 
   const { AdminFetchoneOrder, data, loading } = useFetchOrder();
 
+  // initial fetch
   useEffect(() => {
-    if (path) {
-      AdminFetchoneOrder({
-        variables: { orderID: path },
-        pollInterval: 5000,
-      });
-    }
-  }, [path]);
+    if (!path) return;
+    AdminFetchoneOrder({
+      variables: { orderID: path },
+      pollInterval: data?.RidersRide?.picked_up_parcelAT ? 10000 : 0,
+    });
+  }, [path, data?.RidersRide?.picked_up_parcelAT]);
 
+  // refresh handler
+  const refreshOrder = () => {
+    AdminFetchoneOrder({
+      variables: { orderID: path },
+      fetchPolicy: "network-only",
+    });
+  };
+
+  // products
   const products: OrderItem[] = (data?.items ?? []).map((item, idx) => ({
     id: idx + 1,
     title: item?.product?.productName,
@@ -44,6 +53,7 @@ const PreviewOrder = () => {
     isDiscountApplied: item?.product?.isDiscountApplied,
   }));
 
+  // order summary items
   const summaryItems: OrderSummaryItem[] = [
     {
       label: "Products Subtotal:",
@@ -59,6 +69,7 @@ const PreviewOrder = () => {
     },
   ];
 
+  // saved amount
   const saved = data?.pooledSavings || 0;
   if (saved !== 0) {
     summaryItems.push({
@@ -68,6 +79,7 @@ const PreviewOrder = () => {
     });
   }
 
+  // order timeline steps
   const timelineSteps: TimelineStep[] = [
     {
       id: 1,
@@ -79,16 +91,33 @@ const PreviewOrder = () => {
     {
       id: 2,
       title: "Order Processed",
-      description: "Order has been packaged and assembled.",
-      time: data?.updatedAT
-        ? moment(data?.updatedAT).format("DD MMM, YYYY hh:mm A")
-        : "-",
+      description: "Order has been paid for by customer. but not yet packaged.",
+      time:
+        data?.paymentStatus === "paid"
+          ? moment(data?.updatedAT).format("DD MMM, YYYY hh:mm A")
+          : "-",
       isCompleted:
-        data?.orderStatus === "Packed_And_Ready_For_Pickup" ||
-        Boolean(data?.updatedAT),
+        data?.paymentStatus === "paid" ? Boolean(data?.updatedAT) : false,
     },
     {
       id: 3,
+      title: "Order Packaged",
+      description: "Order has been packaged and assembled.",
+      time:
+        data?.merchantStatuses !== null &&
+        data?.merchantStatuses?.[0]?.updatedAt
+          ? moment(data?.merchantStatuses[0]?.updatedAt).format(
+              "DD MMM, YYYY hh:mm A"
+            )
+          : "-",
+      isCompleted:
+        data?.merchantStatuses !== null &&
+        data?.merchantStatuses?.[0]?.updatedAt
+          ? Boolean(data?.merchantStatuses[0]?.updatedAt)
+          : false,
+    },
+    {
+      id: 4,
       title: "Courier Pick-up",
       description: "Courier collected package from Merchant.",
       time: data?.RidersRide?.picked_up_parcelAT
@@ -99,7 +128,7 @@ const PreviewOrder = () => {
       isCompleted: Boolean(data?.RidersRide?.picked_up_parcelAT),
     },
     {
-      id: 4,
+      id: 5,
       title: "In-Transit",
       description: "Package is on the way to you.",
       time: data?.RidersRide?.enroute_to_dropoff_locationAT
@@ -110,7 +139,7 @@ const PreviewOrder = () => {
       isCompleted: Boolean(data?.RidersRide?.enroute_to_dropoff_locationAT),
     },
     {
-      id: 5,
+      id: 6,
       title: "Order Arrived",
       description: "Courier arrived at delivery address.",
       time: data?.RidersRide?.at_dropoff_locationAT
@@ -121,7 +150,7 @@ const PreviewOrder = () => {
       isCompleted: Boolean(data?.RidersRide?.at_dropoff_locationAT),
     },
     {
-      id: 6,
+      id: 7,
       title: "Order Delivered",
       description: "Package handed to customer.",
       time: data?.RidersRide?.dropped_off_parcelAT
@@ -131,18 +160,21 @@ const PreviewOrder = () => {
     },
   ];
 
+  // extracting details sections
   const splitOne = Object.fromEntries(Object.entries(data?.merchants ?? {}));
-
+  // remove __typename from merchants object
   const splitTwo = Object.entries(splitOne[0] ?? {}).filter(
     ([key]) => key !== "__typename"
   );
 
+  // shipping address
   const address = Object.fromEntries(
     Object.entries(data ?? {}).filter(
       ([key]) => key.toLowerCase() === "shippingaddress"
     )
   );
 
+  // merchants details
   const merchants = Object.fromEntries(splitTwo);
   const customerDetails: Partial<Customer> | undefined = data?.customer
     ? (Object.fromEntries(
@@ -152,6 +184,7 @@ const PreviewOrder = () => {
       ) as Partial<Customer>)
     : undefined;
 
+  // rider details
   const riderDetails: Partial<RiderEntity> | undefined = data?.RidersRide?.rider
     ? (Object.fromEntries(
         Object.entries(data.RidersRide.rider ?? {}).filter(
@@ -160,6 +193,7 @@ const PreviewOrder = () => {
       ) as Partial<RiderEntity>)
     : undefined;
 
+  // assign rider popup
   const popup = () =>
     openModal({
       type: "dialog",
@@ -169,10 +203,32 @@ const PreviewOrder = () => {
       props: { orderID: path, isPooled: data?.isPooled },
     });
 
+  // order status and payment status
+  const orderStatus = data?.orderStatus;
+  const paymentStatus = data?.paymentStatus;
+  // paid status
+  const isPaid = paymentStatus === "paid";
+
+  //assign rider logic
+  const isProcessing = orderStatus === "Processing" && isPaid;
+  const isPackaged = orderStatus === "Packed_And_Ready_For_Pickup";
+  const isAwaitingRider = orderStatus === "AWAITING_RIDER_ACCEPTANCE";
+  const isRiderAssigned = orderStatus === "Rider_Assigned";
+  const isInTransit = orderStatus === "In_Transit";
+  const isDelivered =
+    orderStatus === "Delivered" || orderStatus === "Cancelled";
+  const canAssignRider =
+    isProcessing &&
+    !isPackaged &&
+    !isAwaitingRider &&
+    !isRiderAssigned &&
+    !isInTransit &&
+    !isDelivered;
+
   return (
-    <div className="space-y-2.5 md:space-y-5 flex flex-col flex-1 h-full">
+    <div className="space-y-2.5 md:space-y-5 flex flex-col flex-1 h-full relative">
       {/* Headder section, order ID, order status and button to prepare order for pickup */}
-      <div className=" flex justify-between gap-y-1.5 items-center flex-wrap">
+      <div className=" flex justify-between gap-y-1.5 items-center flex-wrap ">
         <div className="flex items-center space-x-2 flex-wrap">
           <Button
             onClick={() => navigate(-1)}
@@ -198,16 +254,15 @@ const PreviewOrder = () => {
           </p>
         </div>
 
-        <CustomButton
-          disabled={
-            data?.orderStatus?.toLowerCase() === "processing" ||
-            data?.orderStatus?.toLowerCase() === "delivered"
-          }
-          // loading={makeOrderReadyLoading}
-          onClick={popup}
-        >
-          Assign Order To Rider
-        </CustomButton>
+        <div className="flex items-center gap-2">
+          <CustomButton variant="outline" onClick={refreshOrder}>
+            Refresh
+          </CustomButton>
+
+          <CustomButton disabled={!canAssignRider} onClick={popup}>
+            Assign Order To Rider
+          </CustomButton>
+        </div>
       </div>
 
       <div className="flex-1">

@@ -15,7 +15,7 @@ interface OrderEntity {
   id: number;
   isPooled: boolean;
   items: OrderItemsEntity[];
-  // merchantStatuses: [MerchantOrderStatusEntity!]!
+  merchantStatuses: MerchantOrderStatusEntity[];
   merchants: MerchantEntity;
   orderID: string;
   orderStatus: string;
@@ -81,5 +81,16 @@ export type RiderRidesEntity = {
   picked_up_parcelAT: Date;
   rider: RiderEntity;
   ridersRideID: String;
+  updatedAt: Date;
+};
+
+type MerchantOrderStatusEntity = {
+  createdAt: Date;
+  id: number;
+  merchant: MerchantEntity;
+  notes: string;
+  order: OrderEntity;
+  status: string;
+  statusID: string;
   updatedAt: Date;
 };

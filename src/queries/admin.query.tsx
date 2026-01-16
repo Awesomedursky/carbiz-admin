@@ -6,6 +6,7 @@ import {
   UPDATE_ADMIN,
 } from "@/api/admin.profile";
 import { useToast } from "@/hooks/Toast";
+import { usePaginatedQuery } from "@/hooks/usePagination";
 import { useTableState } from "@/hooks/useTableState";
 import { useAuthStore } from "@/store/auth.store";
 import { useDrawerStore } from "@/store/drawer.store";
@@ -43,7 +44,6 @@ export const useAddAdmin = () => {
           paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortBy: filters.sortBy,
             sortOrder: filters.sortOrder,
           },
         },
@@ -79,59 +79,46 @@ export const useAddAdmin = () => {
 };
 
 export const useAdminQuery = () => {
-  interface adminResponseType {
-    AdminFetchAllAdminsWithFilter: {
-      message: string;
-      success: boolean;
-      payload: {
-        currentPage: number;
-        data: adminEntity;
-        pageSize: number;
-        total: number;
-      };
-    };
-  }
   const { currentPage, pageSize, filters, update, searchTerm, setPageTotal } =
     useTableState("admin");
-  const { adminAccess, startDate, endDate, sortBy, sortOrder } = filters;
+  const { adminAccess, startDate, endDate, sortOrder } = filters;
 
-  const { data, loading, error, fetchMore, refetch } = useQuery<
-    adminResponseType,
-    { paginationQuery: PaginationQuery }
-  >(FETCH_ALL_ADMINS, {
-    variables: {
-      paginationQuery: {
-        limit: pageSize,
-        page: currentPage,
-        sortBy,
-        sortOrder,
-        searchTerm,
-        ...(startDate && { startDate }),
-        ...(endDate && { endDate }),
-        ...(adminAccess && { adminAccess }),
-      },
+  const pagination = {
+    limit: pageSize,
+    page: currentPage,
+    sortOrder,
+    searchTerm,
+    ...(startDate && { startDate }),
+    ...(endDate && { endDate }),
+    ...(adminAccess && { adminAccess }),
+  };
+
+  const { data, total, message, refetch, loading } = usePaginatedQuery({
+    query: FETCH_ALL_ADMINS,
+    pagination,
+    extractData: (response) => {
+      return {
+        data: response?.AdminFetchAllAdminsWithFilter?.payload?.data || [],
+        total: response?.AdminFetchAllAdminsWithFilter?.payload?.total || 0,
+        message: response?.AdminFetchAllAdminsWithFilter?.message || "",
+      };
     },
-    fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-first",
   });
 
   React.useEffect(() => {
-    if (data?.AdminFetchAllAdminsWithFilter?.payload?.total != null) {
-      const total = data.AdminFetchAllAdminsWithFilter.payload.total;
+    if (data != null) {
       setPageTotal(total);
     }
-  }, [data?.AdminFetchAllAdminsWithFilter?.payload.total, update]);
+  }, [total, update]);
 
   React.useEffect(() => {
     refetch();
   }, [currentPage, pageSize, searchTerm, startDate, endDate, adminAccess]);
 
   return {
-    data: data?.AdminFetchAllAdminsWithFilter?.payload.data,
-    message: data?.AdminFetchAllAdminsWithFilter?.message,
+    data,
+    message,
     loading,
-    error,
-    fetchMore,
   };
 };
 
@@ -165,7 +152,7 @@ export const useFetchOneAdmin = (adminID: string, skip?: boolean) => {
 export const useUpdateAdmin = () => {
   const { handleError, handleSuccess } = useToast();
   const { pageSize, currentPage, filters } = useTableState("admin");
-  const { sortBy, sortOrder } = filters;
+  const { sortOrder } = filters;
   const { closeModal } = useDrawerStore();
   interface updateOtherAdmin {
     updateOtherAdmin: {
@@ -192,7 +179,6 @@ export const useUpdateAdmin = () => {
           paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortBy,
             sortOrder,
           },
         },
@@ -227,7 +213,7 @@ export const useDeleteAdmin = () => {
     };
   }
   const { pageSize, currentPage, filters } = useTableState("admin");
-  const { sortBy, sortOrder } = filters;
+  const { sortOrder } = filters;
   const { handleError, handleInfo, handleSuccess } = useToast();
   const { closeModal } = useDrawerStore();
   const [deleteAdmin, { loading }] = useMutation<
@@ -241,7 +227,6 @@ export const useDeleteAdmin = () => {
           paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortBy,
             sortOrder,
           },
         },

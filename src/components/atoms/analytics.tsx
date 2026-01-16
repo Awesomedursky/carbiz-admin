@@ -31,7 +31,7 @@ const Analytics: React.FC<AnalyticsProp> = ({
       </div>
       <h3 className="text-3xl text-text-primary font-medium font-family-satoshi">
         {isCurrency
-          ? `N${typeof value === "number" ? value.toLocaleString() : value}`
+          ? `₦${typeof value === "number" ? value.toLocaleString() : value}`
           : typeof value === "number"
           ? value.toLocaleString("en-US")
           : value || 0}

@@ -15,6 +15,7 @@ import {
 
 export type Type = {
   productCategoryName: string;
+  commissionRate: number;
 };
 
 const CategoryForm = ({ type, id }: { type: boolean; id?: string }) => {
@@ -27,13 +28,16 @@ const CategoryForm = ({ type, id }: { type: boolean; id?: string }) => {
   const form = useForm<Type>({
     resolver: zodResolver(
       z.object({
-        productCategoryName: z.string({
-          message: "Product Category Name is required",
-        }),
+        productCategoryName: z
+          .string()
+          .min(1, "Product Category Name is required"),
+        commissionRate: z.coerce.number().min(0).max(100),
       })
     ),
+
     defaultValues: {
       productCategoryName: "",
+      commissionRate: undefined,
     },
   });
 
@@ -41,6 +45,7 @@ const CategoryForm = ({ type, id }: { type: boolean; id?: string }) => {
     if (type && productCategoryData) {
       form.reset({
         productCategoryName: productCategoryData?.productCategoryName,
+        commissionRate: productCategoryData?.commissionRate,
       });
     }
   }, [productCategoryData, type]);
@@ -79,9 +84,16 @@ const CategoryForm = ({ type, id }: { type: boolean; id?: string }) => {
           <InputField
             control={form.control}
             name="productCategoryName"
-            type="name"
+            type="text"
             label="Category Name"
             placeholder="eg. maintenance, accessory or part"
+          />
+          <InputField
+            control={form.control}
+            name="commissionRate"
+            type="number"
+            label="Commission Rate"
+            placeholder="eg. 10 or 20"
           />
 
           <div className="flex space-x-2 mt-2 justify-end">

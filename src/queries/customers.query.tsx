@@ -29,7 +29,7 @@ interface CustomerPreviewResponseType {
 const fetchCustomersQuery = () => {
   const { currentPage, pageSize, filters, update, searchTerm, setPageTotal } =
     useTableState("customers");
-  const { sortBy, sortOrder, startDate, endDate, status } = filters;
+  const { sortOrder, startDate, endDate, status } = filters;
   const { data, loading, error, fetchMore, refetch } = useQuery<
     CustomerPaginatedResponseType,
     { paginationQuery: PaginationQuery }
@@ -38,7 +38,6 @@ const fetchCustomersQuery = () => {
       paginationQuery: {
         limit: pageSize,
         page: currentPage,
-        sortBy,
         sortOrder,
         searchTerm,
         ...(startDate && { startDate }),
@@ -59,7 +58,7 @@ const fetchCustomersQuery = () => {
 
   React.useEffect(() => {
     refetch();
-  }, [currentPage, pageSize, startDate, endDate, sortBy, sortOrder, status]);
+  }, [currentPage, pageSize, startDate, endDate, sortOrder, status]);
 
   return {
     data: data?.AdminFetchAllCustomersWithFilter,

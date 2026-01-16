@@ -15,7 +15,7 @@ interface GenericFiltersProps {
   tableKey: tableKeyType;
 }
 
-const GENERIC_FILTERS = ["startDate", "endDate", "sortBy", "sortOrder"];
+const GENERIC_FILTERS = ["startDate", "endDate", "sortOrder"];
 
 // Define extra filters per tableKey
 const TABLE_SPECIFIC_FILTERS: Record<string, string[]> = {
@@ -113,10 +113,6 @@ const GenericFilters = ({ tableKey }: GenericFiltersProps) => {
     availabilityStatus: [
       { label: "Available", value: "Available" },
       { label: "Busy With An Order", value: "Busy_With_An_Order" },
-    ],
-    sortBy: [
-      { label: "Created At", value: "createdAt" },
-      { label: "Updated At", value: "updatedAt" },
     ],
     sortOrder: [
       { label: "Ascending", value: "ASC" },

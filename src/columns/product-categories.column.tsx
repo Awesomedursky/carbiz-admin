@@ -63,6 +63,21 @@ const ProductCategoryColumn: ColumnDef<productCategoryType>[] = [
     },
   },
   {
+    accessorKey: "commissionRate",
+    header: () => (
+      <div className=" text-base font-[500] text-black bg-[#FAFAFB] px-7 py-3.5 border-none">
+        Commission Rate
+      </div>
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className=" font-normal px-7 py-3.">
+          {row?.original?.commissionRate}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "created",
     header: () => (
       <div className=" text-base font-[500] text-black bg-[#FAFAFB] px-7 py-3.5 border-none">

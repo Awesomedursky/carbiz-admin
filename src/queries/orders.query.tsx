@@ -23,8 +23,7 @@ export const useFetchAllOrders = () => {
   const { currentPage, pageSize, filters, update, searchTerm, setPageTotal } =
     useTableState("orders");
 
-  const { startDate, endDate, sortBy, sortOrder, orderStatus, paymentStatus } =
-    filters;
+  const { startDate, endDate, sortOrder, orderStatus, paymentStatus } = filters;
 
   const { data, loading, error, refetch } = useQuery<
     AdminFetchAllOrdersResponseType,
@@ -35,7 +34,6 @@ export const useFetchAllOrders = () => {
         limit: pageSize,
         page: currentPage,
         searchTerm,
-        sortBy,
         sortOrder,
         ...(startDate && { startDate }),
         ...(endDate && { endDate }),
@@ -63,7 +61,6 @@ export const useFetchAllOrders = () => {
     pageSize,
     startDate,
     endDate,
-    sortBy,
     sortOrder,
     orderStatus,
     paymentStatus,

@@ -38,8 +38,7 @@ interface approveRiderType {
 const useRidersQuery = () => {
   const { currentPage, pageSize, filters, update, searchTerm, setPageTotal } =
     useTableState("riders");
-  const { availabilityStatus, status, startDate, endDate, sortBy, sortOrder } =
-    filters;
+  const { availabilityStatus, status, startDate, endDate, sortOrder } = filters;
 
   const { data, loading, error, fetchMore, refetch } = useQuery<
     AdminFetchAllRidersResponseType,
@@ -50,7 +49,6 @@ const useRidersQuery = () => {
         limit: pageSize,
         page: currentPage,
         searchTerm,
-        sortBy,
         sortOrder,
         ...(startDate && { startDate }),
         ...(endDate && { endDate }),
@@ -76,7 +74,6 @@ const useRidersQuery = () => {
     pageSize,
     startDate,
     endDate,
-    sortBy,
     sortOrder,
     availabilityStatus,
     status,
@@ -115,7 +112,7 @@ export const useFetchRider = (id: string) => {
 
 export const useRiderApproveDisapprove = (riderID: string) => {
   const { currentPage, pageSize, filters } = useTableState("riders");
-  const { sortBy, sortOrder } = filters;
+  const { sortOrder } = filters;
   const { closeModal } = useDrawerStore();
   const { handleError, handleInfo, handleSuccess } = useToast();
   const [approveDisapproveRider, { loading }] = useMutation<
@@ -129,7 +126,6 @@ export const useRiderApproveDisapprove = (riderID: string) => {
           paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortBy,
             sortOrder,
           },
         },
@@ -177,7 +173,7 @@ export const useFetchAllAvailableRiders = () => {
   }
   const { pageSize, currentPage, setPageTotal, filters } =
     useTableState("riders");
-  const { sortBy, sortOrder } = filters;
+  const { sortOrder } = filters;
   const { data, loading, error, fetchMore, refetch } = useQuery<
     allAvailableRiderResponse,
     { paginationQuery: PaginationQuery }
@@ -186,7 +182,6 @@ export const useFetchAllAvailableRiders = () => {
       paginationQuery: {
         limit: pageSize,
         page: currentPage,
-        sortBy,
         sortOrder,
       },
     },
@@ -203,7 +198,7 @@ export const useFetchAllAvailableRiders = () => {
 
   React.useEffect(() => {
     refetch();
-  }, [pageSize, sortBy, sortOrder]);
+  }, [pageSize, sortOrder]);
 
   return {
     data: data?.AdminFetchAllAvailableRiders.payload?.data,

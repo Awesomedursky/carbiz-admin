@@ -67,15 +67,8 @@ export const useFetchAllNotifications = () => {
   const { pageSize, currentPage, filters, setPageTotal, searchTerm } =
     useTableState("notifications");
 
-  const {
-    sortBy,
-    sortOrder,
-    method,
-    recurringType,
-    Audience,
-    startDate,
-    endDate,
-  } = filters;
+  const { sortOrder, method, recurringType, Audience, startDate, endDate } =
+    filters;
 
   const { data, loading, error, fetchMore } = useQuery<
     AdminFetchAllNotificationsWithFilterType,
@@ -85,7 +78,7 @@ export const useFetchAllNotifications = () => {
       paginationQuery: {
         limit: pageSize,
         page: currentPage,
-        sortBy,
+
         sortOrder,
         searchTerm,
         ...(method && { method }),
