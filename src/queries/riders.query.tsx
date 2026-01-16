@@ -171,7 +171,7 @@ export const useFetchAllAvailableRiders = () => {
       };
     };
   }
-  const { pageSize, currentPage, setPageTotal, filters } =
+  const { pageSize, currentPage, setPageTotal, filters, searchTerm } =
     useTableState("riders");
   const { sortOrder } = filters;
   const { data, loading, error, fetchMore, refetch } = useQuery<
@@ -183,6 +183,7 @@ export const useFetchAllAvailableRiders = () => {
         limit: pageSize,
         page: currentPage,
         sortOrder,
+        searchTerm,
       },
     },
     fetchPolicy: "cache-and-network",
@@ -205,6 +206,7 @@ export const useFetchAllAvailableRiders = () => {
     loading,
     error,
     fetchMore,
+    total: data?.AdminFetchAllAvailableRiders.payload?.total || 0,
   };
 };
 
