@@ -87,8 +87,8 @@ export const NotificationColumns: ColumnDef<NotificationCenterOutput>[] = [
         deliveryMethod === "Email"
           ? "outline"
           : deliveryMethod === "Push_Notification"
-          ? "secondary"
-          : "default";
+            ? "secondary"
+            : "default";
 
       return (
         <Badge variant={colorVariant} className="capitalize">
@@ -151,15 +151,15 @@ export const NotificationColumns: ColumnDef<NotificationCenterOutput>[] = [
       };
 
       return (
-        <span
-          className={`px-2 py-1 rounded-md text-xs font-medium ${
+        <Badge
+          className={`uppercase px-2 py-1 text-xs font-medium rounded-md ${
             colorMap[recurringType] || "bg-gray-100 text-gray-800"
           }`}
         >
           {recurringType === "One_Type"
             ? "One Time"
             : recurringType.replaceAll("_", " ")}
-        </span>
+        </Badge>
       );
     },
   },

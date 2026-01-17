@@ -100,12 +100,12 @@ export const ComplaintsColumn: ColumnDef<ComplaintOutput>[] = [
 
       return (
         <span
-          className={`px-2 py-1 rounded-md text-xs font-medium ${
+          className={`uppercase px-2 py-1 text-xs font-medium rounded-md ${
             Status[status.toLowerCase() as StatusKey] ||
             "bg-gray-200 text-gray-800"
           }`}
         >
-          {status}
+          {status.toLowerCase()}
         </span>
       );
     },

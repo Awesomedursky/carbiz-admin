@@ -1,4 +1,5 @@
 import PayoutActions from "@/components/molecules/payouts/PayoutActions";
+import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PayoutOutput } from "@/types/payouts.types";
 import { ColumnDef } from "@tanstack/react-table";
@@ -156,13 +157,15 @@ export const PayoutsColumn: ColumnDef<PayoutOutput>[] = [
     cell: ({ row }) => {
       const status: string | undefined = row.getValue("paymentStatus");
       const statusColor = () => {
-        switch (status?.toLocaleLowerCase()) {
+        switch (status?.toLowerCase()) {
           case "successful":
+          case "approved":
             return "bg-[#F6FAF7] text-[#027A48]";
           case "processing":
             return "bg-[#FAF3FE] text-[#7046C6]";
           case "pending":
             return "text-[#96650D] bg-[#FFFBF3]";
+          case "cancelled":
           case "failed":
             return "text-[#B42318] bg-[#FEE4E2]";
           default:
@@ -173,11 +176,11 @@ export const PayoutsColumn: ColumnDef<PayoutOutput>[] = [
         <div>
           {row?.original?.paymentStatus && (
             <div>
-              <span
-                className={`px-2 py-1 rounded text-sm  font-normal capitalize ${statusColor()}`}
+              <Badge
+                className={`uppercase px-2 py-1 text-xs font-medium rounded-md ${statusColor()}`}
               >
-                {row?.original?.paymentStatus}
-              </span>
+                {row?.original?.paymentStatus?.toLowerCase()}
+              </Badge>
             </div>
           )}
         </div>

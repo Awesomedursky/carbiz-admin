@@ -15,9 +15,10 @@ const initiatePayoutSchema = z.object({
     .min(1, "payment method is required"),
   paymentNote: z.string().optional(),
   payoutId: z.string().optional(),
-  transactionReference: z.string({
-    message: "Transaction reference is required",
-  }),
+  // transactionReference: z.string({
+  //   message: "Transaction reference is required",
+  // }),
+  transactionReference: z.string().optional(),
 });
 
 const ApprovePayout = ({

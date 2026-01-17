@@ -31,8 +31,8 @@ const PayoutActions = ({ payout }: { payout: PayoutOutput }) => {
           payout?.merchant !== null
             ? payout.merchant.businessName
             : payout.rider !== null
-            ? `${payout.rider.firstName} ${payout.rider.lastName}`
-            : "N/A",
+              ? `${payout.rider.firstName} ${payout.rider.lastName}`
+              : "N/A",
         id:
           payout?.merchant !== null
             ? payout.merchant.merchantID
@@ -55,8 +55,8 @@ const PayoutActions = ({ payout }: { payout: PayoutOutput }) => {
           payout?.merchant !== null
             ? payout.merchant.businessName
             : payout.rider !== null
-            ? `${payout.rider.firstName} ${payout.rider.lastName}`
-            : "N/A",
+              ? `${payout.rider.firstName} ${payout.rider.lastName}`
+              : "N/A",
         id:
           payout?.merchant !== null
             ? payout.merchant.merchantID
@@ -83,7 +83,7 @@ const PayoutActions = ({ payout }: { payout: PayoutOutput }) => {
 
     switch (status) {
       case "pending":
-      case "failed":
+      case "processing":
         return (
           <>
             <DropdownMenuItem onSelect={handleViewDetails}>
@@ -104,7 +104,8 @@ const PayoutActions = ({ payout }: { payout: PayoutOutput }) => {
         );
 
       case "successful":
-      case "processing":
+      case "cancelled":
+      case "approved":
         return (
           <>
             <DropdownMenuItem onSelect={handleViewDetails}>

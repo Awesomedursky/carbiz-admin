@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import OrderEntity from "@/types/order.type";
 import { ColumnDef } from "@tanstack/react-table";
@@ -121,16 +122,17 @@ export const ordersColumns: ColumnDef<OrderEntity>[] = [
           case "cancelled":
             return "bg-[#FEE4E2] text-[#B42318]";
           case "refunded":
+          case "unpaid":
             return "text-[#DC6803] bg-[#FFF7E1]";
           default:
-            return null;
+            return "text-[#DC6803] bg-[#FFF7E1]";
         }
       };
       return (
         <div className={` font-normal p-2  md:py-2.5 `}>
-          <span className={`px-3 py-1 rounded-2xl ${statusColor()} capitalize`}>
-            {row.getValue("paymentStatus") ?? "-"}
-          </span>
+          <Badge className={`px-3 py-1 rounded-md ${statusColor()} uppercase`}>
+            {row.original?.paymentStatus?.toLowerCase() ?? "unpaid"}
+          </Badge>
         </div>
       );
     },
@@ -168,9 +170,9 @@ export const ordersColumns: ColumnDef<OrderEntity>[] = [
       const displayStatus = statusStr.replaceAll("_", " ").toLowerCase();
       return (
         <div className={` font-normal p-2  md:py-2.5 `}>
-          <span className={`px-3 py-1 rounded-2xl ${statusColor()} capitalize`}>
+          <Badge className={`px-2 py-1 rounded-md ${statusColor()} uppercase`}>
             {displayStatus || "-"}
-          </span>
+          </Badge>
         </div>
       );
     },

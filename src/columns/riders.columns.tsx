@@ -96,8 +96,8 @@ export const RiderColumns: ColumnDef<RiderEntity>[] = [
       const displayStatus = isApproved
         ? "APPROVED"
         : status === "disabled"
-        ? "DISABLED"
-        : "PENDING";
+          ? "DISABLED"
+          : "PENDING";
 
       const colorMap: Record<string, string> = {
         APPROVED: "bg-green-100 text-green-700",
@@ -107,7 +107,7 @@ export const RiderColumns: ColumnDef<RiderEntity>[] = [
 
       return (
         <Badge
-          className={`capitalize px-2 py-1 text-xs font-medium rounded-md ${
+          className={`uppercase px-2 py-1 text-xs font-medium rounded-md ${
             colorMap[displayStatus] || "bg-gray-100 text-gray-700"
           }`}
         >

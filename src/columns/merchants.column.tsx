@@ -104,8 +104,8 @@ const MerchantColumn: ColumnDef<Merchant>[] = [
       const displayStatus = isApproved
         ? "APPROVED"
         : status === "disabled"
-        ? "DISABLED"
-        : "PENDING";
+          ? "DISABLED"
+          : "PENDING";
 
       const colorMap: Record<string, string> = {
         APPROVED: "bg-green-100 text-green-700",
@@ -115,11 +115,11 @@ const MerchantColumn: ColumnDef<Merchant>[] = [
 
       return (
         <Badge
-          className={`capitalize px-2 py-1 text-xs font-medium rounded-md ${
+          className={`uppercase px-2 py-1 text-xs font-medium rounded-md ${
             colorMap[displayStatus] || "bg-gray-100 text-gray-700"
           }`}
         >
-          {displayStatus}
+          {displayStatus?.toLowerCase()}
         </Badge>
       );
     },
