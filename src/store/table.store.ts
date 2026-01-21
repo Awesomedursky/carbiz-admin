@@ -16,6 +16,8 @@ export type TableFilterType = {
   availabilityStatus?: ("AVAILABLE" | "UNAVAILABLE")[];
   audience?: "MERCHANTS" | "RIDERS" | "CUSTOMERS" | "ALL_USERS"[];
   deliveryMethod?: ("EMAIL" | "PUSH_NOTIFICATION")[];
+  payoutStatus?: ("PENDING" | "COMPLETED" | "FAILED")[];
+  invoiceStatus?: ("PENDING" | "COMPLETED" | "FAILED")[];
 };
 
 export interface TableState {

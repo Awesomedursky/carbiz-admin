@@ -1,77 +1,54 @@
 import { FETCH_ONE_ORDER, FETCH_ORDERS } from "@/api/orders";
 import { useToast } from "@/hooks/Toast";
+import { usePaginatedQuery } from "@/hooks/usePagination";
 import { useTableState } from "@/hooks/useTableState";
-import { PaginationQuery } from "@/types/admin.type";
 import OrderEntity from "@/types/order.type";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import React from "react";
 
-interface AdminFetchAllOrdersResponseType {
-  AdminFetchAllOrdersWithFilter: {
-    message: string;
-    success: boolean;
-    payload: {
-      currentPage: number;
-      data: OrderEntity[];
-      pageSize: number;
-      total: number;
-    };
-  };
-}
-34;
 export const useFetchAllOrders = () => {
   const { currentPage, pageSize, filters, update, searchTerm, setPageTotal } =
     useTableState("orders");
 
   const { startDate, endDate, sortOrder, orderStatus, paymentStatus } = filters;
 
-  const { data, loading, error, refetch } = useQuery<
-    AdminFetchAllOrdersResponseType,
-    { paginationQuery: PaginationQuery }
-  >(FETCH_ORDERS, {
-    variables: {
-      paginationQuery: {
+
+  const pagination= {
         limit: pageSize,
         page: currentPage,
         searchTerm,
         sortOrder,
         ...(startDate && { startDate }),
         ...(endDate && { endDate }),
-        ...(orderStatus && { orderStatus }),
+        ...(orderStatus && {deliveryStatus: orderStatus }),
         ...(paymentStatus && { paymentStatus }),
+      }
+
+   const { data, total, message,error, refetch, loading } = usePaginatedQuery({
+      query: FETCH_ORDERS,
+      pagination,
+      extractData: (response) => {
+        return {
+          data: response?.AdminFetchAllOrdersWithFilter?.payload?.data || [],
+          total: response?.AdminFetchAllOrdersWithFilter?.payload?.total || 0,
+          message: response?.AdminFetchAllOrdersWithFilter?.message || "",
+        };
       },
-    },
-    fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-first",
-  });
+    });
 
   // Update total in the table state
   React.useEffect(() => {
-    if (data?.AdminFetchAllOrdersWithFilter?.payload?.total != null) {
-      const total = data.AdminFetchAllOrdersWithFilter.payload.total;
+    if (total != null) {
       setPageTotal(total);
     }
-  }, [data?.AdminFetchAllOrdersWithFilter?.payload?.total, update]);
-
-  // Refetch whenever relevant filters or pagination change
-  React.useEffect(() => {
-    refetch();
-  }, [
-    currentPage,
-    pageSize,
-    startDate,
-    endDate,
-    sortOrder,
-    orderStatus,
-    paymentStatus,
-  ]);
+  }, [total, update]);
 
   return {
-    data: data?.AdminFetchAllOrdersWithFilter?.payload?.data ?? [],
+    data: data ?? [],
     loading,
     error,
     refetch,
-    message: data?.AdminFetchAllOrdersWithFilter?.message,
+    message
   };
 };
 

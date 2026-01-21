@@ -4,35 +4,20 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import RiderActions from "@/components/molecules/riders/RiderActions";
 import RiderEntity from "@/types/rider.type";
-import { Checkbox } from "@/components/ui/checkbox";
 
 export const RiderColumns: ColumnDef<RiderEntity>[] = [
   {
     id: "id",
-    header: ({ table }) => (
-      <div className=" pl-3 md:pl-7">
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-          className=""
-        />
+    header: () => (
+      <div className=" pl-3  text-base font-[500] text-black !bg-[#FAFAFB] !border-none">
+        #
       </div>
     ),
     cell: ({ row }) => (
-      <div className=" pl-3 md:pl-7">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
+      <div className=" pl-3 text-base font-[500] text-black !border-none ">
+        {row.index + 1}
       </div>
     ),
-    enableSorting: false,
-    enableHiding: true,
   },
   {
     accessorKey: "riderID",
@@ -112,6 +97,34 @@ export const RiderColumns: ColumnDef<RiderEntity>[] = [
           }`}
         >
           {displayStatus}
+        </Badge>
+      );
+    },
+  },
+  {
+    accessorKey: "availabilityStatus",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Availability Status
+      </div>
+    ),
+    cell: ({ row }) => {
+      const { availabilityStatus } = row.original;
+
+      const statusText = availabilityStatus?.toLowerCase()
+
+      const colorMap: Record<string, string> = {
+        available: "bg-green-100 text-green-700",
+        busy_with_an_order: "bg-yellow-100 text-yellow-700",
+      };
+
+      return (
+        <Badge
+          className={`uppercase px-2 py-1 text-xs font-medium rounded-md ${
+            colorMap[statusText] || "bg-gray-100 text-gray-700"
+          }`}
+        >
+          {statusText.replaceAll("_", " ") || "unavailable"}
         </Badge>
       );
     },

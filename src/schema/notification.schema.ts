@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const NotificationSchema = z.object({
   broadcastDateTime: z.string().optional(),
-  deliveryMethod: z.enum(["Email", "Push_Notification"]),
+  deliveryMethod: z.enum(["Email", "Push_Notification",]),
   makeBroadcastRecurringType: z.string().optional(),
   time: z.string().optional(),
   recurring: z.boolean().optional(),

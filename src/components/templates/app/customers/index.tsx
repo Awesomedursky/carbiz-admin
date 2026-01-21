@@ -10,7 +10,7 @@ const Customers = () => {
       message={message}
       tableName="Customers"
       columns={CustomerColumns}
-      data={data?.payload?.data || []}
+      data={data || []}
       loading={loading}
       columnKey="customerID"
     />

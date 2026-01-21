@@ -3,7 +3,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import NotificationActions from "@/components/molecules/notification/NotificationActions";
-import { Checkbox } from "@/components/ui/checkbox";
 import { NotificationCenterOutput } from "@/types/notification-center.type";
 
 export type NotificationEntity = {
@@ -23,30 +22,16 @@ export type NotificationEntity = {
 export const NotificationColumns: ColumnDef<NotificationCenterOutput>[] = [
   {
     id: "id",
-    header: ({ table }) => (
-      <div className=" pl-3 md:pl-7">
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-          className=""
-        />
+    header: () => (
+      <div className=" pl-3  text-base font-[500] text-black !bg-[#FAFAFB] !border-none">
+        #
       </div>
     ),
     cell: ({ row }) => (
-      <div className=" pl-3 md:pl-7">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
+      <div className=" pl-3 text-base font-[500] text-black !border-none ">
+        {row.index + 1}
       </div>
     ),
-    enableSorting: false,
-    enableHiding: true,
   },
   {
     accessorKey: "title",

@@ -1,5 +1,4 @@
 import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
 import OrderEntity from "@/types/order.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
@@ -8,31 +7,17 @@ import { useNavigate } from "react-router";
 
 export const ordersColumns: ColumnDef<OrderEntity>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <div className=" pl-1 sm:pl-3 md:pl-7">
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-          className=""
-        />
+    id: "id",
+    header: () => (
+      <div className=" pl-3  text-base font-[500] text-black !bg-[#FAFAFB] !border-none">
+        #
       </div>
     ),
     cell: ({ row }) => (
-      <div className=" pl-1 sm:pl-3 md:pl-7">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
+      <div className=" pl-3 text-base font-[500] text-black !border-none ">
+        {row.index + 1}
       </div>
     ),
-    enableSorting: false,
-    enableHiding: true,
   },
   {
     accessorKey: "items",
@@ -53,8 +38,10 @@ export const ordersColumns: ColumnDef<OrderEntity>[] = [
             ?.productName;
 
       return (
-        <div className="font-normal p-2 md:py-2.5 uppercase">
-          {productName ?? "-"}
+        <div className="font-normal p-2 md:py-2.5 uppercase ">
+          <p className=" break-words block text-wrap max-w-xs">
+            {productName ?? "-"}
+          </p>
         </div>
       );
     },

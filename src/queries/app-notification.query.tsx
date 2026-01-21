@@ -36,26 +36,20 @@ export const useAppNotificationQuery = () => {
   }
 
   const loadMore = async () => {
-    if (!data) return;
-
+    if (!data) return
     const { totalPages } = data?.allNotificationsAdmin?.payload;
-
     if (page >= totalPages) return;
-
     const nextPage = page + 1;
 
     await fetchMore({
       variables: { paginationQuery: { page: nextPage, limit: 10 } },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
-
         const newItems = fetchMoreResult.allNotificationsAdmin.payload.data;
-
         const merged = [
           ...prev.allNotificationsAdmin.payload.data,
           ...newItems,
         ];
-
         setItems(merged);
         setPage(nextPage);
 

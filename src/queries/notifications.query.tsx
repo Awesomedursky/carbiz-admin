@@ -1,11 +1,9 @@
 import { useToast } from "@/hooks/Toast";
 import { useDrawerStore } from "@/store/drawer.store";
-import { PaginationQuery } from "@/types/admin.type";
 import { useMutation, useQuery } from "@apollo/client";
 import React from "react";
 import {
   NotificationCenterOutput,
-  NotificationMetricsOutput,
 } from "@/types/notification-center.type";
 import {
   ALL_NOTIFICATION_CENTER,
@@ -17,68 +15,34 @@ import {
 } from "@/api/notification";
 import { NotificationSchemaType } from "@/schema/notification.schema";
 import { useTableState } from "@/hooks/useTableState";
+import { usePaginatedQuery } from "@/hooks/usePagination";
 
 export const useFetchAllNotificationMetrics = () => {
-  interface getNotificationMetricsType {
-    getNotificationMetrics: {
-      message: string;
-      success: boolean;
-      payload: NotificationMetricsOutput;
-    };
+  const { data, loading, error } = usePaginatedQuery({
+    query:GET_NOTIFICATION_METRICS,
+    extractData:(response)=>{
+      return {
+    data: response?.getNotificationMetrics?.payload,
   }
-
-  const { data, loading, error } = useQuery<getNotificationMetricsType>(
-    // {
-    //   filters: {
-    //     audience: string;
-    //     deliveryMethod: string;
-    //     endDate: Date;
-    //     startDate: Date;
-    //   };
-    // }
-    GET_NOTIFICATION_METRICS,
-    {
-      fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-first",
     }
-  );
+  })
 
   return {
-    data: data?.getNotificationMetrics?.payload,
+    data,
     loading,
     error,
   };
 };
 
 export const useFetchAllNotifications = () => {
-  interface AdminFetchAllNotificationsWithFilterType {
-    AdminFetchAllNotificationsWithFilter: {
-      message: string;
-      success: boolean;
-      payload: {
-        currentPage: number;
-        data: NotificationCenterOutput[];
-        pageSize: number;
-        total: number;
-      };
-    };
-  }
-
   const { pageSize, currentPage, filters, setPageTotal, searchTerm } =
     useTableState("notifications");
 
   const { sortOrder, method, recurringType, Audience, startDate, endDate } =
     filters;
-
-  const { data, loading, error, fetchMore } = useQuery<
-    AdminFetchAllNotificationsWithFilterType,
-    { paginationQuery: PaginationQuery }
-  >(ALL_NOTIFICATION_CENTER, {
-    variables: {
-      paginationQuery: {
+  const pagination ={
         limit: pageSize,
         page: currentPage,
-
         sortOrder,
         searchTerm,
         ...(method && { method }),
@@ -86,22 +50,30 @@ export const useFetchAllNotifications = () => {
         ...(Audience && { sentby: Audience }),
         ...(startDate && { startDate }),
         ...(endDate && { endDate }),
-      },
-    },
-    fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-first",
-  });
+      }
+    
+  const { data, loading, error, fetchMore ,total,message} = usePaginatedQuery({
+    query:ALL_NOTIFICATION_CENTER,
+    pagination,
+    extractData:(data)=>{
+      return {
+        data:data?.AdminFetchAllNotificationsWithFilter?.payload?.data,
+        total: data?.AdminFetchAllNotificationsWithFilter?.payload?.total,
+        message:data?.AdminFetchAllNotificationsWithFilter?.message
+        
+      }
+    }
+  })
 
   React.useEffect(() => {
-    if (data?.AdminFetchAllNotificationsWithFilter?.payload?.total != null) {
-      const total = data?.AdminFetchAllNotificationsWithFilter.payload.total;
+    if (total != null) {
       setPageTotal(total);
     }
-  }, [data?.AdminFetchAllNotificationsWithFilter.payload.total]);
+  }, [total]);
 
   return {
-    data: data?.AdminFetchAllNotificationsWithFilter?.payload?.data,
-    message: data?.AdminFetchAllNotificationsWithFilter?.message,
+    data,
+    message,
     loading,
     error,
     fetchMore,
@@ -170,7 +142,6 @@ export const useupdateNotificationCenter = () => {
   const { handleError, handleSuccess } = useToast();
   const { pageSize, currentPage } = useTableState("notifications");
   const { closeModal } = useDrawerStore();
-
   const [updateNotification, { loading }] = useMutation<
     AdminUpdateNotificationCenterType,
     { notificationID: string; input: any }
@@ -250,7 +221,7 @@ export const useDeleteoneNotificationCenter = () => {
 };
 
 export const useFetchOneNotification = (id: string, type: boolean) => {
-  interface fetchOneNotificationType {
+    interface fetchOneNotificationType {
     fetchOneNotificationCenter: {
       message: string;
       success: boolean;
@@ -269,7 +240,7 @@ export const useFetchOneNotification = (id: string, type: boolean) => {
   );
 
   return {
-    data: data?.fetchOneNotificationCenter?.payload,
+    data:data?.fetchOneNotificationCenter?.payload,
     loading,
     error,
   };

@@ -7,8 +7,10 @@ import { useFetchAllProductCategoryQuery } from "@/queries/product-categories.qu
 import ProductCategoryColumn from "@/columns/product-categories.column";
 
 const ProductCategory = () => {
-  const { data: rawData, loading } = useFetchAllProductCategoryQuery();
-  const data = rawData?.payload?.data;
+  const { data: rawData, loading,message } = useFetchAllProductCategoryQuery();
+  const data = rawData;
+
+  console.log("Product Category Data:", data);
 
   const { openModal } = useDrawerStore();
 
@@ -27,7 +29,7 @@ const ProductCategory = () => {
         tableKey="products"
         loading={loading}
         tableName="Product Categories"
-        message={rawData?.message}
+        message={message}
         columns={ProductCategoryColumn}
         showSearch={false}
         data={Array.isArray(data) ? data : []}

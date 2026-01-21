@@ -131,7 +131,9 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    font: normal 0.875rem /1.6 "Satoshi", sans-serif;
+    font:
+      normal 0.875rem /1.6 "Satoshi",
+      sans-serif;
     padding: 0;
     text-align: left;
   }
@@ -174,4 +176,14 @@
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal; /* allow wrapping */
+  word-break: break-word;
 }

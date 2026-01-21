@@ -7,12 +7,11 @@ import {
 } from "@/api/product-categories";
 import { Type } from "@/components/organisms/form/categoryForm";
 import { useToast } from "@/hooks/Toast";
+import { usePaginatedQuery } from "@/hooks/usePagination";
 import { useTableState } from "@/hooks/useTableState";
 import { useDrawerStore } from "@/store/drawer.store";
-import { PaginationQuery } from "@/types/admin.type";
 import ProductEntity from "@/types/product.type";
 import { useMutation, useQuery } from "@apollo/client";
-import { update } from "lodash";
 import React from "react";
 
 export interface productCategoryType {
@@ -84,58 +83,67 @@ export const useAddProductCategory = () => {
 };
 
 export const useFetchAllProductCategoryQuery = () => {
-  interface categoryResType {
-    AdminFetchAllProductCategoriesWithFilter: {
-      message: string;
-      success: boolean;
-      payload: {
-        currentPage: number;
-        data: productCategoryType;
-        pageSize: number;
-        total: number;
-      };
-    };
-  }
-  const { pageSize, currentPage, setPageTotal, filters, searchTerm } =
+
+  const { pageSize, currentPage, setPageTotal, filters, searchTerm,update } =
     useTableState("products");
 
   const { endDate, startDate, sortOrder } = filters;
 
-  const { data, loading, error, fetchMore, refetch } = useQuery<
-    categoryResType,
-    { paginationQuery: PaginationQuery }
-  >(FETCH_ALL_PRODUCT_CATEGORY, {
-    variables: {
-      paginationQuery: {
+  const pagination = {
         limit: pageSize,
         page: currentPage,
         sortOrder,
         searchTerm,
         ...(endDate && { endDate }),
         ...(startDate && { startDate }),
-      },
-    },
-    fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-first",
-  });
+      }
+
+  // const { data, loading, error, fetchMore, refetch } = useQuery<
+  //   categoryResType,
+  //   { paginationQuery: PaginationQuery }
+  // >(FETCH_ALL_PRODUCT_CATEGORY, {
+  //   variables: {
+  //     paginationQuery: {
+  //       limit: pageSize,
+  //       page: currentPage,
+  //       sortOrder,
+  //       searchTerm,
+  //       ...(endDate && { endDate }),
+  //       ...(startDate && { startDate }),
+  //     },
+  //   },
+  //   fetchPolicy: "cache-and-network",
+  //   nextFetchPolicy: "cache-first",
+  // });
+
+  const { data, loading, error, fetchMore,total,message  } = usePaginatedQuery({
+    query: FETCH_ALL_PRODUCT_CATEGORY,
+    pagination,
+    extractData: (data) => {
+      return {
+        data: data?.AdminFetchAllProductCategoriesWithFilter?.payload?.data,
+        total:
+          data?.AdminFetchAllProductCategoriesWithFilter?.payload?.total,
+        message:
+          data?.AdminFetchAllProductCategoriesWithFilter?.message,
+      }
+    }
+  })
+
+
 
   React.useEffect(() => {
     if (
-      data?.AdminFetchAllProductCategoriesWithFilter?.payload?.total != null
+      total != null
     ) {
-      const total =
-        data?.AdminFetchAllProductCategoriesWithFilter?.payload?.total;
       setPageTotal(total);
     }
-  }, [data?.AdminFetchAllProductCategoriesWithFilter.payload.total, update]);
+  }, [total, update]);
 
-  React.useEffect(() => {
-    refetch();
-  }, [currentPage, pageSize, startDate, endDate, sortOrder]);
 
   return {
-    data: data?.AdminFetchAllProductCategoriesWithFilter,
-    message: data?.AdminFetchAllProductCategoriesWithFilter?.message,
+    data,
+    message,
     loading,
     error,
     fetchMore,
@@ -162,10 +170,14 @@ export const useFetchOneProductCategory = ({
     { productCategoryID: string }
   >(FETCH_ONE_PRODUCT_CATEGORY, {
     variables: { productCategoryID: productCategoryID },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
     nextFetchPolicy: "cache-first",
     skip: skip ?? false,
   });
+
+  
+
+
 
   return {
     data: data?.fetchOneProductCategory.payload,
@@ -235,6 +247,8 @@ export const useDeleteProductCategory = () => {
   const { pageSize, currentPage, filters } = useTableState("products");
   const { handleError, handleInfo, handleSuccess } = useToast();
   const { closeModal } = useDrawerStore();
+
+
   const [deleteProductCategory, { loading }] = useMutation<
     deleteProductCategory,
     { productCategoryID: string }

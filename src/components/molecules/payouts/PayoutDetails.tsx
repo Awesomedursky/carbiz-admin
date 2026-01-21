@@ -116,7 +116,7 @@ const PayoutDetails = ({ payout }: { payout: PayoutOutput }) => {
           <h3 className=" text-xs text-[#68655F] font-bold flex justify-between px-2.5">
             Gross Sales Amount:{" "}
             <span className=" text-black font-bold">
-              ₦{Number(finances?.grossSaleAmount ?? "-")}
+              ₦{Number(finances?.grossSaleAmount ?? "0")}
             </span>
           </h3>
           <div className=" flex flex-col  bg-[#FCFAFF] border-[#F1ECF9] border p-2.5 rounded-lg">
@@ -137,7 +137,7 @@ const PayoutDetails = ({ payout }: { payout: PayoutOutput }) => {
                 <div className="flex justify-between py-2 border-b border-[#F1ECF9] last:border-b-0">
                   <span className="text-xs text-[#061812]">{label}</span>
                   <span className="text-xs text-black font-bold">
-                    ₦{String(value ?? "-")}
+                    ₦{String(value ?? "0")}
                   </span>
                 </div>
               );
@@ -147,13 +147,13 @@ const PayoutDetails = ({ payout }: { payout: PayoutOutput }) => {
             <h3 className=" text-xs text-[#68655F] font-bold px-2.5">
               Total Deductions:{" "}
               <span className=" text-red-500 font-normal">
-                - ₦{Number(finances?.totalDeductions ?? "-").toPrecision(5)}
+                - ₦{Number(finances?.totalDeductions ?? "0").toPrecision(5)}
               </span>
             </h3>
             <h3 className=" text-xs text-[#68655F] font-bold px-2.5">
               Net Payout:{" "}
               <span className=" text-[#3E8152] font-bold">
-                ₦{Number(finances?.netPayout ?? "-").toPrecision(5)}
+                ₦{Number(finances?.netPayout ?? "0").toPrecision(5)}
               </span>
             </h3>
           </div>

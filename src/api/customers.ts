@@ -16,7 +16,7 @@ export const GET_CUSTOMERS = gql`
           email
           phoneNumber
           createdAt
-          customerID
+          customerID status isVerified
         }
       }
     }

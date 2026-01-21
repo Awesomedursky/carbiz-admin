@@ -17,25 +17,25 @@ const NotificationCards = () => {
   const notificationStats = [
     {
       title: "Total Sent",
-      value: data?.totalSent ?? 0,
+      value: (data as any)?.totalSent ?? 0,
       name: "totalSent",
       color: "#027A48",
     },
     {
       title: "Sent via Push",
-      value: data?.totalSentViaPush ?? 0,
+      value: (data as any)?.totalSentViaPush ?? 0,
       name: "sentPush",
       color: "#DC6803",
     },
     {
       title: "Sent via Email",
-      value: data?.totalSentViaEmail ?? 0,
+      value: (data as any)?.totalSentViaEmail ?? 0,
       name: "sentEmail",
       color: "#7046C6",
     },
     {
       title: "Scheduled",
-      value: data?.totalScheduled ?? 0,
+      value: (data as any)?.totalScheduled ?? 0,
       name: "scheduled",
       color: "#155EEF",
     },

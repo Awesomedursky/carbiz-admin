@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/Toast";
 import { useAuthStore } from "@/store/auth.store";
 import { adminEntity } from "@/types/admin.type";
 import { useQuery } from "@apollo/client";
+import { useEffect } from "react";
 
 interface profileAdmin {
   profileAdmin: {
@@ -55,17 +56,23 @@ export const useAdminProfile = () => {
   const { setUser } = useAuthStore();
 
   const { loading, error, data } = useQuery<profileAdmin>(PROFILE_ADMIN, {
-    onCompleted: (response) => {
-      if (response?.profileAdmin?.payload) {
-        setUser(response?.profileAdmin?.payload);
-      }
-    },
     onError: (error) => {
       handleError(error, "Error fetching Admin profile");
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
     nextFetchPolicy: "cache-first",
   });
+  
+  const profile = data?.profileAdmin?.payload;
+  useEffect(() => {
+    if (profile) {
+      setUser(profile);
+    }
+  }, [profile, setUser]);
+
+
+
+
 
   return {
     loading,
@@ -77,43 +84,39 @@ export const useAdminProfile = () => {
 export const useFetchAdminMetrics = () => {
   const { handleError } = useToast();
   const merchantCount = useQuery<AdminFetchMerchantCount>(MERCHNAT_COUNT, {
-    onCompleted: () => {},
     onError: (error) => {
       handleError(error, "Error fetching  product count");
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
     nextFetchPolicy: "cache-first",
-    pollInterval: 100000,
+    pollInterval: 300000,
   });
 
   const customerCount = useQuery<AdminFetchCustomerCount>(TOTAL_CUSTOMER, {
-    onCompleted: () => {},
     onError: (error) => {
       handleError(error, "Error fetching  customer count");
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
     nextFetchPolicy: "cache-first",
-    pollInterval: 100000,
+    pollInterval: 300000,
   });
 
   const ridersCount = useQuery<AdminFetchRiderCount>(RIDERS_COUNT, {
-    onCompleted: () => {},
     onError: (error) => {
       handleError(error, "Error fetching  customer count");
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
     nextFetchPolicy: "cache-first",
-    pollInterval: 100000,
+    pollInterval: 300000,
   });
 
   const revenue = useQuery<MerchantsTotalRevenueWithDeliveryFee>(REVENUE, {
-    onCompleted: () => {},
     onError: (error) => {
       handleError(error, "Error fetching  revenue");
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
     nextFetchPolicy: "cache-first",
-    pollInterval: 100000,
+    pollInterval: 300000,
   });
 
   return {

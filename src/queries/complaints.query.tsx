@@ -5,25 +5,12 @@ import {
   UPDATE_COMPLAINT,
 } from "@/api/complaints";
 import { useToast } from "@/hooks/Toast";
+import { usePaginatedQuery } from "@/hooks/usePagination";
 import { useTableState } from "@/hooks/useTableState";
 import { useDrawerStore } from "@/store/drawer.store";
-import { PaginationQuery } from "@/types/admin.type";
 import { ComplaintOutput } from "@/types/complaints.type";
 import { useMutation, useQuery } from "@apollo/client";
 import React from "react";
-
-interface AdminFetchAllComplaintsWithFiltType {
-  AdminFetchAllComplaintsWithFilter: {
-    message: string;
-    success: boolean;
-    payload: {
-      currentPage: number;
-      data: ComplaintOutput[];
-      pageSize: number;
-      total: number;
-    };
-  };
-}
 
 interface complaintMetricsType {
   AdminfetchComplaintMetrics: {
@@ -45,14 +32,6 @@ interface complaintMetricsType {
   };
 }
 
-interface AdminFetchoneComplaintType {
-  AdminfetchaOneComplant: {
-    message: string;
-    success: boolean;
-    payload: ComplaintOutput[];
-  };
-}
-
 interface AdminUpdateComplaintType {
   AdminUpdateComplaint: {
     message: string;
@@ -61,17 +40,14 @@ interface AdminUpdateComplaintType {
   };
 }
 
+
+
 export const useFetchAllComplaints = () => {
   const { pageSize, currentPage, searchTerm, filters, setPageTotal, update } =
     useTableState("complaints");
   const { status, sortOrder, startDate, endDate } = filters;
 
-  const { data, loading, error, fetchMore, refetch } = useQuery<
-    AdminFetchAllComplaintsWithFiltType,
-    { paginationQuery: PaginationQuery }
-  >(FETCH_ALL_COMPLAINTS, {
-    variables: {
-      paginationQuery: {
+  const pagination= {
         limit: pageSize,
         page: currentPage,
         sortOrder,
@@ -79,27 +55,35 @@ export const useFetchAllComplaints = () => {
         ...(status && { status }),
         ...(startDate && { startDate }),
         ...(endDate && { endDate }),
-      },
-    },
-    fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-first",
-    pollInterval: 60000,
-  });
+      }
+
+  const { data, loading, error,fetchMore, total,message } = usePaginatedQuery(
+    {
+      pollInterval: 20000,
+      query: FETCH_ALL_COMPLAINTS,
+      pagination,
+      extractData: (response) => {
+        return {
+          data:
+            response?.AdminFetchAllComplaintsWithFilter?.payload?.data || [],
+          total:
+            response?.AdminFetchAllComplaintsWithFilter?.payload?.total || 0,
+          message:
+            response?.AdminFetchAllComplaintsWithFilter?.message || "",
+        };
+      }
+    }
+  )
 
   React.useEffect(() => {
-    if (data?.AdminFetchAllComplaintsWithFilter?.payload?.total != null) {
-      const total = data?.AdminFetchAllComplaintsWithFilter.payload.total;
+    if (total != null) {
       setPageTotal(total);
     }
-  }, [data?.AdminFetchAllComplaintsWithFilter?.payload?.total, update]);
-
-  React.useEffect(() => {
-    refetch();
-  }, [currentPage, pageSize, startDate, endDate, sortOrder, status]);
-
+  }, [total, update]);
+  
   return {
-    data: data?.AdminFetchAllComplaintsWithFilter?.payload?.data,
-    message: data?.AdminFetchAllComplaintsWithFilter?.message,
+    data,
+    message,
     loading,
     error,
     fetchMore,
@@ -123,19 +107,19 @@ export const useFetchComplainMetrics = () => {
 };
 
 export const useFetchOneComplaint = (complaintID: string) => {
-  const { data, loading, error } = useQuery<
-    AdminFetchoneComplaintType,
-    { complaintID: string }
-  >(FETCH_ONE_COMPLAINTS, {
-    variables: {
-      complaintID,
-    },
-    fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-first",
-  });
+  const { data, loading, error } = usePaginatedQuery({
+    query: FETCH_ONE_COMPLAINTS,
+    variables: { complaintID },
+    extractData: (response) => {
+      return {
+        data:
+          response?.AdminfetchaOneComplant?.payload || [],
+      }
+
+  }})
 
   return {
-    data: data?.AdminfetchaOneComplant?.payload,
+    data,
     loading,
     error,
   };

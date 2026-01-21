@@ -76,7 +76,7 @@ const GenericFilters = ({ tableKey }: GenericFiltersProps) => {
       { label: "Processing", value: "Processing" },
       {
         label: "Packed and Ready for Pickup",
-        value: "Parked_And_Ready_For_Pickup",
+        value: "Packed_And_Ready_For_Pickup",
       },
       { label: "Rider Assigned", value: "Rider_Assigned" },
       { label: "In Transit", value: "In_Transit" },
@@ -98,17 +98,24 @@ const GenericFilters = ({ tableKey }: GenericFiltersProps) => {
       { label: "Bank Transfer", value: "Bank_Transfer" },
     ],
     payoutStatus: [
-      { label: "Pending", value: "PENDING" },
-      { label: "Processed", value: "PROCESSED" },
+      { label: "Cancelled", value: "Cancelled" },
+      { label: "Declined", value: "Declined" },
+      { label: "Approved", value: "Approved" },
+      { label: "Pending", value: "Pending" },
       { label: "Failed", value: "FAILED" },
     ],
     invoiceStatus: [
-      { label: "Pending", value: "PENDING" },
-      { label: "Paid", value: "PAID" },
+      { label: "Successful", value: "Successful" },
+      { label: "Failed", value: "Failed" },
+      { label: "Processing", value: "Processing" },
+      { label: "Pending", value: "Pending" },
     ],
     role: [
-      { label: "Rider", value: "RIDER" },
-      { label: "Merchant", value: "MERCHANT" },
+      { label: "Admin", value: "admin" },
+      { label: "Rider", value: "rider" },
+      { label: "Merchant", value: "merchant" },
+      { label: "Customer", value: "customer" },
+
     ],
     availabilityStatus: [
       { label: "Available", value: "Available" },
@@ -140,7 +147,6 @@ const GenericFilters = ({ tableKey }: GenericFiltersProps) => {
   });
 
   const onSubmit = (values: FilterValues) => {
-    console.log("Filter Values:", values);
     update(values);
   };
 

@@ -6,10 +6,11 @@ import { PaginationQuery } from "@/types/admin.type";
 type UsePaginatedQueryProps<TVariables> = {
   query: any;
   variables?: TVariables;
-  pagination: PaginationQuery;
+  pagination?: PaginationQuery;
+  pollInterval?:number;skip?:boolean;
   extractData: (response: any) => {
     data: any[];
-    total: number;
+    total?: number;
     message?: string;
   };
 };
@@ -17,18 +18,20 @@ type UsePaginatedQueryProps<TVariables> = {
 export function usePaginatedQuery<TVariables = any>({
   query,
   variables,
-  pagination,
-  extractData,
+  pagination,pollInterval,
+  extractData,skip
 }: UsePaginatedQueryProps<TVariables>) {
   const { handleError } = useToast();
 
-  const { data, loading, error, refetch } = useQuery(query, {
+  const { data, loading, error, refetch,fetchMore } = useQuery(query, {
     variables: {
       ...variables,
       paginationQuery: pagination,
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-first",
     nextFetchPolicy: "cache-first",
+    pollInterval: pollInterval ??undefined,
+    skip
   });
 
   useEffect(() => {
@@ -55,10 +58,10 @@ export function usePaginatedQuery<TVariables = any>({
 
   return {
     loading,
-    error, // still expose for UI conditions
+    error, 
     data: tableData,
     total,
     message,
-    refetch,
+    refetch,fetchMore
   };
 }

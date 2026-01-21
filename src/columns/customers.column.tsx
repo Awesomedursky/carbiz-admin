@@ -1,36 +1,22 @@
 import moment from "moment";
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
 import Customer from "@/types/customer.type";
 import CustomerActions from "@/components/molecules/customer/customerActions";
+import { Badge } from "@/components/ui/badge";
 
 const CustomerColumns: ColumnDef<Customer>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <div className=" pl-3 md:pl-7">
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-          className=""
-        />
+    id: "id",
+    header: () => (
+      <div className=" pl-3  text-base font-[500] text-black !bg-[#FAFAFB] !border-none">
+        #
       </div>
     ),
     cell: ({ row }) => (
-      <div className=" pl-3 md:pl-7">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
+      <div className=" pl-3 text-base font-[500] text-black !border-none ">
+        {row.index + 1}
       </div>
     ),
-    enableSorting: false,
-    enableHiding: false,
   },
   {
     accessorKey: "customerID",
@@ -92,6 +78,33 @@ const CustomerColumns: ColumnDef<Customer>[] = [
       );
     },
   },
+  {
+      accessorKey: "status",
+      header: () => (
+        <div className=" text-base  font-[500] text-black bg-[#FAFAFB]">
+          Status
+        </div>
+      ),
+      cell: ({ row }) => {
+        const { status } = row.original;
+  
+        const colorMap: Record<string, string> = {
+          ACTIVE: "bg-green-100 text-green-700",
+          INACTIVE: "bg-red-100 text-red-700",
+        };
+  
+        return (
+          <Badge
+            className={`uppercase px-2 py-1 text-xs font-medium rounded-md 
+              ${colorMap[status?.toUpperCase()] }
+              `
+          }
+          >
+           {status}
+          </Badge>
+        );
+      },
+    },
   {
     accessorKey: "createdAt",
     header: () => (

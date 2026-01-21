@@ -7,25 +7,14 @@ import {
   ADMIN_FETCH_ONE_RIDER,
 } from "@/api/riders";
 import RiderEntity from "@/types/rider.type";
-import { PaginationQuery } from "@/types/admin.type";
 import React from "react";
 import { useToast } from "@/hooks/Toast";
 import { useDrawerStore } from "@/store/drawer.store";
 import { FETCH_ONE_ORDER } from "@/api/orders";
 import { useTableState } from "@/hooks/useTableState";
+import { usePaginatedQuery } from "@/hooks/usePagination";
 
-interface AdminFetchAllRidersResponseType {
-  AdminFetchAllRidersWithFilter: {
-    message: string;
-    success: boolean;
-    payload: {
-      currentPage: number;
-      data: RiderEntity[];
-      pageSize: number;
-      total: number;
-    };
-  };
-}
+
 
 interface approveRiderType {
   AdminApproveOrDisApproveRider: {
@@ -40,12 +29,7 @@ const useRidersQuery = () => {
     useTableState("riders");
   const { availabilityStatus, status, startDate, endDate, sortOrder } = filters;
 
-  const { data, loading, error, fetchMore, refetch } = useQuery<
-    AdminFetchAllRidersResponseType,
-    { paginationQuery: PaginationQuery }
-  >(ADMIN_FETCH_ALL_RIDERS, {
-    variables: {
-      paginationQuery: {
+  const pagination = {
         limit: pageSize,
         page: currentPage,
         searchTerm,
@@ -54,40 +38,56 @@ const useRidersQuery = () => {
         ...(endDate && { endDate }),
         ...(availabilityStatus && { availabilityStatus }),
         ...(status && { status }),
-      },
-    },
-    fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-first",
-  });
+      }
+
+
+  const { data, loading, error, fetchMore,message,total } = usePaginatedQuery({
+    query: ADMIN_FETCH_ALL_RIDERS,
+    pagination,
+    extractData: (data) => {
+      return {
+        data: data?.AdminFetchAllRidersWithFilter?.payload?.data,
+        message: data?.AdminFetchAllRidersWithFilter?.message,
+        total: data?.AdminFetchAllRidersWithFilter?.payload.total,
+      }
+    }
+  })
+
+
+  // const { data, loading, error, fetchMore, refetch } = useQuery<
+  //   AdminFetchAllRidersResponseType,
+  //   { paginationQuery: PaginationQuery }
+  // >(ADMIN_FETCH_ALL_RIDERS, {
+  //   variables: {
+  //     paginationQuery: {
+  //       limit: pageSize,
+  //       page: currentPage,
+  //       searchTerm,
+  //       sortOrder,
+  //       ...(startDate && { startDate }),
+  //       ...(endDate && { endDate }),
+  //       ...(availabilityStatus && { availabilityStatus }),
+  //       ...(status && { status }),
+  //     },
+  //   },
+  //   fetchPolicy: "cache-and-network",
+  //   nextFetchPolicy: "cache-first",
+  // });
 
   React.useEffect(() => {
-    if (data?.AdminFetchAllRidersWithFilter?.payload?.total != null) {
-      const total = data.AdminFetchAllRidersWithFilter.payload.total;
+    if (total != null) {
       setPageTotal(total);
     }
-  }, [data?.AdminFetchAllRidersWithFilter?.payload?.total, update]);
-
-  React.useEffect(() => {
-    refetch();
-  }, [
-    currentPage,
-    pageSize,
-    startDate,
-    endDate,
-    sortOrder,
-    availabilityStatus,
-    status,
-  ]);
+  }, [total, update]);
 
   return {
-    data: data?.AdminFetchAllRidersWithFilter.payload?.data,
-    message: data?.AdminFetchAllRidersWithFilter?.message,
+    data,
+    message,
     loading,
     error,
     fetchMore,
   };
 };
-
 export default useRidersQuery;
 
 export const useFetchRider = (id: string) => {
@@ -102,7 +102,7 @@ export const useFetchRider = (id: string) => {
     ADMIN_FETCH_ONE_RIDER,
     {
       variables: { riderID: id },
-      fetchPolicy: "cache-and-network",
+      fetchPolicy: "cache-first",
       nextFetchPolicy: "cache-first",
     }
   );
@@ -159,54 +159,42 @@ export const useRiderApproveDisapprove = (riderID: string) => {
 };
 
 export const useFetchAllAvailableRiders = () => {
-  interface allAvailableRiderResponse {
-    AdminFetchAllAvailableRiders: {
-      message: string;
-      success: boolean;
-      payload: {
-        currentPage: number;
-        data: RiderEntity[];
-        pageSize: number;
-        total: number;
-      };
-    };
-  }
   const { pageSize, currentPage, setPageTotal, filters, searchTerm } =
     useTableState("riders");
   const { sortOrder } = filters;
-  const { data, loading, error, fetchMore, refetch } = useQuery<
-    allAvailableRiderResponse,
-    { paginationQuery: PaginationQuery }
-  >(ADMIN_FETCH_ALL_AVAILABLE_RIDERS, {
-    variables: {
-      paginationQuery: {
+
+
+  const pagination = {
         limit: pageSize,
         page: currentPage,
         sortOrder,
         searchTerm,
-      },
-    },
-    fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-first",
-  });
+      }
+  const { data, loading, error, fetchMore,total } = usePaginatedQuery({
+    query: ADMIN_FETCH_ALL_AVAILABLE_RIDERS,pagination,extractData: (data) => {
+      return {
+        data: data?.AdminFetchAllAvailableRiders?.payload?.data || [],
+        total: data?.AdminFetchAllAvailableRiders?.payload?.total || 0,
+        message: data?.AdminFetchAllAvailableRiders?.message || "",
+
+      };
+    }
+  })
+
+
 
   React.useEffect(() => {
-    if (data?.AdminFetchAllAvailableRiders?.payload?.total != null) {
-      const total = data.AdminFetchAllAvailableRiders.payload.total;
+    if (total != null) {
       setPageTotal(total);
     }
-  }, [data?.AdminFetchAllAvailableRiders.payload?.total]);
-
-  React.useEffect(() => {
-    refetch();
-  }, [pageSize, sortOrder]);
+  }, [total]);
 
   return {
-    data: data?.AdminFetchAllAvailableRiders.payload?.data,
+    data,
     loading,
     error,
     fetchMore,
-    total: data?.AdminFetchAllAvailableRiders.payload?.total || 0,
+    total,
   };
 };
 

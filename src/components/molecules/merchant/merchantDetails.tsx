@@ -63,12 +63,8 @@ const MerchantDetails = ({ merchant }: { merchant: Merchant }) => {
   ) as Record<string, unknown>;
 
   const my_products = (data as any)?.my_products;
-  const status = data?.isApproved;
+  const status = (data as any)?.AdminFetchOneMerchant?.payload?.isApproved;
 
-  //   const navigate = (e: string) => {
-  //     closeModal();
-  //     nav(`/orders/${e}`);
-  //   };
 
   if (loading) {
     return (

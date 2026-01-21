@@ -111,14 +111,10 @@ export const useAdminQuery = () => {
     }
   }, [total, update]);
 
-  React.useEffect(() => {
-    refetch();
-  }, [currentPage, pageSize, searchTerm, startDate, endDate, adminAccess]);
-
   return {
     data,
     message,
-    loading,
+    loading,refetch
   };
 };
 
@@ -183,7 +179,7 @@ export const useUpdateAdmin = () => {
           },
         },
       },
-    ],
+    ], awaitRefetchQueries: true,
     onCompleted: (data) => {
       console.log(data);
       if (!data?.updateOtherAdmin?.success) {

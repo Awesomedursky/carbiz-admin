@@ -4,20 +4,13 @@ import {
   VERIFY_MERCHANT,
 } from "@/api/merchants";
 import { useToast } from "@/hooks/Toast";
+import { usePaginatedQuery } from "@/hooks/usePagination";
 import { useTableState } from "@/hooks/useTableState";
 import { useDrawerStore } from "@/store/drawer.store";
-import { PaginationQuery } from "@/types/admin.type";
-import MerchantData from "@/types/merchants.type";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import React from "react";
 
-interface MerchantPreviewResponseType {
-  AdminFetchOneMerchant: {
-    message: string;
-    success: boolean;
-    payload: MerchantData;
-  };
-}
+
 
 interface VerifyMerchantResponseType {
   AdminApproveOrDisApproveMerchant: {
@@ -31,31 +24,14 @@ interface VerifyMerchantResponseType {
   };
 }
 
-interface MerchantPaginatedResponseType {
-  AdminFetchAllMerchantsWithFilter: {
-    message: string;
-    success: boolean;
-    payload: {
-      currentPage: number;
-      data: MerchantData[];
-      pageSize: number;
-      total: number;
-    };
-  };
-}
+
 
 const useMerchantQuery = () => {
   const { pageSize, currentPage, searchTerm, filters, setPageTotal } =
     useTableState("merchants");
-
   const { sortOrder, startDate, endDate, status } = filters;
 
-  const { data, loading, error, fetchMore, refetch } = useQuery<
-    MerchantPaginatedResponseType,
-    { paginationQuery: PaginationQuery }
-  >(GET_MERCHANTS, {
-    variables: {
-      paginationQuery: {
+  const pagination ={
         limit: pageSize,
         page: currentPage,
         sortOrder,
@@ -63,26 +39,25 @@ const useMerchantQuery = () => {
         ...(startDate && { startDate }),
         ...(endDate && { endDate }),
         ...(status && { status }),
-      },
-    },
-    fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-first",
-  });
+      }
+
+  const { data, loading, error, fetchMore,total,message } = usePaginatedQuery({
+    query: GET_MERCHANTS,
+    pagination,
+    extractData: (data) =>{
+      return {data:data?.AdminFetchAllMerchantsWithFilter?.payload?.data, total: data?.AdminFetchAllMerchantsWithFilter?.payload?.total, message: data?.AdminFetchAllMerchantsWithFilter?.message};
+    }
+  })
 
   React.useEffect(() => {
-    if (data?.AdminFetchAllMerchantsWithFilter?.payload?.total != null) {
-      const total = data?.AdminFetchAllMerchantsWithFilter.payload.total;
+    if (total != null) {
       setPageTotal(total);
     }
-  }, [data?.AdminFetchAllMerchantsWithFilter.payload.total]);
-
-  React.useEffect(() => {
-    refetch();
-  }, [currentPage, pageSize, startDate, endDate, sortOrder, status]);
+  }, [total]);
 
   return {
-    data: data?.AdminFetchAllMerchantsWithFilter.payload.data,
-    message: data?.AdminFetchAllMerchantsWithFilter.message,
+    data,
+    message,
     loading,
     error,
     fetchMore,
@@ -97,14 +72,14 @@ type VerifyMerchantInput = {
 };
 
 export const useFetchOneMerchant = (id: string) => {
-  const { data, loading, error, refetch } =
-    useQuery<MerchantPreviewResponseType>(GET_ONE_MERCHANT, {
-      variables: { merchantID: id },
-      fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-first",
-    });
-
-  return { data: data?.AdminFetchOneMerchant.payload, loading, error, refetch };
+  const { data, loading, error, refetch } = usePaginatedQuery({
+    query: GET_ONE_MERCHANT,
+    variables: { merchantID: id },
+    extractData: (data) => {
+      return {data, message: data?.AdminFetchOneMerchant?.message, success: data?.AdminFetchOneMerchant?.success};
+    }
+  })
+  return { data, loading, error, refetch };
 };
 
 export const useVerifyMerchant = (merchantID: string) => {
@@ -112,7 +87,6 @@ export const useVerifyMerchant = (merchantID: string) => {
   const { pageSize, currentPage, filters } = useTableState("merchants");
   const {  sortOrder } = filters;
   const { closeModal } = useDrawerStore();
-
   const [approveDisApproveMerchant, { loading: merchantLoading }] = useMutation<
     VerifyMerchantResponseType,
     VerifyMerchantInput
@@ -138,7 +112,6 @@ export const useVerifyMerchant = (merchantID: string) => {
       handleError("Update profile error", error.message);
     },
   });
-
   return {
     approveDisApproveMerchant,
     merchantLoading,

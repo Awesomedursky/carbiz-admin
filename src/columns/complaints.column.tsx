@@ -1,7 +1,6 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
 import { ComplaintOutput } from "@/types/complaints.type";
 import moment from "moment";
 import CompliaintActions from "@/components/molecules/complaints/complaintActions";
@@ -10,30 +9,16 @@ import Status, { StatusKey } from "@/lib/statusClass";
 export const ComplaintsColumn: ColumnDef<ComplaintOutput>[] = [
   {
     id: "id",
-    header: ({ table }) => (
-      <div className=" pl-3 md:pl-7">
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-          className=""
-        />
+    header: () => (
+      <div className=" pl-3  text-base font-[500] text-black !bg-[#FAFAFB] !border-none">
+        #
       </div>
     ),
     cell: ({ row }) => (
-      <div className=" pl-3 md:pl-7">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
+      <div className=" pl-3 text-base font-[500] text-black !border-none ">
+        {row.index + 1}
       </div>
     ),
-    enableSorting: false,
-    enableHiding: true,
   },
   {
     accessorKey: "customer",
@@ -49,6 +34,37 @@ export const ComplaintsColumn: ColumnDef<ComplaintOutput>[] = [
       </div>
     ),
   },
+  {
+    accessorKey: "title",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Complaint Title
+      </div>
+    ),
+    cell: ({ row }) => (
+      <div className="py-3.5 capitalize font-normal">
+        <p className=" clamp-2 max-w-[150px] text-sm font-medium">
+          {row.original.title}
+        </p>
+      </div>
+    ),
+  },
+  {
+    accessorKey: "details",
+    header: () => (
+      <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
+        Complaint Details
+      </div>
+    ),
+    cell: ({ row }) => (
+      <div className="py-3.5 font-normal capitalize">
+        <p className="clamp-2 max-w-[120px] text-sm font-medium break-words">
+          {row.original.description}
+        </p>
+      </div>
+    ),
+  },
+
   {
     accessorKey: "order",
     header: () => (

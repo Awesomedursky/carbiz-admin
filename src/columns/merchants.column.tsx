@@ -1,6 +1,5 @@
 import MerchantAction from "@/components/molecules/merchant/MerchantActions";
 import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
 import Merchant from "@/types/merchants.type";
 import { ColumnDef } from "@tanstack/react-table";
 import moment from "moment";
@@ -8,30 +7,16 @@ import moment from "moment";
 const MerchantColumn: ColumnDef<Merchant>[] = [
   {
     id: "id",
-    header: ({ table }) => (
-      <div className=" pl-3 md:pl-7">
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-          className=""
-        />
+    header: () => (
+      <div className=" pl-3  text-base font-[500] text-black !bg-[#FAFAFB] !border-none">
+        #
       </div>
     ),
     cell: ({ row }) => (
-      <div className=" pl-3 md:pl-7">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
+      <div className=" pl-3 text-base font-[500] text-black !border-none ">
+        {row.index + 1}
       </div>
     ),
-    enableSorting: false,
-    enableHiding: true,
   },
   {
     id: "merchantID",

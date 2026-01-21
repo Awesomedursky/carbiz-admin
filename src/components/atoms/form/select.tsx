@@ -53,7 +53,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
                 {label}
               </FormLabel>
             )}
-            <Select onValueChange={field.onChange} value={field.value}>
+            <Select onValueChange={field.onChange} value={field.value || ""} key={field.value ? "loaded" : "loading"}>
               <FormControl>
                 <SelectTrigger className="w-full py-6 rounded-lg focus:border-primary  focus-visible:border-primary placeholder:text-text-secondary">
                   <SelectValue
