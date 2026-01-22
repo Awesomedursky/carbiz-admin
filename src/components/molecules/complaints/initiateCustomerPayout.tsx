@@ -69,7 +69,7 @@ const InitiatePayout = ({ complaint }: { complaint: ComplaintOutput }) => {
           {/* ---- Header ---- */}
           <div className="flex items-center flex-col  w-full">
             <h2 className="text-lg md:text-xl font-bold text-center">
-              Iniate Customer Payout
+              Initiate Customer Payout
             </h2>
             <p className="text-base">
               Confirm manual payment and upload proof of payment.
@@ -122,20 +122,19 @@ const InitiatePayout = ({ complaint }: { complaint: ComplaintOutput }) => {
               label="Payment Notes"
             />
 
-            <div className=" grid grid-cols-2 gap-4">
-              <ImagePicker
-                sm
-                name="paymentProof"
-                control={form.control}
-                label="Upload payment proof"
-              />
-              <ImagePicker
-                sm
-                name="transactionReference"
-                control={form.control}
-                label="Upload payment receipt"
-              />
-            </div>
+            <ImagePicker
+              sm
+              name="paymentProof"
+              control={form.control}
+              label="Upload proof of payment"
+            />
+
+            <InputField
+              name="transactionReference"
+              placeholder="Enter Transaction Reference. ie: CARBIZ-RF-123456"
+              control={form.control}
+              label="Transaction Reference"
+            />
           </div>
 
           {/* ---- Buttons ---- */}
