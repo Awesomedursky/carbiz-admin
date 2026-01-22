@@ -58,7 +58,7 @@ const ComplaintResolve = ({
     <div className="p-2 w-full  space-y-3">
       {/* ---- Header ---- */}
       <div className="flex items-center flex-col  w-full">
-        <h2 className="text-lg md:text-xl font-bold text-center">{title}</h2>
+        <h2 className="text-lg md:text-xl font-bold text-center UPPERCASE">{title}</h2>
         <p className="text-base text-center">
           {T === "resolve"
             ? "Are you sure you want to mark this complaint as resolved? This action will update the complaint status and notify relevant parties"

@@ -1,4 +1,3 @@
-
 import {
   ADMIN_CANCEL_PAYOUT,
   ADMIN_INITIATE_PAYOUT,
@@ -28,38 +27,46 @@ export type initiatePayoutType = {
   transactionReference?: string;
 };
 
-
 const payoutQuery = () => {
-  const { pageSize, currentPage, filters, setPageTotal,searchTerm } =
+  const { pageSize, currentPage, filters, setPageTotal, searchTerm } =
     useTableState("payouts");
 
-    const { role,paymentMethod,paymentStatus,payoutStatus,invoiceStatus,startDate,endDate, } = filters;
+  const {
+    role,
+    paymentMethod,
+    paymentStatus,
+    payoutStatus,
+    invoiceStatus,
+    startDate,
+    endDate,
+  } = filters;
 
-    const pagination ={
-        limit: pageSize,
-        page: currentPage,
-        sortOrder: filters?.sortOrder,
-        searchTerm, 
-        ...(role && { role }),
-        ...(paymentMethod && { paymentMethod }),
-        ...(paymentStatus && { paymentStatus }),
-        ...(payoutStatus && { payoutStatus }),
-        ...(invoiceStatus && { invoiceStatus }),
-        ...(startDate && { startDate }),
-        ...(endDate && { endDate }),
-
-      }
-  const { data, loading, error, fetchMore ,total,message} = usePaginatedQuery({
-    query:GET_PAYOUTS,
-    pagination,extractData:(data)=>{
-      return {
-data:data?.AdminFetchAllPayoutsWithFilter?.payload?.data,
-message:data?.AdminFetchAllPayoutsWithFilter?.message,
-total:data?.AdminFetchAllPayoutsWithFilter?.payload.total
-
-      }
-    }
-  })
+  const pagination = {
+    limit: pageSize,
+    page: currentPage,
+    sortOrder: filters?.sortOrder,
+    searchTerm,
+    ...(role && { role }),
+    ...(paymentMethod && { paymentMethod }),
+    ...(paymentStatus && { paymentStatus }),
+    ...(payoutStatus && { payoutStatus }),
+    ...(invoiceStatus && { invoiceStatus }),
+    ...(startDate && { startDate }),
+    ...(endDate && { endDate }),
+  };
+  const { data, loading, error, fetchMore, total, message } = usePaginatedQuery(
+    {
+      query: GET_PAYOUTS,
+      pagination,
+      extractData: (data) => {
+        return {
+          data: data?.AdminFetchAllPayoutsWithFilter?.payload?.data,
+          message: data?.AdminFetchAllPayoutsWithFilter?.message,
+          total: data?.AdminFetchAllPayoutsWithFilter?.payload.total,
+        };
+      },
+    },
+  );
 
   React.useEffect(() => {
     if (total) return;
@@ -80,13 +87,13 @@ total:data?.AdminFetchAllPayoutsWithFilter?.payload.total
   //   }
   // );
 
-//   const {data: payoutStatus,
-// loading: payoutStatusLoading,
-//  error: payoutStatusError,} = usePaginatedQuery({
-//   query:GET_ONE_PAYOUT_STATUS,variables: { payoutID: payoutID || "" },extractData:(res)=>{return {
-//     data:res?.
-//   }}
-//  })
+  //   const {data: payoutStatus,
+  // loading: payoutStatusLoading,
+  //  error: payoutStatusError,} = usePaginatedQuery({
+  //   query:GET_ONE_PAYOUT_STATUS,variables: { payoutID: payoutID || "" },extractData:(res)=>{return {
+  //     data:res?.
+  //   }}
+  //  })
 
   return {
     // payouts list
@@ -189,7 +196,7 @@ export const fetchOnePayout = (payoutID: string) => {
       variables: { payoutID: payoutID || "" },
       fetchPolicy: "cache-first",
       nextFetchPolicy: "cache-first",
-    }
+    },
   );
   return {
     singlePayoutDetails: singlePayoutDetails?.AdminFetchOnePayout?.payload,

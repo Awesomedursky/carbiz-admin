@@ -22,6 +22,11 @@ interface Customer {
   role: string;
   status: string;
   updatedAt: Date;
+  bankDetails?: {
+    accountName: string;
+    accountNumber: string;
+    bankName: string;
+  };
 }
 
 export default Customer;

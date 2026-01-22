@@ -19,6 +19,7 @@ interface ImagePickerProp {
   label?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
+  sm?: boolean;
 }
 
 const ImagePicker: React.FC<ImagePickerProp> = ({
@@ -27,10 +28,11 @@ const ImagePicker: React.FC<ImagePickerProp> = ({
   label,
   defaultValue,
   onChange,
+  sm,
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(
-    defaultValue || null
+    defaultValue || null,
   );
   const [progress, setProgress] = useState<number>(0);
   const [uploading, setUploading] = useState<boolean>(false);
@@ -99,7 +101,7 @@ const ImagePicker: React.FC<ImagePickerProp> = ({
           <FormControl>
             <div className="flex flex-col items-center space-y-3 ">
               <div
-                className={`w-full h-48 bg-[#FEFEFE] border border-[#F3F2F4] rounded-xl flex justify-center items-center overflow-hidden relative`}
+                className={`w-full ${sm ? "h-30" : "h-48"} bg-[#FEFEFE] border border-[#F3F2F4] rounded-xl flex justify-center items-center overflow-hidden relative`}
               >
                 {previewUrl ? (
                   <img

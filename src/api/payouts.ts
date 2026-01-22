@@ -113,6 +113,16 @@ export const ADMIN_INITIATE_PAYOUT = gql`
   }
 `;
 
+export const ADMIN_INITIATE_CUSTOMER_PAYOUT = gql`
+  mutation AdminInitiateCustomerPayout($input: InitiateCustomerPayoutDto!) {
+    AdminInitiateCustomerPayout(input: $input) {
+      success
+      message
+      payload
+    }
+  }
+`;
+
 export const ADMIN_CANCEL_PAYOUT = gql`
   mutation AdminCancelPayout($input: CancelPayoutDto!) {
     AdminCancelPayout(input: $input) {

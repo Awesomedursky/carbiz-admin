@@ -11,6 +11,8 @@ import { useDrawerStore } from "@/store/drawer.store";
 import { ComplaintOutput } from "@/types/complaints.type";
 import { useMutation, useQuery } from "@apollo/client";
 import React from "react";
+import { ADMIN_INITIATE_CUSTOMER_PAYOUT, GET_PAYOUTS } from "@/api/payouts";
+import { initiatePayoutType } from "@/components/molecules/complaints/initiateCustomerPayout";
 
 interface complaintMetricsType {
   AdminfetchComplaintMetrics: {
@@ -40,24 +42,22 @@ interface AdminUpdateComplaintType {
   };
 }
 
-
-
 export const useFetchAllComplaints = () => {
   const { pageSize, currentPage, searchTerm, filters, setPageTotal, update } =
     useTableState("complaints");
   const { status, sortOrder, startDate, endDate } = filters;
 
-  const pagination= {
-        limit: pageSize,
-        page: currentPage,
-        sortOrder,
-        searchTerm,
-        ...(status && { status }),
-        ...(startDate && { startDate }),
-        ...(endDate && { endDate }),
-      }
+  const pagination = {
+    limit: pageSize,
+    page: currentPage,
+    sortOrder,
+    searchTerm,
+    ...(status && { status }),
+    ...(startDate && { startDate }),
+    ...(endDate && { endDate }),
+  };
 
-  const { data, loading, error,fetchMore, total,message } = usePaginatedQuery(
+  const { data, loading, error, fetchMore, total, message } = usePaginatedQuery(
     {
       pollInterval: 20000,
       query: FETCH_ALL_COMPLAINTS,
@@ -68,19 +68,18 @@ export const useFetchAllComplaints = () => {
             response?.AdminFetchAllComplaintsWithFilter?.payload?.data || [],
           total:
             response?.AdminFetchAllComplaintsWithFilter?.payload?.total || 0,
-          message:
-            response?.AdminFetchAllComplaintsWithFilter?.message || "",
+          message: response?.AdminFetchAllComplaintsWithFilter?.message || "",
         };
-      }
-    }
-  )
+      },
+    },
+  );
 
   React.useEffect(() => {
     if (total != null) {
       setPageTotal(total);
     }
   }, [total, update]);
-  
+
   return {
     data,
     message,
@@ -96,7 +95,7 @@ export const useFetchComplainMetrics = () => {
     {
       fetchPolicy: "cache-and-network",
       nextFetchPolicy: "cache-first",
-    }
+    },
   );
 
   return {
@@ -112,11 +111,10 @@ export const useFetchOneComplaint = (complaintID: string) => {
     variables: { complaintID },
     extractData: (response) => {
       return {
-        data:
-          response?.AdminfetchaOneComplant?.payload || [],
-      }
-
-  }})
+        data: response?.AdminfetchaOneComplant?.payload || [],
+      };
+    },
+  });
 
   return {
     data,
@@ -165,5 +163,51 @@ export const useUpdateComplaint = () => {
   return {
     adminUpdateComplaint,
     updateComplaintLoading: loading,
+  };
+};
+
+interface AdminInitiateCustomerPayoutType {
+  AdminInitiateCustomerPayout: {
+    message: string;
+    success: boolean;
+    payload: any;
+  };
+}
+
+export const initiateCustomerPayout = () => {
+  const { handleError, handleSuccess } = useToast();
+  const { pageSize, currentPage, filters } = useTableState("complaints");
+  const { closeModal } = useDrawerStore();
+
+  const [adminInitiatPayout, { loading }] = useMutation<
+    AdminInitiateCustomerPayoutType,
+    { input: initiatePayoutType }
+  >(ADMIN_INITIATE_CUSTOMER_PAYOUT, {
+    refetchQueries: [
+      { query: FETCH_COMPLAINTS_METRICS },
+      { query: GET_PAYOUTS },
+      {
+        query: FETCH_ALL_COMPLAINTS,
+        variables: {
+          paginationQuery: {
+            limit: pageSize,
+            page: currentPage,
+            sortOrder: filters.sortOrder,
+          },
+        },
+      },
+    ],
+    onCompleted: (data) => {
+      handleSuccess(data?.AdminInitiateCustomerPayout?.message);
+      closeModal();
+    },
+    onError: (error) => {
+      handleError("Error!", error.message);
+    },
+  });
+
+  return {
+    adminInitiatPayout,
+    loading,
   };
 };

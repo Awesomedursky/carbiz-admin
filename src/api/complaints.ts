@@ -21,6 +21,7 @@ export const FETCH_ALL_COMPLAINTS = gql`
             name
             email
             phoneNumber
+            customerID
           }
           deletedAt
           description
@@ -36,6 +37,12 @@ export const FETCH_ALL_COMPLAINTS = gql`
     }
   }
 `;
+
+// bank_details {
+//          accountName
+//               accountNumber
+//               bankName
+//             }
 
 export const FETCH_COMPLAINTS_METRICS = gql`
   query AdminfetchComplaintMetrics {

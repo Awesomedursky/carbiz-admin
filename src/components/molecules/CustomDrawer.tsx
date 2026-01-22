@@ -67,9 +67,6 @@ export const CustomDrawer = () => {
             style={{ width: width ? width : "" }}
             showCloseButton={false}
           >
-            {/* <DialogHeader className=" flex items-center">
-              <DialogTitle>{title}</DialogTitle>
-            </DialogHeader> */}
             {description && <p className="text-center ">{description}</p>}
             {renderContent()}
           </DialogContent>

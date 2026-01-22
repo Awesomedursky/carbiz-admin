@@ -15,6 +15,7 @@ import { ComplaintsDetail } from "./complaintDetails";
 import ComplaintResolve from "./ComplaintResolve";
 import { useUpdateComplaint } from "@/queries/complaints.query";
 import { useToast } from "@/hooks/Toast";
+import InitiatePayout from "./initiateCustomerPayout";
 
 interface ComplaintProps {
   complaint: ComplaintOutput;
@@ -22,8 +23,8 @@ interface ComplaintProps {
 
 const CompliaintActions: React.FC<ComplaintProps> = ({ complaint }) => {
   const { openModal } = useDrawerStore();
-  const { adminUpdateComplaint, updateComplaintLoading } = useUpdateComplaint();
   const { handleInfo } = useToast();
+  const { adminUpdateComplaint, updateComplaintLoading } = useUpdateComplaint();
 
   React.useEffect(() => {
     if (updateComplaintLoading) {
@@ -42,14 +43,11 @@ const CompliaintActions: React.FC<ComplaintProps> = ({ complaint }) => {
 
   const handleReplyViaEmail = () => {
     const email = complaint?.customer?.email ?? "";
-
     if (!email) return;
-
     const subject = encodeURIComponent("Product Complaint");
     const body = encodeURIComponent(
-      `Hello,\n\nRegarding your complaint titled "${complaint?.title}".\n\n`
+      `Hello,\n\nRegarding your complaint titled "${complaint?.title}".\n\n`,
     );
-
     window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
   };
 
@@ -87,6 +85,16 @@ const CompliaintActions: React.FC<ComplaintProps> = ({ complaint }) => {
     });
   };
 
+  const handleCustomerPayout = () => {
+    openModal({
+      width: 650,
+      type: "dialog",
+      title: "Initiate Payout",
+      content: InitiatePayout,
+      props: { complaint },
+    });
+  };
+
   const handleCLose = () => {
     openModal({
       width: 650,
@@ -111,11 +119,15 @@ const CompliaintActions: React.FC<ComplaintProps> = ({ complaint }) => {
             </DropdownMenuItem>
 
             <DropdownMenuItem onSelect={handleResolve}>
-              Mark As Resolvedm
+              Mark As Resolved
             </DropdownMenuItem>
 
             <DropdownMenuItem onSelect={handleReplyViaEmail}>
               Reply Via Mail
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onSelect={handleCustomerPayout}>
+              Initiate Customer Payout
             </DropdownMenuItem>
           </>
         );
@@ -137,6 +149,10 @@ const CompliaintActions: React.FC<ComplaintProps> = ({ complaint }) => {
 
             <DropdownMenuItem onSelect={handleReplyViaEmail}>
               Reply Via Mail
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onSelect={handleCustomerPayout}>
+              Initiate Customer Payout
             </DropdownMenuItem>
           </>
         );
@@ -162,6 +178,10 @@ const CompliaintActions: React.FC<ComplaintProps> = ({ complaint }) => {
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={handleReplyViaEmail}>
               Reply Via Email
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onSelect={handleCustomerPayout}>
+              Initiate Customer Payout
             </DropdownMenuItem>
           </>
         );
