@@ -176,7 +176,7 @@ interface AdminInitiateCustomerPayoutType {
 
 export const initiateCustomerPayout = () => {
   const { handleError, handleSuccess } = useToast();
-  const { pageSize, currentPage, filters } = useTableState("complaints");
+  const { pageSize, currentPage } = useTableState("complaints");
   const { closeModal } = useDrawerStore();
 
   const [adminInitiatPayout, { loading }] = useMutation<
@@ -184,22 +184,22 @@ export const initiateCustomerPayout = () => {
     { input: initiatePayoutType }
   >(ADMIN_INITIATE_CUSTOMER_PAYOUT, {
     refetchQueries: [
-      { query: FETCH_COMPLAINTS_METRICS },
-      { query: GET_PAYOUTS },
       {
-        query: FETCH_ALL_COMPLAINTS,
+        query: GET_PAYOUTS,
         variables: {
           paginationQuery: {
             limit: pageSize,
             page: currentPage,
-            sortOrder: filters.sortOrder,
           },
         },
       },
     ],
     onCompleted: (data) => {
-      handleSuccess(data?.AdminInitiateCustomerPayout?.message);
-      closeModal();
+      if (data?.AdminInitiateCustomerPayout?.success) {
+        handleSuccess(data?.AdminInitiateCustomerPayout?.message);
+        closeModal();
+        return;
+      }
     },
     onError: (error) => {
       handleError("Error!", error.message);

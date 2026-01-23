@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 
 const PayoutDetails = ({ payout }: { payout: PayoutOutput }) => {
   const { singlePayoutDetails, singlePayoutLoading } = fetchOnePayout(
-    payout.payoutID
+    payout.payoutID,
   );
   const navigate = useNavigate();
 
@@ -15,11 +15,11 @@ const PayoutDetails = ({ payout }: { payout: PayoutOutput }) => {
     Object.entries(singlePayoutDetails ?? {}).filter(
       ([key, value]) =>
         ["payoutid", "payoutat", "paymentmethod", "invoicestatus"].includes(
-          key.toLowerCase()
+          key.toLowerCase(),
         ) &&
         !Array.isArray(value) &&
-        key !== "__typename"
-    )
+        key !== "__typename",
+    ),
   ) as Record<string, unknown>;
 
   const merchant = Object.fromEntries(
@@ -27,8 +27,17 @@ const PayoutDetails = ({ payout }: { payout: PayoutOutput }) => {
       ([key, value]) =>
         ["merchant"].includes(key.toLowerCase()) &&
         !Array.isArray(value) &&
-        key !== "__typename"
-    )
+        key !== "__typename",
+    ),
+  ) as Record<string, unknown>;
+
+  const customer = Object.fromEntries(
+    Object.entries(singlePayoutDetails ?? {}).filter(
+      ([key, value]) =>
+        ["customer"].includes(key.toLowerCase()) &&
+        !Array.isArray(value) &&
+        key !== "__typename",
+    ),
   ) as Record<string, unknown>;
 
   const rider = Object.fromEntries(
@@ -36,8 +45,8 @@ const PayoutDetails = ({ payout }: { payout: PayoutOutput }) => {
       ([key, value]) =>
         ["rider"].includes(key.toLowerCase()) &&
         !Array.isArray(value) &&
-        key !== "__typename"
-    )
+        key !== "__typename",
+    ),
   ) as Record<string, unknown>;
 
   const finances = Object.fromEntries(
@@ -52,8 +61,8 @@ const PayoutDetails = ({ payout }: { payout: PayoutOutput }) => {
           "netpayout",
         ].includes(key.toLowerCase()) &&
         !Array.isArray(value) &&
-        key !== "__typename"
-    )
+        key !== "__typename",
+    ),
   ) as Record<string, unknown>;
 
   const my_orders = singlePayoutDetails?.relatedOrders;
@@ -78,8 +87,8 @@ const PayoutDetails = ({ payout }: { payout: PayoutOutput }) => {
           "paymentreceipt",
         ].includes(key.toLowerCase()) &&
         !Array.isArray(value) &&
-        key !== "__typename"
-    )
+        key !== "__typename",
+    ),
   ) as Record<string, unknown>;
 
   const flattenedManualPayment = () => {
@@ -98,7 +107,11 @@ const PayoutDetails = ({ payout }: { payout: PayoutOutput }) => {
       />
       <DetailsSection
         title={
-          merchant?.merchant === null ? "Rider Details" : "Merchant Details"
+          merchant?.merchant !== null
+            ? "Merchant Details"
+            : customer?.customer !== null
+              ? "Customer Details"
+              : "Rider Details"
         }
         details={
           merchant?.merchant === null
@@ -131,8 +144,8 @@ const PayoutDetails = ({ payout }: { payout: PayoutOutput }) => {
                 key === "commision"
                   ? "Platform Commission (10%)"
                   : key === "taxDeduction"
-                  ? "Tax Deduction (5%)"
-                  : "Processing Fee";
+                    ? "Tax Deduction (5%)"
+                    : "Processing Fee";
               return (
                 <div className="flex justify-between py-2 border-b border-[#F1ECF9] last:border-b-0">
                   <span className="text-xs text-[#061812]">{label}</span>
@@ -218,7 +231,7 @@ const flattenEntity = (entity: any): Record<string, unknown> => {
     name = entity.businessName;
   }
   const idEntry = Object.entries(entity).find(([key]) =>
-    key.toLowerCase().endsWith("id")
+    key.toLowerCase().endsWith("id"),
   );
   const bankDetails = entity.bank_details ?? {};
 

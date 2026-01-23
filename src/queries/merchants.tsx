@@ -10,8 +10,6 @@ import { useDrawerStore } from "@/store/drawer.store";
 import { useMutation } from "@apollo/client";
 import React from "react";
 
-
-
 interface VerifyMerchantResponseType {
   AdminApproveOrDisApproveMerchant: {
     message: string;
@@ -24,30 +22,34 @@ interface VerifyMerchantResponseType {
   };
 }
 
-
-
 const useMerchantQuery = () => {
   const { pageSize, currentPage, searchTerm, filters, setPageTotal } =
     useTableState("merchants");
   const { sortOrder, startDate, endDate, status } = filters;
 
-  const pagination ={
-        limit: pageSize,
-        page: currentPage,
-        sortOrder,
-        searchTerm,
-        ...(startDate && { startDate }),
-        ...(endDate && { endDate }),
-        ...(status && { status }),
-      }
+  const pagination = {
+    limit: pageSize,
+    page: currentPage,
+    sortOrder,
+    searchTerm,
+    ...(startDate && { startDate }),
+    ...(endDate && { endDate }),
+    ...(status && { status }),
+  };
 
-  const { data, loading, error, fetchMore,total,message } = usePaginatedQuery({
-    query: GET_MERCHANTS,
-    pagination,
-    extractData: (data) =>{
-      return {data:data?.AdminFetchAllMerchantsWithFilter?.payload?.data, total: data?.AdminFetchAllMerchantsWithFilter?.payload?.total, message: data?.AdminFetchAllMerchantsWithFilter?.message};
-    }
-  })
+  const { data, loading, error, fetchMore, total, message } = usePaginatedQuery(
+    {
+      query: GET_MERCHANTS,
+      pagination,
+      extractData: (data) => {
+        return {
+          data: data?.AdminFetchAllMerchantsWithFilter?.payload?.data,
+          total: data?.AdminFetchAllMerchantsWithFilter?.payload?.total,
+          message: data?.AdminFetchAllMerchantsWithFilter?.message,
+        };
+      },
+    },
+  );
 
   React.useEffect(() => {
     if (total != null) {
@@ -76,16 +78,20 @@ export const useFetchOneMerchant = (id: string) => {
     query: GET_ONE_MERCHANT,
     variables: { merchantID: id },
     extractData: (data) => {
-      return {data, message: data?.AdminFetchOneMerchant?.message, success: data?.AdminFetchOneMerchant?.success};
-    }
-  })
+      return {
+        data: data?.AdminFetchOneMerchant?.payload,
+        message: data?.AdminFetchOneMerchant?.message,
+        success: data?.AdminFetchOneMerchant?.success,
+      };
+    },
+  });
   return { data, loading, error, refetch };
 };
 
 export const useVerifyMerchant = (merchantID: string) => {
   const { handleError, handleSuccess } = useToast();
   const { pageSize, currentPage, filters } = useTableState("merchants");
-  const {  sortOrder } = filters;
+  const { sortOrder } = filters;
   const { closeModal } = useDrawerStore();
   const [approveDisApproveMerchant, { loading: merchantLoading }] = useMutation<
     VerifyMerchantResponseType,

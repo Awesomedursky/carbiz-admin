@@ -27,6 +27,10 @@ export const GET_PAYOUTS = gql`
               accountNumber
             }
           }
+          customer {
+            customerID
+            name
+          }
           payoutID
           netPayout
           paymentMethod
@@ -69,6 +73,10 @@ export const FETCH_ONE_PAYOUT = gql`
             accountNumber
             bankName
           }
+        }
+        customer {
+          name
+          customerID
         }
         grossSaleAmount
         commision

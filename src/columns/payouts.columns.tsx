@@ -34,7 +34,7 @@ export const PayoutsColumn: ColumnDef<PayoutOutput>[] = [
     },
   },
   {
-    accessorKey: "date",
+    accessorKey: "created-date",
     header: () => (
       <div className=" text-base font-[500] text-black !bg-[#FAFAFB] py-3.5  !border-none">
         Created Date
@@ -61,7 +61,8 @@ export const PayoutsColumn: ColumnDef<PayoutOutput>[] = [
     cell: ({ row }) => {
       return (
         <div className=" font-normal px-7 py-3.5">
-          {row?.original?.merchant?.businessName ||
+          {row.original?.customer?.name ||
+            row?.original?.merchant?.businessName ||
             `${row?.original?.rider?.firstName} ${row?.original?.rider?.lastName}`}
         </div>
       );
@@ -77,7 +78,11 @@ export const PayoutsColumn: ColumnDef<PayoutOutput>[] = [
     cell: ({ row }) => {
       return (
         <div className=" font-normal px-7 py-3.5">
-          {row?.original?.merchant !== null ? "Merchant" : "Rider"}
+          {row?.original?.customer !== null
+            ? "Customer"
+            : row?.original?.merchant !== null
+              ? "Merchant"
+              : "Rider"}
         </div>
       );
     },
@@ -107,7 +112,7 @@ export const PayoutsColumn: ColumnDef<PayoutOutput>[] = [
     cell: ({ row }) => {
       return (
         <div className=" font-normal px-7 py-3.">
-          {row.original?.paymentMethod ?? "~~~~"}
+          {row.original?.paymentMethod?.replaceAll("_", " ") ?? "~~~~"}
         </div>
       );
     },

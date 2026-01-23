@@ -13,6 +13,8 @@ const MerchantDetails = ({ merchant }: { merchant: Merchant }) => {
   const { data, loading } = useFetchOneMerchant(merchant?.merchantID || "");
   const { openModal } = useDrawerStore();
 
+  console.log("merchant details data", data);
+
   const disableMerchant = () => {
     openModal({
       title: "Merchant",
@@ -40,17 +42,17 @@ const MerchantDetails = ({ merchant }: { merchant: Merchant }) => {
     Object.entries(data ?? {}).filter(
       ([key, value]) =>
         !["businesslicense", "valididcard", "cac", "taxid"].includes(
-          key.toLowerCase()
+          key.toLowerCase(),
         ) &&
         !Array.isArray(value) &&
-        key !== "__typename"
-    )
+        key !== "__typename",
+    ),
   ) as Record<string, unknown>;
 
   const taxid = Object.fromEntries(
     Object.entries(data ?? {}).filter(([key]) =>
-      ["taxid"].includes(key.toLowerCase())
-    )
+      ["taxid"].includes(key.toLowerCase()),
+    ),
   ) as Record<string, unknown>;
 
   const documents = Object.fromEntries(
@@ -58,13 +60,11 @@ const MerchantDetails = ({ merchant }: { merchant: Merchant }) => {
       ([key, value]) =>
         ["businesslicense", "valididcard", "cac"].includes(key.toLowerCase()) &&
         !Array.isArray(value) &&
-        key !== "__typename"
-    )
+        key !== "__typename",
+    ),
   ) as Record<string, unknown>;
 
   const my_products = (data as any)?.my_products;
-  const status = (data as any)?.AdminFetchOneMerchant?.payload?.isApproved;
-
 
   if (loading) {
     return (
@@ -75,6 +75,7 @@ const MerchantDetails = ({ merchant }: { merchant: Merchant }) => {
       </div>
     );
   }
+  const status = merchant?.isApproved;
 
   const buttonRender = () => {
     if (status == false) {

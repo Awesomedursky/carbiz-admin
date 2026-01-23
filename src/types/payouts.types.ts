@@ -32,6 +32,7 @@ export interface PayoutOutput {
   totalDeductions: GLfloat;
   transactionReference: string;
   updatedAt: Date;
+  customer: Customer;
 }
 
 type TransactionEntity = {
