@@ -3,6 +3,7 @@ const Status = {
   shipped: "bg-[#FFF7E1] text-[#DC6803]",
   closed: "bg-[#FEE4E2] text-[#B42318]",
   paid: "bg-[#D1FADF] text-[#027A48]",
+  payment_confirmed: "bg-[#D1FADF] text-[#027A48]",
   delivered: "text-[#027A48] bg-[#D1FADF]",
   cancelled: "bg-[#FEE4E2] text-[#B42318]",
   awaiting: "text-[#343239] bg-[#E6E5E8]",

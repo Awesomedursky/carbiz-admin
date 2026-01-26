@@ -94,10 +94,12 @@ const PreviewOrder = () => {
       description: "Order has been paid for by customer. but not yet packaged.",
       time:
         data?.paymentStatus === "paid"
-          ? moment(data?.updatedAT).format("DD MMM, YYYY hh:mm A")
+          ? moment(data?.paymentConfirmedAT).format("DD MMM, YYYY hh:mm A")
           : "-",
       isCompleted:
-        data?.paymentStatus === "paid" ? Boolean(data?.updatedAT) : false,
+        data?.paymentStatus === "paid"
+          ? Boolean(data?.paymentConfirmedAT)
+          : false,
     },
     {
       id: 3,
@@ -107,7 +109,7 @@ const PreviewOrder = () => {
         data?.merchantStatuses !== null &&
         data?.merchantStatuses?.[0]?.updatedAt
           ? moment(data?.merchantStatuses[0]?.updatedAt).format(
-              "DD MMM, YYYY hh:mm A"
+              "DD MMM, YYYY hh:mm A",
             )
           : "-",
       isCompleted:
@@ -122,7 +124,7 @@ const PreviewOrder = () => {
       description: "Courier collected package from Merchant.",
       time: data?.RidersRide?.picked_up_parcelAT
         ? moment(data?.RidersRide?.picked_up_parcelAT).format(
-            "DD MMM, YYYY hh:mm A"
+            "DD MMM, YYYY hh:mm A",
           )
         : "-",
       isCompleted: Boolean(data?.RidersRide?.picked_up_parcelAT),
@@ -133,7 +135,7 @@ const PreviewOrder = () => {
       description: "Package is on the way to you.",
       time: data?.RidersRide?.enroute_to_dropoff_locationAT
         ? moment(data?.RidersRide?.enroute_to_dropoff_locationAT).format(
-            "DD MMM, YYYY hh:mm A"
+            "DD MMM, YYYY hh:mm A",
           )
         : "-",
       isCompleted: Boolean(data?.RidersRide?.enroute_to_dropoff_locationAT),
@@ -144,7 +146,7 @@ const PreviewOrder = () => {
       description: "Courier arrived at delivery address.",
       time: data?.RidersRide?.at_dropoff_locationAT
         ? moment(data?.RidersRide?.at_dropoff_locationAT).format(
-            "DD MMM, YYYY hh:mm A"
+            "DD MMM, YYYY hh:mm A",
           )
         : "-",
       isCompleted: Boolean(data?.RidersRide?.at_dropoff_locationAT),
@@ -164,14 +166,14 @@ const PreviewOrder = () => {
   const splitOne = Object.fromEntries(Object.entries(data?.merchants ?? {}));
   // remove __typename from merchants object
   const splitTwo = Object.entries(splitOne[0] ?? {}).filter(
-    ([key]) => key !== "__typename"
+    ([key]) => key !== "__typename",
   );
 
   // shipping address
   const address = Object.fromEntries(
     Object.entries(data ?? {}).filter(
-      ([key]) => key.toLowerCase() === "shippingaddress"
-    )
+      ([key]) => key.toLowerCase() === "shippingaddress",
+    ),
   );
 
   // merchants details
@@ -179,8 +181,8 @@ const PreviewOrder = () => {
   const customerDetails: Partial<Customer> | undefined = data?.customer
     ? (Object.fromEntries(
         Object.entries(data.customer ?? {}).filter(
-          ([key]) => key !== "__typename"
-        )
+          ([key]) => key !== "__typename",
+        ),
       ) as Partial<Customer>)
     : undefined;
 
@@ -188,8 +190,8 @@ const PreviewOrder = () => {
   const riderDetails: Partial<RiderEntity> | undefined = data?.RidersRide?.rider
     ? (Object.fromEntries(
         Object.entries(data.RidersRide.rider ?? {}).filter(
-          ([key]) => key !== "__typename"
-        )
+          ([key]) => key !== "__typename",
+        ),
       ) as Partial<RiderEntity>)
     : undefined;
 
@@ -205,21 +207,18 @@ const PreviewOrder = () => {
 
   // order status and payment status
   const orderStatus = data?.orderStatus;
-  const paymentStatus = data?.paymentStatus;
-  // paid status
-  const isPaid = paymentStatus === "paid";
-
   //assign rider logic
-  const isProcessing = orderStatus === "Processing" && isPaid;
+  const isPaid = data?.paymentConfirmedAT !== null;
   const isPackaged = orderStatus === "Packed_And_Ready_For_Pickup";
   const isAwaitingRider = orderStatus === "AWAITING_RIDER_ACCEPTANCE";
   const isRiderAssigned = orderStatus === "Rider_Assigned";
   const isInTransit = orderStatus === "In_Transit";
+
   const isDelivered =
     orderStatus === "Delivered" || orderStatus === "Cancelled";
   const canAssignRider =
-    isProcessing &&
-    !isPackaged &&
+    isPaid &&
+    isPackaged &&
     !isAwaitingRider &&
     !isRiderAssigned &&
     !isInTransit &&
@@ -309,8 +308,8 @@ const PreviewOrder = () => {
                           item.isDiscount
                             ? "text-blue-600"
                             : item.isSaved
-                            ? "text-red-600"
-                            : "text-gray-900"
+                              ? "text-red-600"
+                              : "text-gray-900"
                         }`}
                       >
                         {item.isDiscount || item.isSaved ? "-" : ""}

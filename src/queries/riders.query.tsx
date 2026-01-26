@@ -10,11 +10,9 @@ import RiderEntity from "@/types/rider.type";
 import React from "react";
 import { useToast } from "@/hooks/Toast";
 import { useDrawerStore } from "@/store/drawer.store";
-import { FETCH_ONE_ORDER } from "@/api/orders";
+import { FETCH_ONE_ORDER, FETCH_ORDERS } from "@/api/orders";
 import { useTableState } from "@/hooks/useTableState";
 import { usePaginatedQuery } from "@/hooks/usePagination";
-
-
 
 interface approveRiderType {
   AdminApproveOrDisApproveRider: {
@@ -30,29 +28,29 @@ const useRidersQuery = () => {
   const { availabilityStatus, status, startDate, endDate, sortOrder } = filters;
 
   const pagination = {
-        limit: pageSize,
-        page: currentPage,
-        searchTerm,
-        sortOrder,
-        ...(startDate && { startDate }),
-        ...(endDate && { endDate }),
-        ...(availabilityStatus && { availabilityStatus }),
-        ...(status && { status }),
-      }
+    limit: pageSize,
+    page: currentPage,
+    searchTerm,
+    sortOrder,
+    ...(startDate && { startDate }),
+    ...(endDate && { endDate }),
+    ...(availabilityStatus && { availabilityStatus }),
+    ...(status && { status }),
+  };
 
-
-  const { data, loading, error, fetchMore,message,total } = usePaginatedQuery({
-    query: ADMIN_FETCH_ALL_RIDERS,
-    pagination,
-    extractData: (data) => {
-      return {
-        data: data?.AdminFetchAllRidersWithFilter?.payload?.data,
-        message: data?.AdminFetchAllRidersWithFilter?.message,
-        total: data?.AdminFetchAllRidersWithFilter?.payload.total,
-      }
-    }
-  })
-
+  const { data, loading, error, fetchMore, message, total } = usePaginatedQuery(
+    {
+      query: ADMIN_FETCH_ALL_RIDERS,
+      pagination,
+      extractData: (data) => {
+        return {
+          data: data?.AdminFetchAllRidersWithFilter?.payload?.data,
+          message: data?.AdminFetchAllRidersWithFilter?.message,
+          total: data?.AdminFetchAllRidersWithFilter?.payload.total,
+        };
+      },
+    },
+  );
 
   // const { data, loading, error, fetchMore, refetch } = useQuery<
   //   AdminFetchAllRidersResponseType,
@@ -104,7 +102,7 @@ export const useFetchRider = (id: string) => {
       variables: { riderID: id },
       fetchPolicy: "cache-first",
       nextFetchPolicy: "cache-first",
-    }
+    },
   );
 
   return { data: data?.AdminFetchOneRider.payload, loading, error, refetch };
@@ -163,25 +161,23 @@ export const useFetchAllAvailableRiders = () => {
     useTableState("riders");
   const { sortOrder } = filters;
 
-
   const pagination = {
-        limit: pageSize,
-        page: currentPage,
-        sortOrder,
-        searchTerm,
-      }
-  const { data, loading, error, fetchMore,total } = usePaginatedQuery({
-    query: ADMIN_FETCH_ALL_AVAILABLE_RIDERS,pagination,extractData: (data) => {
+    limit: pageSize,
+    page: currentPage,
+    sortOrder,
+    searchTerm,
+  };
+  const { data, loading, error, fetchMore, total } = usePaginatedQuery({
+    query: ADMIN_FETCH_ALL_AVAILABLE_RIDERS,
+    pagination,
+    extractData: (data) => {
       return {
         data: data?.AdminFetchAllAvailableRiders?.payload?.data || [],
         total: data?.AdminFetchAllAvailableRiders?.payload?.total || 0,
         message: data?.AdminFetchAllAvailableRiders?.message || "",
-
       };
-    }
-  })
-
-
+    },
+  });
 
   React.useEffect(() => {
     if (total != null) {
@@ -213,6 +209,15 @@ export const useAssignOrdertoRider = (orderID: string) => {
     { orderID: string; riderID: string; isPoolAssignment: boolean }
   >(ADMIN_ASSIGN_RIDER_TO_ORDER, {
     refetchQueries: [
+      {
+        query: FETCH_ORDERS,
+        variables: {
+          paginationQuery: {
+            limit: 10,
+            page: 1,
+          },
+        },
+      },
       {
         query: FETCH_ONE_ORDER,
         variables: {

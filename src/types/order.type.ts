@@ -6,6 +6,7 @@ import RiderEntity from "./rider.type";
 interface OrderEntity {
   RidersRide: RiderRidesEntity;
   createdAT: Date;
+  paymentConfirmedAT: Date;
   customer: Customer;
   deliveryFee: number;
   deliveryType: string;
