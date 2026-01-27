@@ -106,17 +106,11 @@ const PreviewOrder = () => {
       title: "Order Packaged",
       description: "Order has been packaged and assembled.",
       time:
-        data?.merchantStatuses !== null &&
-        data?.merchantStatuses?.[0]?.updatedAt
-          ? moment(data?.merchantStatuses[0]?.updatedAt).format(
-              "DD MMM, YYYY hh:mm A",
-            )
+        data?.orderPackedAT !== null
+          ? moment(data?.orderPackedAT).format("DD MMM, YYYY hh:mm A")
           : "-",
       isCompleted:
-        data?.merchantStatuses !== null &&
-        data?.merchantStatuses?.[0]?.updatedAt
-          ? Boolean(data?.merchantStatuses[0]?.updatedAt)
-          : false,
+        Boolean(data?.paymentConfirmedAT) && Boolean(data?.orderPackedAT),
     },
     {
       id: 4,
@@ -162,12 +156,17 @@ const PreviewOrder = () => {
     },
   ];
 
-  // extracting details sections
-  const splitOne = Object.fromEntries(Object.entries(data?.merchants ?? {}));
-  // remove __typename from merchants object
-  const splitTwo = Object.entries(splitOne[0] ?? {}).filter(
-    ([key]) => key !== "__typename",
-  );
+  const merchants = Array.isArray(data?.merchants)
+    ? data.merchants.map(
+        ({
+          __typename,
+          ...rest
+        }: {
+          __typename?: string;
+          [key: string]: any;
+        }) => rest,
+      )
+    : [];
 
   // shipping address
   const address = Object.fromEntries(
@@ -177,7 +176,7 @@ const PreviewOrder = () => {
   );
 
   // merchants details
-  const merchants = Object.fromEntries(splitTwo);
+
   const customerDetails: Partial<Customer> | undefined = data?.customer
     ? (Object.fromEntries(
         Object.entries(data.customer ?? {}).filter(
@@ -368,10 +367,18 @@ const PreviewOrder = () => {
                 details={address ?? {}}
               />
               {/* Merchant Details */}
-              <DetailsSection
-                title="Merchant Details"
-                details={merchants ?? {}}
-              />
+
+              {merchants?.map((merchant, idx) => {
+                const sectionTitle = `Merchant Details ${idx === 0 ? "" : idx + 1}`;
+                return (
+                  <DetailsSection
+                    key={idx}
+                    details={merchant ?? {}}
+                    title={sectionTitle}
+                  />
+                );
+              })}
+
               {/* Customer Details */}
               <DetailsSection
                 title="Customer Details"

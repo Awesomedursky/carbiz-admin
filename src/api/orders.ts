@@ -137,6 +137,7 @@ export const FETCH_ONE_ORDER = gql`
         deliveryFee
         updatedAT
         paymentConfirmedAT
+        orderPackedAT
       }
     }
   }
