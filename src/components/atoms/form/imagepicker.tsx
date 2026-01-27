@@ -128,7 +128,7 @@ const ImagePicker: React.FC<ImagePickerProp> = ({
 
               <CustomButton
                 type="button"
-                variant="outline"
+                variant={selectedFile ? "default" : "outline"}
                 size="sm"
                 className="flex items-center space-x-2"
                 onClick={() => handleUpload(field.onChange)}
