@@ -13,6 +13,7 @@ const Status = {
   resolved: "text-[#027A48] bg-[#D1FADF]",
   awaiting_rider_acceptance: "bg-[#BBE4E2] text-[#027A48]",
   rider_assigned: "bg-[#BBE4E2] text-[#027A48]",
+  in_transit: "bg-[#FFF7E1] text-[#DC6803]",
 };
 
 export type StatusKey = keyof typeof Status;

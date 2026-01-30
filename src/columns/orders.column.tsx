@@ -110,15 +110,16 @@ export const ordersColumns: ColumnDef<OrderEntity>[] = [
             return "bg-[#FEE4E2] text-[#B42318]";
           case "refunded":
           case "unpaid":
-            return "text-[#DC6803] bg-[#FFF7E1]";
+            return "text-[#FF6803] bg-[#FFF7E1]";
           default:
-            return "text-[#DC6803] bg-[#FFF7E1]";
+            return "bg-[#FCFCFB] text-[#6B7280]";
         }
       };
+
       return (
         <div className={` font-normal p-2  md:py-2.5 `}>
-          <Badge className={`px-3 py-1 rounded-md ${statusColor()} uppercase`}>
-            {row.original?.paymentStatus?.toLowerCase() ?? "unpaid"}
+          <Badge className={`px-3 py-1 rounded-md  ${statusColor()} uppercase`}>
+            {row.original?.paymentStatus?.toLowerCase() ?? "~~~"}
           </Badge>
         </div>
       );
@@ -139,6 +140,7 @@ export const ordersColumns: ColumnDef<OrderEntity>[] = [
           case "processing":
             return "bg-[#E2DAF4] text-[#7046C6]";
           case "shipped":
+          case "in_transit":
             return "bg-[#FFF7E1] text-[#DC6803]";
           case "cancelled":
             return "text-[#B42318] bg-[#FEE4E2]";
