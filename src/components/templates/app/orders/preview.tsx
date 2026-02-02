@@ -360,7 +360,37 @@ const PreviewOrder = () => {
               </div>
             </div>
 
-            <div className="w-full bg-white p-2 border-gray-200 rounded-[0.75rem]">
+            <div className="w-full bg-white p-2 border-gray-200 rounded-[0.75rem] space-y-3">
+              <div className=" space-y-2.5 p-3 border-[#F1ECF9] bg-white rounded-lg border shadow-sm">
+                <h3 className=" text-lg font-black text-gray-900">
+                  DroppOff Confirmation Code
+                </h3>
+                <div className="grid grid-flow-col gap-x-2.5">
+                  {data?.dropOffCode &&
+                    data?.dropOffCode
+                      ?.split("")
+                      .map((i) => (
+                        <p className=" text-2xl font-black rounded-xl border mx-auto w-full py-2.5  text-center  text-primary border-primary shadow-sm shadow-primary">
+                          {i}
+                        </p>
+                      ))}
+                </div>
+              </div>
+              <div className=" space-y-2.5 p-3 border-[#F1ECF9] bg-white rounded-lg border shadow-sm">
+                <h3 className=" text-lg font-black text-gray-900">
+                  PickUp Confirmation Code
+                </h3>
+                <div className="grid grid-flow-col gap-x-2.5">
+                  {data?.pickUpCode &&
+                    data?.pickUpCode
+                      ?.split("")
+                      .map((i) => (
+                        <p className=" text-2xl font-black rounded-xl border mx-auto w-full py-2.5  text-center  text-primary border-primary shadow-sm shadow-primary">
+                          {i}
+                        </p>
+                      ))}
+                </div>
+              </div>
               {/* Delievery Details */}
               <DetailsSection
                 title=" Order Delievery Details"

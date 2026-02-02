@@ -138,6 +138,8 @@ export const FETCH_ONE_ORDER = gql`
         updatedAT
         paymentConfirmedAT
         orderPackedAT
+        dropOffCode
+        pickUpCode
       }
     }
   }
