@@ -253,7 +253,12 @@ const PreviewOrder = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <CustomButton variant="outline" onClick={refreshOrder}>
+          <CustomButton
+            variant="outline"
+            onClick={refreshOrder}
+            loading={loading}
+            disabled={loading}
+          >
             Refresh
           </CustomButton>
 

@@ -94,13 +94,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     : data?.navMain;
 
   const nav = useNavigate();
+
   const onLogout = () => {
     setIsLoggingOut(true);
     setTimeout(() => {
       nav("/");
       handleSuccess("Admin Logged out successfully");
       logout();
-    }, 3000);
+    }, 1000);
   };
   return (
     <Sidebar backgroundColor="bg-white" {...props} className="">

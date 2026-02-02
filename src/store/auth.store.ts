@@ -18,13 +18,13 @@ export const useAuthStore = create<AuthStoreType>()(
       setGeneratedPassword: (generatedPassword) => set({ generatedPassword }),
       setUser: (user) => set({ user }),
       logout: () => {
-        sessionStorage.removeItem("authToken");
+        sessionStorage.clear();
         set({ user: null });
       },
     }),
     {
       name: "auth-storage",
       storage: createJSONStorage(() => sessionStorage),
-    }
-  )
+    },
+  ),
 );
