@@ -91,7 +91,7 @@ const PayoutActions = ({ payout }: { payout: PayoutOutput }) => {
             </DropdownMenuItem>
 
             <DropdownMenuItem onSelect={handleApprove}>
-              Approve Payout
+              Initiate Payout
             </DropdownMenuItem>
 
             <DropdownMenuItem
@@ -115,7 +115,13 @@ const PayoutActions = ({ payout }: { payout: PayoutOutput }) => {
         );
 
       default:
-        return null;
+        return (
+          <>
+            <DropdownMenuItem onSelect={handleViewDetails}>
+              View Details
+            </DropdownMenuItem>
+          </>
+        );
     }
   };
 

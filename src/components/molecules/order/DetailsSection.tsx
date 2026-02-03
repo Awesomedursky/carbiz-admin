@@ -58,6 +58,7 @@ const renderStatusBadge = (status: string | boolean | undefined) => {
     ACTIVE: "bg-green-100 text-green-700",
     INACTIVE: "bg-gray-100 text-gray-700",
     REJECTED: "bg-red-100 text-red-700",
+    FAILED: "bg-red-100 text-red-700",
     FALSE: "bg-red-100 text-red-700",
     PROCESSING: "bg-[#E2DAF4] text-[#7046C6]",
     SHIPPED: "bg-[#FFF7E1] text-[#DC6803]",
@@ -77,7 +78,7 @@ const renderStatusBadge = (status: string | boolean | undefined) => {
 
   return (
     <span
-      className={`px-2 py-1 rounded-full text-xs font-semibold tracking-wide ${colorClass}`}
+      className={`px-2 py-1 rounded-md text-xs font-semibold tracking-wide ${colorClass}`}
     >
       {String(status)}
     </span>
@@ -152,7 +153,8 @@ const DetailsSection: React.FC<DetailsSectionProps> = ({
               typeof value === "boolean" ||
               key.toLowerCase() === "status" ||
               key.toLowerCase() === "isverified" ||
-              key.toLowerCase() === "invoicestatus"
+              key.toLowerCase() === "invoicestatus" ||
+              key.toLowerCase() === "paymentstatus"
             ) {
               displayValue = renderStatusBadge(value);
             } else if (isDateValue(value)) {

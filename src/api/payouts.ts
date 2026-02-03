@@ -55,6 +55,7 @@ export const FETCH_ONE_PAYOUT = gql`
         payoutAt
         paymentMethod
         invoiceStatus
+        paymentStatus
         merchant {
           businessName
           merchantID
@@ -117,6 +118,31 @@ export const ADMIN_INITIATE_PAYOUT = gql`
       success
       message
       payload
+      errors
+    }
+  }
+`;
+
+export const COMPLETE_EXTERNAL_TRANSFER = gql`
+  mutation AdminCompleteExternalTransferPayout(
+    $input: CompleteExternalTransferDto!
+  ) {
+    AdminCompleteExternalTransferPayout(input: $input) {
+      success
+      message
+      payload
+      errors
+    }
+  }
+`;
+
+export const ADMIN_VERIFY_PAYSTACK = gql`
+  mutation AdminVerifyPaystackTransfer($input: VerifyPaystackTransferDto!) {
+    AdminVerifyPaystackTransfer(input: $input) {
+      success
+      message
+      payload
+      errors
     }
   }
 `;

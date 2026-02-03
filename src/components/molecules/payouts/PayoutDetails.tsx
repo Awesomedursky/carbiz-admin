@@ -4,23 +4,34 @@ import { PayoutOutput } from "@/types/payouts.types";
 import DetailsSection from "../order/DetailsSection";
 import { BoxIcon } from "lucide-react";
 import { useNavigate } from "react-router";
+import { useDrawerStore } from "@/store/drawer.store";
 
 const PayoutDetails = ({ payout }: { payout: PayoutOutput }) => {
   const { singlePayoutDetails, singlePayoutLoading } = fetchOnePayout(
     payout.payoutID,
   );
   const navigate = useNavigate();
+  const { closeModal } = useDrawerStore();
 
   const filteredData = Object.fromEntries(
     Object.entries(singlePayoutDetails ?? {}).filter(
       ([key, value]) =>
-        ["payoutid", "payoutat", "paymentmethod", "invoicestatus"].includes(
-          key.toLowerCase(),
-        ) &&
+        [
+          "payoutid",
+          "payoutat",
+          "paymentmethod",
+          "invoicestatus",
+          "paymentstatus",
+        ].includes(key.toLowerCase()) &&
         !Array.isArray(value) &&
         key !== "__typename",
     ),
   ) as Record<string, unknown>;
+
+  const handleNavigate = (id: string) => {
+    navigate(`orders/${id}`);
+    closeModal();
+  };
 
   const merchant = Object.fromEntries(
     Object.entries(singlePayoutDetails ?? {}).filter(
@@ -199,7 +210,7 @@ const PayoutDetails = ({ payout }: { payout: PayoutOutput }) => {
                   </div>
                   <button
                     //   to={"/customers"}
-                    onClick={() => navigate(`${order?.orderID}`)}
+                    onClick={() => handleNavigate(order?.orderID)}
                     className=" font-semibold text-primary cursor-pointer"
                   >
                     See Details

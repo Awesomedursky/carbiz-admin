@@ -7,22 +7,35 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import SelectField from "@/components/atoms/form/select";
 import ImagePicker from "@/components/atoms/form/imagepicker";
-import { approvePayout, initiatePayoutType } from "@/queries/payouts.query";
+import {
+  approveEtxernalPayoutType,
+  approveExternalTransfer,
+  approvePayout,
+  initiatePayoutType,
+} from "@/queries/payouts.query";
 
 const initiatePayoutSchema = z.object({
   paymentMethod: z
     .string({ message: "payment method is required" })
     .min(1, "payment method is required"),
+  payoutId: z.string().optional(),
+  transactionReference: z.string().optional(),
+});
+
+const approvePayoutSchema = z.object({
   paymentNote: z.string().optional(),
   payoutId: z.string().optional(),
   // transactionReference: z.string({
   //   message: "Transaction reference is required",
   // }),
-  transactionReference: z.string().optional(),
+  paymentReceiptUrl: z
+    .string({ message: "Payment receipt is required" })
+    .min(1, "Payment receipt is required"),
 });
 
 const ApprovePayout = ({
   title,
+  type,
   payoutId,
   name,
   id,
@@ -37,15 +50,21 @@ const ApprovePayout = ({
   requestID: string;
   bank: string;
   amount: number;
+  type?: string;
 }) => {
   const { closeModal } = useDrawerStore();
   const form = useForm<initiatePayoutType>({
     resolver: zodResolver(initiatePayoutSchema),
   });
+  const externalApprovalForm = useForm<approveEtxernalPayoutType>({
+    resolver: zodResolver(approvePayoutSchema),
+  });
 
   const paymentMethod = form.watch("paymentMethod");
 
   const { initiatePayout, initiatePayoutLoading } = approvePayout(payoutId);
+  const { approveTransfer, approvalLoading } =
+    approveExternalTransfer(payoutId);
 
   const onSubmit = async (data: initiatePayoutType) => {
     initiatePayout({
@@ -55,9 +74,59 @@ const ApprovePayout = ({
     });
   };
 
+  const onExternalApprovalSubmit = async (data: approveEtxernalPayoutType) => {
+    approveTransfer({
+      variables: {
+        input: { ...data, payoutId },
+      },
+    });
+  };
+
+  if (paymentMethod === "Bank_Transfer" && type) {
+    return (
+      <Form {...externalApprovalForm}>
+        <form
+          onSubmit={externalApprovalForm.handleSubmit(onExternalApprovalSubmit)}
+        >
+          <div className="p-5 w-full  space-y-2.5">
+            <div className="flex items-center flex-col  w-full">
+              <h2 className="text-lg md:text-xl font-bold text-center">
+                Complete {String(paymentMethod).replace("_", " ")} Payout
+              </h2>
+            </div>
+
+            <ImagePicker
+              name="paymentReceiptUrl"
+              control={externalApprovalForm.control}
+              label="Upload payment receipt"
+            />
+            <TextArea
+              name="paymentNote"
+              placeholder="add any additional note about payment"
+              control={externalApprovalForm.control}
+              label="Payment Notes"
+            />
+
+            <div className="grid grid-cols-2 space-x-2.5">
+              <CustomButton variant="outline" onClick={closeModal}>
+                Cancel
+              </CustomButton>
+              <CustomButton
+                disabled={approvalLoading}
+                loading={approvalLoading}
+              >
+                Confirm Payout
+              </CustomButton>
+            </div>
+          </div>
+        </form>
+      </Form>
+    );
+  }
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="p-5 w-full  space-y-2.5">
           {/* ---- Header ---- */}
           <div className="flex items-center flex-col  w-full">
@@ -101,21 +170,6 @@ const ApprovePayout = ({
             ]}
             placeholder="select payment method"
           />
-
-          <TextArea
-            name="paymentNote"
-            placeholder="add any additional note about payment"
-            control={form.control}
-            label="Payment Notes"
-          />
-
-          {paymentMethod === "Bank_Transfer" && (
-            <ImagePicker
-              name="transactionReference"
-              control={form.control}
-              label="Upload payment receipt"
-            />
-          )}
 
           {/* ---- Buttons ---- */}
           <div className="grid grid-cols-2 space-x-2.5">

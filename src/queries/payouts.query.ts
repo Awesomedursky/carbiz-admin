@@ -1,6 +1,7 @@
 import {
   ADMIN_CANCEL_PAYOUT,
   ADMIN_INITIATE_PAYOUT,
+  COMPLETE_EXTERNAL_TRANSFER,
   FETCH_ONE_PAYOUT,
   // GET_ONE_PAYOUT_STATUS,
   GET_PAYOUTS,
@@ -11,6 +12,8 @@ import { useTableState } from "@/hooks/useTableState";
 import { useToast } from "@/hooks/Toast";
 import { PayoutOutput } from "@/types/payouts.types";
 import { usePaginatedQuery } from "@/hooks/usePagination";
+import { useDrawerStore } from "@/store/drawer.store";
+import ApprovePayout from "@/components/molecules/payouts/ApprovePayout";
 
 interface initiatePayoutRes {
   AdminInitiatePayout: {
@@ -19,12 +22,26 @@ interface initiatePayoutRes {
     payload: any;
   };
 }
+interface approvalRes {
+  AdminCompleteExternalTransferPayout: {
+    success: boolean;
+    message: string;
+    payload: any;
+  };
+}
 
 export type initiatePayoutType = {
   paymentMethod: string;
-  paymentNote?: string;
+  // paymentNote?: string;
   payoutId?: string;
-  transactionReference?: string;
+  // transactionReference?: string;
+};
+
+export type approveEtxernalPayoutType = {
+  payoutId?: string;
+  paymentReceiptUrl: string;
+  // transactionReference?: string;
+  paymentNote?: string;
 };
 
 const payoutQuery = () => {
@@ -62,38 +79,16 @@ const payoutQuery = () => {
         return {
           data: data?.AdminFetchAllPayoutsWithFilter?.payload?.data,
           message: data?.AdminFetchAllPayoutsWithFilter?.message,
-          total: data?.AdminFetchAllPayoutsWithFilter?.payload.total,
+          total: data?.AdminFetchAllPayoutsWithFilter?.payload?.total,
         };
       },
     },
   );
 
   React.useEffect(() => {
-    if (total) return;
+    if (!total) return;
     setPageTotal(total);
   }, [total]);
-
-  // const {
-  //   data: payoutStatus,
-  //   loading: payoutStatusLoading,
-  //   error: payoutStatusError,
-  // } = useQuery<payoutStatusResponseType, { payoutID: string }>(
-  //   GET_ONE_PAYOUT_STATUS,
-  //   {
-  //     variables: { payoutID: payoutID || "" },
-  //     nextFetchPolicy: "cache-first",
-  //     fetchPolicy: "cache-and-network",
-  //     skip: fetchStatus && !!payoutID,
-  //   }
-  // );
-
-  //   const {data: payoutStatus,
-  // loading: payoutStatusLoading,
-  //  error: payoutStatusError,} = usePaginatedQuery({
-  //   query:GET_ONE_PAYOUT_STATUS,variables: { payoutID: payoutID || "" },extractData:(res)=>{return {
-  //     data:res?.
-  //   }}
-  //  })
 
   return {
     // payouts list
@@ -109,6 +104,7 @@ export default payoutQuery;
 
 export const approvePayout = (payoutID: string) => {
   const { pageSize, currentPage, filters } = useTableState("payouts");
+  const { closeModal, openModal } = useDrawerStore();
   const { handleError, handleInfo, handleSuccess } = useToast();
   const [initiatePayout, { loading: initiatePayoutLoading }] = useMutation<
     initiatePayoutRes,
@@ -139,8 +135,13 @@ export const approvePayout = (payoutID: string) => {
         handleInfo(result.message || "Payout initiation unsuccessful");
         return;
       }
-
       handleSuccess(result?.message || "Payout initiated successfully");
+      closeModal();
+      openModal({
+        type: "dialog",
+        content: ApprovePayout,
+        props: { type: "bank", payoutId: payoutID },
+      });
     },
     onError: (error) => {
       handleError(error, "Payout failed");
@@ -152,8 +153,55 @@ export const approvePayout = (payoutID: string) => {
   };
 };
 
+export const approveExternalTransfer = (payoutID: string) => {
+  const { pageSize, currentPage, filters } = useTableState("payouts");
+  const { closeModal } = useDrawerStore();
+  const { handleError, handleInfo, handleSuccess } = useToast();
+  const [approveTransfer, { loading: approvalLoading }] = useMutation<
+    approvalRes,
+    { input: approveEtxernalPayoutType }
+  >(COMPLETE_EXTERNAL_TRANSFER, {
+    refetchQueries: [
+      {
+        query: GET_PAYOUTS,
+        variables: {
+          paginationQuery: {
+            limit: pageSize,
+            page: currentPage,
+            sortOrder: filters?.sortOrder,
+          },
+        },
+      },
+      ...(payoutID
+        ? [{ query: FETCH_ONE_PAYOUT, variables: { payoutID } }]
+        : []),
+    ],
+    onCompleted: (data) => {
+      const result = data?.AdminCompleteExternalTransferPayout;
+      if (!result) {
+        handleError(new Error("Invalid"), "Error Initiating Payout");
+        return;
+      }
+      if (!result.success) {
+        handleInfo(result.message || "Payout initiation unsuccessful");
+        return;
+      }
+      handleSuccess(result?.message || "Payout initiated successfully");
+      closeModal();
+    },
+    onError: (error) => {
+      handleError(error, "Payout failed");
+    },
+  });
+  return {
+    approveTransfer,
+    approvalLoading,
+  };
+};
+
 export const cancelPayout = (payoutID: string) => {
   const { handleError, handleInfo, handleSuccess } = useToast();
+  const { closeModal } = useDrawerStore();
   const { pageSize, currentPage, filters } = useTableState("payouts");
   const [cancelPayoutMutation, { loading: cancelPayoutLoading }] = useMutation<
     { AdminCancelPayout: { success: boolean; message: string; payload: any } },
@@ -184,6 +232,7 @@ export const cancelPayout = (payoutID: string) => {
       }
 
       handleSuccess(result?.message || "Payout cancelled successfully");
+      closeModal();
     },
     onError: (error) => {
       handleError(error, "Payout Cancel failed");
