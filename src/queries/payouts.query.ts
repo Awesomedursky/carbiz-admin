@@ -108,13 +108,23 @@ const payoutQuery = () => {
 export default payoutQuery;
 
 export const approvePayout = (payoutID: string) => {
+  const { pageSize, currentPage, filters } = useTableState("payouts");
   const { handleError, handleInfo, handleSuccess } = useToast();
   const [initiatePayout, { loading: initiatePayoutLoading }] = useMutation<
     initiatePayoutRes,
     { input: initiatePayoutType }
   >(ADMIN_INITIATE_PAYOUT, {
     refetchQueries: [
-      { query: GET_PAYOUTS },
+      {
+        query: GET_PAYOUTS,
+        variables: {
+          paginationQuery: {
+            limit: pageSize,
+            page: currentPage,
+            sortOrder: filters?.sortOrder,
+          },
+        },
+      },
       ...(payoutID
         ? [{ query: FETCH_ONE_PAYOUT, variables: { payoutID } }]
         : []),
@@ -144,12 +154,20 @@ export const approvePayout = (payoutID: string) => {
 
 export const cancelPayout = (payoutID: string) => {
   const { handleError, handleInfo, handleSuccess } = useToast();
+  const { pageSize, currentPage, filters } = useTableState("payouts");
   const [cancelPayoutMutation, { loading: cancelPayoutLoading }] = useMutation<
     { AdminCancelPayout: { success: boolean; message: string; payload: any } },
     { input: { payoutId: string; reason: string } }
   >(ADMIN_CANCEL_PAYOUT, {
     refetchQueries: [
-      { query: GET_PAYOUTS },
+      {
+        query: GET_PAYOUTS,
+        variables: {
+          limit: pageSize,
+          page: currentPage,
+          sortOrder: filters?.sortOrder,
+        },
+      },
       ...(payoutID
         ? [{ query: FETCH_ONE_PAYOUT, variables: { payoutID } }]
         : []),

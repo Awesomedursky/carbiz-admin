@@ -11,7 +11,7 @@ import { approvePayout, initiatePayoutType } from "@/queries/payouts.query";
 
 const initiatePayoutSchema = z.object({
   paymentMethod: z
-    .string({ message: "payment methos is required" })
+    .string({ message: "payment method is required" })
     .min(1, "payment method is required"),
   paymentNote: z.string().optional(),
   payoutId: z.string().optional(),
@@ -42,6 +42,8 @@ const ApprovePayout = ({
   const form = useForm<initiatePayoutType>({
     resolver: zodResolver(initiatePayoutSchema),
   });
+
+  const paymentMethod = form.watch("paymentMethod");
 
   const { initiatePayout, initiatePayoutLoading } = approvePayout(payoutId);
 
@@ -107,11 +109,13 @@ const ApprovePayout = ({
             label="Payment Notes"
           />
 
-          <ImagePicker
-            name="transactionReference"
-            control={form.control}
-            label="Upload payment receipt"
-          />
+          {paymentMethod === "Bank_Transfer" && (
+            <ImagePicker
+              name="transactionReference"
+              control={form.control}
+              label="Upload payment receipt"
+            />
+          )}
 
           {/* ---- Buttons ---- */}
           <div className="grid grid-cols-2 space-x-2.5">
