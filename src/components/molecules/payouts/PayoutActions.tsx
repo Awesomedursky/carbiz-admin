@@ -103,13 +103,15 @@ const PayoutActions = ({ payout }: { payout: PayoutOutput }) => {
           </>
         );
 
-      case "successful":
-      case "cancelled":
-      case "approved":
+      case "failed":
         return (
           <>
             <DropdownMenuItem onSelect={handleViewDetails}>
               View Details
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onSelect={handleApprove}>
+              Initiate Payout
             </DropdownMenuItem>
           </>
         );

@@ -13,6 +13,8 @@ import {
   approvePayout,
   initiatePayoutType,
 } from "@/queries/payouts.query";
+// import FormOtpInput from "@/components/atoms/form/otpinput";
+// import InputField from "@/components/atoms/form/input";
 
 const initiatePayoutSchema = z.object({
   paymentMethod: z
@@ -106,6 +108,39 @@ const ApprovePayout = ({
               control={externalApprovalForm.control}
               label="Payment Notes"
             />
+
+            <div className="grid grid-cols-2 space-x-2.5">
+              <CustomButton variant="outline" onClick={closeModal}>
+                Cancel
+              </CustomButton>
+              <CustomButton
+                disabled={approvalLoading}
+                loading={approvalLoading}
+              >
+                Confirm Payout
+              </CustomButton>
+            </div>
+          </div>
+        </form>
+      </Form>
+    );
+  }
+
+  if (paymentMethod === "Paystack" && type) {
+    return (
+      <Form {...externalApprovalForm}>
+        <form
+          onSubmit={externalApprovalForm.handleSubmit(onExternalApprovalSubmit)}
+        >
+          <div className="p-5 w-full  space-y-2.5">
+            <div className="flex items-center flex-col  w-full">
+              <h2 className="text-lg md:text-xl font-bold text-center">
+                Complete {String(paymentMethod).replace("_", " ")} Payout
+              </h2>
+            </div>
+
+            {/* <FormOtpInput name="otp" label="OTP" control={} />
+            <InputField name="transferCode" label="Transfer Code" /> */}
 
             <div className="grid grid-cols-2 space-x-2.5">
               <CustomButton variant="outline" onClick={closeModal}>
