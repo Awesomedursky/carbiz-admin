@@ -13,8 +13,8 @@ import {
   approvePayout,
   initiatePayoutType,
 } from "@/queries/payouts.query";
-// import FormOtpInput from "@/components/atoms/form/otpinput";
-// import InputField from "@/components/atoms/form/input";
+import FormOtpInput from "@/components/atoms/form/otpinput";
+import InputField from "@/components/atoms/form/input";
 
 const initiatePayoutSchema = z.object({
   paymentMethod: z
@@ -139,8 +139,12 @@ const ApprovePayout = ({
               </h2>
             </div>
 
-            {/* <FormOtpInput name="otp" label="OTP" control={} />
-            <InputField name="transferCode" label="Transfer Code" /> */}
+            <FormOtpInput name="otp" label="OTP" control={form.control} />
+            <InputField
+              name="transferCode"
+              label="Transfer Code"
+              control={form.control}
+            />
 
             <div className="grid grid-cols-2 space-x-2.5">
               <CustomButton variant="outline" onClick={closeModal}>
@@ -166,7 +170,7 @@ const ApprovePayout = ({
           {/* ---- Header ---- */}
           <div className="flex items-center flex-col  w-full">
             <h2 className="text-lg md:text-xl font-bold text-center">
-              Iniate Payout
+              Initiate Payout
             </h2>
             <p className="text-base">
               Confirm manual payment and upload proof of payment.

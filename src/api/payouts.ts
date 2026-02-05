@@ -63,6 +63,7 @@ export const FETCH_ONE_PAYOUT = gql`
             accountName
             accountNumber
             bankName
+            bankCode
           }
         }
         rider {
@@ -73,11 +74,18 @@ export const FETCH_ONE_PAYOUT = gql`
             accountName
             accountNumber
             bankName
+            bankCode
           }
         }
         customer {
           name
           customerID
+          bank_details {
+            accountName
+            accountNumber
+            bankName
+            bankCode
+          }
         }
         grossSaleAmount
         commision

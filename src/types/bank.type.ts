@@ -9,6 +9,7 @@ interface BankEntity {
   id: number;
   rider: RiderEntity;
   updatedAT: Date;
+  bankCode: string;
 }
 
 export default BankEntity;

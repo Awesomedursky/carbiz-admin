@@ -22,10 +22,11 @@ interface Customer {
   role: string;
   status: string;
   updatedAt: Date;
-  bankDetails?: {
+  bank_details?: {
     accountName: string;
     accountNumber: string;
     bankName: string;
+    bankCode: string;
   };
 }
 
