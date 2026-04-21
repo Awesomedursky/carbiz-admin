@@ -11,7 +11,7 @@ import {
 import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
-  uri: "https://carbiz-backend-euek.onrender.com/graphql",
+  uri: "https://carbiz-backend-0q3t.onrender.com/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -34,5 +34,5 @@ createRoot(document.getElementById("root")!).render(
     <ApolloProvider client={client}>
       <App />
     </ApolloProvider>
-  </StrictMode>
+  </StrictMode>,
 );
