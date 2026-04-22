@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const uploadImageRest = (
   files: File[],
-  onProgress?: (percent: number) => void
+  onProgress?: (percent: number) => void,
 ): Promise<string[]> => {
   const formData = new FormData();
 
@@ -12,7 +12,7 @@ export const uploadImageRest = (
 
   return axios
     .post(
-      "https://carbiz-backend-euek.onrender.com/api/carbiz/v1/files/upload/product-images",
+      "https://carbiz-backend-0q3t.onrender.com/api/carbiz/v1/files/upload/product-images",
       formData,
       {
         headers: {
@@ -24,13 +24,13 @@ export const uploadImageRest = (
             onProgress(percent);
           }
         },
-      }
+      },
     )
     .then((res) => res.data.payload); // should be an array of URLs
 };
 
 export const submitImageMetadata = async (
-  images: { url: string; isFeatured: boolean }[]
+  images: { url: string; isFeatured: boolean }[],
 ) => {
   const res = await axios.post("/api/images/submit", { images });
   return res.data;
